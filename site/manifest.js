@@ -49,7 +49,7 @@ export default [
       { title: 'Radio', file: B('RadioGroup.stories-DVXazEy6'), lead: 'A group of radio buttons for choosing one option.', children: [{ title: 'Radio List Item', file: B('Radio.stories-ByX4his4'), lead: 'A single radio button inside a Radio.' }] },
       { title: 'Rating', file: B('Rating.stories-B5Vm-Sbj'), lead: 'Shows or collects a rating as stars.' },
       { title: 'Segmented Control', file: N('SegmentedControl') },
-      { title: 'Selector', file: B('Select.stories-vOU6jfFc'), lead: 'A field for choosing one or several options from a list.' },
+      { title: 'Selector', file: B('Select.stories-vOU6jfFc'), lead: 'A field, or any element, that opens a list of options.', examples: [{ title: 'Selector Trigger', file: N('SelectTrigger') }] },
       { title: 'Skeleton', file: N('Skeleton') },
       { title: 'Slider', file: N('Slider') },
       { title: 'Spinner', file: N('Spinner') },

@@ -13,3 +13,4 @@
 - Radius follows control height; new tokens `radius-6` and `radius-10`.
 - Cleanup: dead CSS and unused code removed; `src/index.js` also exports the compiled components.
 - Table rebuilt in the look of the documentation tables and now used by the docs (props and token tables). New: density, dividers, striped rows, hover, sorting, selection, clickable rows, sticky header, truncation, column widths (`pixel`, `proportional`), loading and empty states, children mode.
+- Selector: `trigger` lets any element open the list (icon button, button, text); lists now open above dialogs; in the mobile sheet the option text lines up with the dialog content.

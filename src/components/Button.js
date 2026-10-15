@@ -8,7 +8,7 @@ const ToggleGroupContext = createContext(null);
 
 export function Button({
   label, children, variant = 'secondary', size, isDisabled, isLoading = false, icon, endContent, isIconOnly = false,
-  width, tooltip, href, target, rel, type = 'button', onClick, clickAction, className, style, ...rest
+  width, tooltip, href, target, rel, type = 'button', onClick, clickAction, className, style, ref, ...rest
 }) {
   const group = useContext(GroupContext);
   const [pending, setPending] = useState(false);
@@ -23,7 +23,7 @@ export function Button({
     if (clickAction) { setPending(true); try { await clickAction(e); } finally { setPending(false); } }
   };
   const node = h(Base, {
-    ...common, ...variantProps, type: href ? undefined : type, 'aria-label': isIconOnly ? label : undefined, onClick: click,
+    ref, ...common, ...variantProps, type: href ? undefined : type, 'aria-label': isIconOnly ? label : undefined, onClick: click,
     startIcon: isIconOnly ? undefined : icon, endIcon: isIconOnly ? undefined : endContent,
     ...(href && { render: h('a', { href, target, rel }) }), ...rest,
   }, isIconOnly ? icon : children ?? label);
