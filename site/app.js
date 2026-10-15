@@ -312,19 +312,20 @@ function App() {
   return (
       h('div', { className: 'shell' + (menu ? ' menu-open' : '') },
         h('a', { className: 'skip', href: '#main', onClick: skip }, 'Skip to content'),
-        h('aside', { className: 'side' },
-          h('div', { className: 'side-head' },
-            h('a', { className: 'brand', href: '#/' }, 'baseui')),
-          h('div', { className: 'search' }, h(TextField, {
-            label: 'Search', floatingLabel: false, size: 'sm', value: q, clearable: true, actionLabel: 'Clear search', startIcon: h(icons.SearchSm, { size: 24 }),
-            onChange: (e) => setQ(e.target.value),
-          })),
-          h(Nav, { entry, query: q.trim().toLowerCase() })),
-        h('div', { className: 'scrim', onClick: () => _setMenu(false) }),
-        h('main', { id: 'main', 'data-viewport': viewport },
-          h('div', { className: 'topbar' }, h(Button, { variant: 'secondary', size: 'xsm', onClick: () => _setMenu(!menu) }, 'Menu'), h('a', { href: '#/', className: 'brand' }, 'baseui'), h('span', { className: 'topbar-end' }, themeControl)),
-          h('div', { className: 'pagebar' }, viewControl, themeControl),
-          entry ? h(Page, { entry, key: entry.slug }) : h(Home))));
+        h('header', { className: 'appbar' },
+          h(Button, { variant: 'secondary', size: 'xsm', className: 'menu-btn', onClick: () => _setMenu(!menu) }, 'Menu'),
+          h('a', { className: 'brand', href: '#/' }, 'baseui'),
+          h('div', { className: 'appbar-end' }, h('div', { className: 'view-control' }, viewControl), themeControl)),
+        h('div', { className: 'body' },
+          h('aside', { className: 'side' },
+            h('div', { className: 'search' }, h(TextField, {
+              label: 'Search', floatingLabel: false, size: 'sm', value: q, clearable: true, actionLabel: 'Clear search', startIcon: h(icons.SearchSm, { size: 24 }),
+              onChange: (e) => setQ(e.target.value),
+            })),
+            h(Nav, { entry, query: q.trim().toLowerCase() })),
+          h('div', { className: 'scrim', onClick: () => _setMenu(false) }),
+          h('main', { id: 'main', 'data-viewport': viewport },
+            entry ? h(Page, { entry, key: entry.slug }) : h(Home)))));
 }
 
 await initDom();
