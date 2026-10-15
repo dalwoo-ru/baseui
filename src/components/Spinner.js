@@ -13,7 +13,7 @@ export function Spinner({ size = 'medium', label = 'Loading', className, style, 
     h('circle', { className: 'bui-spinner__arc', cx: 12, cy: 12, r: 9, strokeWidth: 3, strokeLinecap: 'round' })));
 }
 
-describe(Spinner, 'A loading indicator of unknown duration. Color is `currentColor`.', {
-  size: ["'small' | 'medium' | 'large' | number", "'medium'", 'Size: 16 / 24 / 40 px, or a number in px.'],
-  label: ['string', "'Loading'", 'Accessible name (read by screen readers).'],
+describe(Spinner, 'A loading indicator.', {
+  size: ["'small' | 'medium' | 'large' | number", "'medium'", 'Size; a number is px'],
+  label: ['string', "'Loading'", 'Accessible name'],
 });

@@ -12,12 +12,12 @@ export function Slider({ value, defaultValue = 0, onValueChange, min = 0, max = 
       onChange: (e) => setV(Number(e.target.value)), ...rest,
     }));
 }
-describe(Slider, 'Selects a number in a range by dragging or with the arrow keys.', {
-  value: ['number', null, 'Value (controlled).'],
-  defaultValue: ['number', '0', 'Initial value.'],
-  onValueChange: ['(value: number) => void', null, 'Called while dragging.'],
-  min: ['number', '0', 'Minimum.'], max: ['number', '100', 'Maximum.'], step: ['number', '1', 'Step.'],
-  label: ['ReactNode', null, 'Label above the track.'],
-  showValue: ['boolean', 'false', 'Show the current value.'],
-  disabled: ['boolean', 'false', 'Disabled state.'],
+describe(Slider, 'Selects a number in a range.', {
+  value: ['number', null, 'Value'],
+  defaultValue: ['number', '0', 'Initial value'],
+  onValueChange: ['(value: number) => void', null, 'Called when the value changes'],
+  min: ['number', '0', 'Minimum'], max: ['number', '100', 'Maximum.'], step: ['number', '1', 'Step.'],
+  label: ['ReactNode', null, 'Label above the track'],
+  showValue: ['boolean', 'false', 'Show the current value'],
+  disabled: ['boolean', 'false', 'Disabled state'],
 });

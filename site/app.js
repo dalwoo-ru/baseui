@@ -1,6 +1,7 @@
 import { t as requireReact } from '../lib/react-BZJXY1be.js';
 import { t as initDom, r as renderInto } from '../lib/react-18-D4o7zN8K.js';
 import manifest from './manifest.js';
+import { Button, TextField, Switch } from '../src/base.js';
 
 const React = requireReact();
 const { createElement: h, useState, useEffect, useMemo, useRef, Fragment } = React;
@@ -13,7 +14,7 @@ const stemOf = (file) => file.split('/').pop().replace(/\.stories.*$/, '').toLow
 /** manifest (sections → items → children) → flat list of routable pages. */
 const pages = [];
 for (const { section, items } of manifest) {
-  const add = (item, group) => pages.push({ section, group, title: item.title, slug: kebab(item.title), file: item.file, anchor: item.anchor });
+  const add = (item, group) => pages.push({ section, group, title: item.title, slug: kebab(item.title), file: item.file, anchor: item.anchor, lead: item.lead });
   for (const item of items) {
     if (item.children) item.children.forEach((c) => add(c, item.title));
     else add(item);
@@ -48,11 +49,7 @@ const loadModule = (file) => {
   if (!modules.has(file)) modules.set(file, import(file));
   return modules.get(file);
 };
-const ui = {};
-async function loadUi() {
-  const pick = async (title) => (await loadModule(pages.find((p) => p.title === title).file)).default.component;
-  [ui.Button, ui.TextField, ui.Switch] = await Promise.all([pick('Button'), pick('Text Input'), pick('Switch')]);
-}
+const ui = { Button, TextField, Switch };
 
 /* ----------------------------------------------------------------- stories */
 
@@ -128,7 +125,7 @@ function Control({ name, spec, value, onChange, args }) {
   if (!input) return null;
   const inlineLabel = type === 'range' || type === 'boolean' || type === 'inline-radio' || type === 'radio' || type === 'select';
   return h('div', { className: 'control' },
-    inlineLabel && h('div', { className: 'control-head' }, h('code', null, name), spec.description && h('span', null, spec.description)),
+    inlineLabel && h('div', { className: 'control-head' }, h('code', null, name)),
     input);
 }
 
@@ -180,7 +177,6 @@ function Example({ meta, story, name, id, controls, overlay }) {
   const [nonce, setNonce] = useState(0);
   return h('section', { className: 'example', id },
     h('h3', null, name),
-    h(Md, { text: doc.description && doc.description.story }),
     h('div', { className: showControls ? 'stage with-controls' : 'stage' },
       h('div', { className: 'canvas' },
         shown
@@ -195,9 +191,12 @@ function Example({ meta, story, name, id, controls, overlay }) {
 }
 
 const TYPE_CLEAN = (t) => (t ? t.raw || t.name : '');
+const HIDDEN_PROPS = new Set(['ref', 'className', 'style', 'id', 'data-testid', 'contentClassName', 'portalContainer', 'keepMounted', 'initialFocus', 'finalFocus', 'name', 'form', 'labelId', 'captionId', 'focusRef', 'cellRef', 'onBlur']);
+/** One short fragment: first sentence, no @tags, no trailing period. */
+const brief = (text = '', max = 110) => text.replace(/@\w+.*$/s, '').trim().split(/(?<=[.!?])\s/)[0].replace(/\s+/g, ' ').replace(/\.$/, '').slice(0, max);
 function PropsTable({ component }) {
   const props = component && component.__docgenInfo && component.__docgenInfo.props;
-  const rows = props ? Object.entries(props).filter(([, p]) => p.description || p.tsType) : [];
+  const rows = props ? Object.entries(props).filter(([n, p]) => !HIDDEN_PROPS.has(n) && !/@internal/.test(p.description || '') && brief(p.description)) : [];
   if (!rows.length) return null;
   return h('section', { className: 'section' },
     h('h2', null, 'Props'),
@@ -209,7 +208,7 @@ function PropsTable({ component }) {
             h('td', null, h('code', null, name), p.required && h('span', { className: 'req', title: 'Required' }, '*')),
             h('td', null, h('code', { className: 'type' }, TYPE_CLEAN(p.tsType))),
             h('td', null, p.defaultValue ? h('code', null, p.defaultValue.value) : '—'),
-            h('td', null, h(Md, { text: p.description, className: 'prose small' }))))))));
+            h('td', null, h(Md, { text: brief(p.description), className: 'prose small' }))))))));
 }
 
 /* ------------------------------------------------------------------- pages */
@@ -249,9 +248,9 @@ function Page({ entry }) {
   return h('article', { className: 'page' },
     h('div', { className: 'eyebrow' }, entry.group ? `${entry.section} · ${entry.group}` : entry.section),
     h('h1', null, entry.title),
-    h(Md, { text: desc && desc.component, className: 'prose lead' }),
+    h(Md, { text: entry.lead || brief(desc && desc.component, 240) + '.', className: 'prose lead' }),
     state.page && h(state.page),
-    stories.length > 3 && h(Toc, { items: stories }),
+    stories.length > 4 && h(Toc, { items: stories }),
     playground && h(Example, { key: entry.slug + 'pg', meta, story: playground.story, name: playground.name, id: playground.id, controls: true, overlay }),
     !isFoundation && h(PropsTable, { component: meta.component }),
     rest.length > 0 && h('section', { className: 'section' },
@@ -344,6 +343,5 @@ function App() {
       entry ? h(Page, { entry, key: entry.slug }) : h(Home)));
 }
 
-await loadUi();
 await initDom();
 renderInto(h(App), document.getElementById('root'));

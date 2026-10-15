@@ -17,11 +17,11 @@ export function NumberInput({ value, defaultValue, onValueChange, min = -Infinit
     ...rest,
   });
 }
-describe(NumberInput, 'A text input for numbers with − and + buttons. Arrow keys step the value.', {
-  value: ['number | string', null, 'Value (controlled).'],
-  defaultValue: ['number', null, 'Initial value.'],
-  onValueChange: ['(value: number | string) => void', null, 'Called on change.'],
-  min: ['number', null, 'Minimum.'], max: ['number', null, 'Maximum.'], step: ['number', '1', 'Step.'],
-  label: ['string', null, 'Floating label.'],
-  size: ["'small' | 'medium'", null, 'Input size (same as Text Input).'],
+describe(NumberInput, 'A text input for numbers.', {
+  value: ['number | string', null, 'Value'],
+  defaultValue: ['number', null, 'Initial value'],
+  onValueChange: ['(value: number | string) => void', null, 'Called when the value changes'],
+  min: ['number', null, 'Minimum'], max: ['number', null, 'Maximum.'], step: ['number', '1', 'Step.'],
+  label: ['string', null, 'Floating label'],
+  size: ["'small' | 'medium'", null, 'Input size (same as Text Input)'],
 });

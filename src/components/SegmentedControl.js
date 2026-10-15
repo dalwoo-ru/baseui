@@ -20,12 +20,12 @@ export function SegmentedControl({ items, value, defaultValue, onValueChange, si
       disabled: it.disabled, className: 'bui-segmented__item', onClick: () => setCurrent(it.value),
     }, it.label)));
 }
-describe(SegmentedControl, 'Switches between a few mutually exclusive views or modes. Arrow keys move the selection.', {
-  items: ['Array<{ value: string; label: ReactNode; disabled?: boolean }>', null, 'Segments (Segmented Control Item).'],
-  value: ['string', null, 'Selected value (controlled).'],
-  defaultValue: ['string', null, 'Initial value (first enabled).'],
-  onValueChange: ['(value: string) => void', null, 'Called on selection.'],
-  size: ["'small' | 'medium'", "'medium'", 'Control height 32 / 40 px.'],
-  fullWidth: ['boolean', 'false', 'Stretch to the container; segments share the width equally.'],
-  label: ['string', null, 'aria-label of the group.'],
+describe(SegmentedControl, 'A control for switching between a few exclusive options.', {
+  items: ['Array<{ value: string; label: ReactNode; disabled?: boolean }>', null, 'Segments'],
+  value: ['string', null, 'Selected value'],
+  defaultValue: ['string', null, 'Initial value (first enabled)'],
+  onValueChange: ['(value: string) => void', null, 'Called when the selection changes'],
+  size: ["'small' | 'medium'", "'medium'", 'Control height'],
+  fullWidth: ['boolean', 'false', 'Fill the container width'],
+  label: ['string', null, 'Accessible name'],
 });

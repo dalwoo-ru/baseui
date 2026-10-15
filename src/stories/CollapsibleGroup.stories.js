@@ -7,7 +7,7 @@ const items = [
   { value: 'b', title: 'How do I change my password?', content: 'Settings → Security → Change password.' },
   { value: 'c', title: 'Unavailable section', content: '—', disabled: true },
 ];
-export default meta({ title: 'Components/Collapsible Group', component: CollapsibleGroup, args: { multiple: false, items, defaultValue: ['a'] }, argTypes: { multiple: { control: 'boolean', description: 'Several open sections' } } });
-export const Playground = { ...playground({ description: 'One open section at a time; `multiple` allows several.', source: '{}' }), render: (args) => W(480, h(CollapsibleGroup, { key: String(args.multiple), ...args })) };
-export const Multiple = example({ name: 'Multiple', description: 'Several sections open at once.', render: () => W(480, h(CollapsibleGroup, { multiple: true, defaultValue: ['a', 'b'], items })), source: `<CollapsibleGroup multiple defaultValue={['a', 'b']} items={items} />` });
+export default meta({ title: 'Components/Collapsible Group', component: CollapsibleGroup, args: { multiple: false, items, defaultValue: ['a'] }, argTypes: { multiple: { control: 'boolean' } } });
+export const Playground = { ...playground({ source: '{}' }), render: (args) => W(480, h(CollapsibleGroup, { key: String(args.multiple), ...args })) };
+export const Multiple = example({ name: 'Multiple', render: () => W(480, h(CollapsibleGroup, { multiple: true, defaultValue: ['a', 'b'], items })), source: `<CollapsibleGroup multiple defaultValue={['a', 'b']} items={items} />` });
 export const __namedExportsOrder = ['Playground', 'Multiple'];

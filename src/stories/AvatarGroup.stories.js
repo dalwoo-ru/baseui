@@ -1,19 +1,23 @@
 import { h } from '../react.js';
-import { AvatarGroup } from '../components/AvatarGroup.js';
-import { meta, playground, example, Row } from './_helpers.js';
+import { Avatar, AvatarGroup } from '../components/Avatar.js';
+import { meta, playground, example } from './_helpers.js';
 
-const users = ['AB', 'CD', 'EF', 'GH', 'IJ', 'KL'].map((initials) => ({ initials, name: initials }));
+const people = ['Anna Petrova', 'Mark Lee', 'Sofia Rossi', 'John Smith', 'Eva Novak', 'Li Wei'];
 export default meta({
-  title: 'Components/Avatar Group', component: AvatarGroup, args: { users, max: 4, size: 'small' },
-  argTypes: {
-    max: { control: { type: 'range', min: 1, max: 6, step: 1 }, description: 'Visible avatars' },
-    size: { control: 'inline-radio', options: ['xsmall', 'small', 'medium'], description: 'Avatar size' },
-  },
+  title: 'Components/Avatar Group', component: AvatarGroup, args: { size: 'md', shape: 'circle' },
+  argTypes: { size: { control: 'inline-radio', options: ['xsm', 'sm', 'md', 'lg'] }, shape: { control: 'inline-radio', options: ['circle', 'rounded', 'square'] } },
 });
-export const Playground = playground({ description: 'Avatars overlap; the rest collapse into a “+N” counter.', source: '{}' });
+export const Playground = {
+  ...playground({ source: `<AvatarGroup size="md">
+  {people.slice(0, 4).map((name) => <Avatar key={name} name={name} />)}
+  <AvatarGroupOverflow count={people.length - 4} />
+</AvatarGroup>` }),
+  render: (args) => h(AvatarGroup, { key: args.size + args.shape, ...args }, people.slice(0, 4).map((n) => h(Avatar, { key: n, name: n })), h(OverflowItem)),
+};
+import { AvatarGroupOverflow } from '../components/Avatar.js';
+const OverflowItem = () => h(AvatarGroupOverflow, { count: people.length - 4 });
 export const Sizes = example({
-  name: 'Sizes', description: 'Three sizes.',
-  render: () => h(Row, { gap: 'var(--baseui-spacing-24)' }, ['xsmall', 'small', 'medium'].map((s) => h(AvatarGroup, { key: s, users, size: s, max: 3 }))),
-  source: `<AvatarGroup users={users} size="medium" max={3} />`,
+  name: 'Sizes', render: () => h('div', { style: { display: 'flex', flexDirection: 'column', gap: 16 } }, ['sm', 'md', 'lg'].map((s) => h(AvatarGroup, { key: s, size: s }, people.slice(0, 3).map((n) => h(Avatar, { key: n, name: n })), h(AvatarGroupOverflow, { count: 3 })))),
+  source: `<AvatarGroup size="lg">…</AvatarGroup>`,
 });
 export const __namedExportsOrder = ['Playground', 'Sizes'];

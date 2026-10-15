@@ -20,10 +20,10 @@ export function Pagination({ page, total, onPageChange, siblings = 1, label = 'P
       : h('button', { key: p, type: 'button', className: 'bui-page', 'aria-current': p === page ? 'page' : undefined, 'aria-label': `Page ${p}`, onClick: () => go(p) }, p)),
     h('button', { type: 'button', className: 'bui-page', 'aria-label': 'Next page', disabled: page >= total, onClick: () => go(page + 1) }, h(Icon, { name: 'chevronRight', size: 18 })));
 }
-describe(Pagination, 'Navigates between pages of a list or table.', {
-  page: ['number', null, 'Current page (1-based).'],
-  total: ['number', null, 'Number of pages.'],
-  onPageChange: ['(page: number) => void', null, 'Called with the new page.'],
-  siblings: ['number', '1', 'Pages shown on each side of the current one.'],
-  label: ['string', "'Pagination'", 'aria-label of the nav.'],
+describe(Pagination, 'Navigation between pages.', {
+  page: ['number', null, 'Current page (1-based)'],
+  total: ['number', null, 'Number of pages'],
+  onPageChange: ['(page: number) => void', null, 'Called with the new page'],
+  siblings: ['number', '1', 'Pages shown on each side of the current one'],
+  label: ['string', "'Pagination'", 'Accessible name'],
 });

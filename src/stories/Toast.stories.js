@@ -12,8 +12,7 @@ function Demo() {
 }
 export default meta({ title: 'Components/Toast', component: ToastProvider, args: {}, argTypes: {} });
 export const Playground = example({
-  name: 'Playground', description: 'Call `toast()` from anywhere inside `ToastProvider` (see `useToast`). The timer pauses on hover and focus.',
-  render: () => h(ToastProvider, null, h(Demo)),
+  name: 'Playground', render: () => h(ToastProvider, null, h(Demo)),
   source: `// Once, at the app root
 <ToastProvider>…</ToastProvider>
 

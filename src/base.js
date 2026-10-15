@@ -2,14 +2,12 @@
 // A component is taken from its own stories' metadata, so we do not depend on names inside the bundle.
 const component = async (file) => (await import(`../lib/${file}`)).default.component;
 
-export const [Button, TextField, Checkbox, CheckboxGroup, Switch, Avatar, Badge, Chip, Select, Modal, Radio, RadioGroup, List, ListItem] = await Promise.all([
+export const [Button, TextField, Checkbox, CheckboxGroup, Switch, Chip, Select, Modal, Radio, RadioGroup, List, ListItem] = await Promise.all([
   component('Button.stories-BIZ8i_Er.js'),
   component('TextField.stories-JboKGoC9.js'),
   component('Checkbox.stories-CjVZ5VOE.js'),
   component('CheckboxGroup.stories-DyCBCBrP.js'),
   component('Switch.stories-UfYPEzH7.js'),
-  component('Avatar.stories-BJh8m-el.js'),
-  component('Badge.stories-f_dinpre.js'),
   component('Chip.stories-BFj78RSq.js'),
   component('Select.stories-vOU6jfFc.js'),
   component('Modal.stories-BG7Qmigd.js'),

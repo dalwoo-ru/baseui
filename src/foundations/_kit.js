@@ -53,8 +53,6 @@ export const section = (title, data) => data && data.find((s) => s.title === tit
 
 export const Block = ({ title, id, children }) =>
   h('section', { className: 'doc-block', id }, title && h('h2', null, title), children);
-export const P = ({ children }) => h('p', { className: 'doc-p' }, children);
-export const Code = ({ children }) => h('code', null, children);
 
 export function DoDont({ dos = [], donts = [] }) {
   return h('div', { className: 'table-wrap' },

@@ -15,10 +15,10 @@ export function Banner({ status = 'info', title, children, onClose, closeLabel =
       h(Icon, { name: 'close', size: 20 })));
 }
 
-describe(Banner, 'An inline message for the user: information, success, warning or error.', {
-  status: ["'info' | 'success' | 'warning' | 'error'", "'info'", 'Message type. `error` and `warning` are announced immediately (`role="alert"`).'],
-  title: ['ReactNode', null, 'Heading.'],
-  children: ['ReactNode', null, 'Message text.'],
-  onClose: ['() => void', null, 'When set, a close button is shown.'],
-  closeLabel: ['string', "'Close'", 'Accessible name of the close button.'],
+describe(Banner, 'An inline message with a status.', {
+  status: ["'info' | 'success' | 'warning' | 'error'", "'info'", 'Message type'],
+  title: ['ReactNode', null, 'Heading'],
+  children: ['ReactNode', null, 'Message text'],
+  onClose: ['() => void', null, 'When set, a close button is shown'],
+  closeLabel: ['string', "'Close'", 'Accessible name of the close button'],
 });

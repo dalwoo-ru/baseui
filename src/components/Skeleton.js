@@ -14,9 +14,9 @@ export function Skeleton({ variant = 'text', width, height, lines = 1, className
   });
 }
 
-describe(Skeleton, 'A content placeholder while loading. Hidden from screen readers: announce loading with `aria-busy` on the container.', {
-  variant: ["'text' | 'rect' | 'circle'", "'text'", 'Placeholder shape.'],
-  width: ['number | string', null, 'Width.'],
-  height: ['number | string', null, 'Height (rect and circle).'],
-  lines: ['number', '1', 'Number of lines for `variant="text"`; the last one is shorter.'],
+describe(Skeleton, 'A placeholder shown while content loads.', {
+  variant: ["'text' | 'rect' | 'circle'", "'text'", 'Placeholder shape'],
+  width: ['number | string', null, 'Width'],
+  height: ['number | string', null, 'Height (rect and circle)'],
+  lines: ['number', '1', 'Number of text lines'],
 });

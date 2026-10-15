@@ -1,19 +1,16 @@
 // Public entry: baseui components (no external dependencies).
 export { AlertDialog } from './components/AlertDialog.js';
-export { AspectRatio } from './components/AspectRatio.js';
-export { AvatarGroup } from './components/AvatarGroup.js';
+export { Avatar, AvatarGroup, AvatarGroupOverflow, AvatarStatusDot } from './components/Avatar.js';
+export { Badge, StatusDot } from './components/Badge.js';
 export { Banner } from './components/Banner.js';
 export { Breadcrumbs } from './components/Breadcrumbs.js';
-export { ButtonGroup, IconButton, ToggleButton, ToggleButtonGroup } from './components/Button.js';
+export { Button, ButtonGroup, IconButton, ToggleButton, ToggleButtonGroup } from './components/Button.js';
 export { Card, ClickableCard, SelectableCard } from './components/Card.js';
 export { Collapsible, CollapsibleGroup } from './components/Collapsible.js';
 export { Divider } from './components/Divider.js';
-export { DropdownMenu, DropdownMenuItem, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuDivider, DropdownMenuGroup } from './components/DropdownMenu.js';
 export { EmptyState } from './components/EmptyState.js';
-export { Field } from './components/Field.js';
-export { FileInput } from './components/FileInput.js';
-export { Icon } from './components/Icon.js';
 export { Stack, HStack, VStack, Center, Grid, Section } from './components/Layout.js';
+export { Link } from './components/Link.js';
 export { MetadataList } from './components/MetadataList.js';
 export { NumberInput } from './components/NumberInput.js';
 export { Pagination } from './components/Pagination.js';
@@ -28,4 +25,3 @@ export { Table } from './components/Table.js';
 export { Tabs, TabList, Tab, TabPanel } from './components/Tabs.js';
 export { ToastProvider, useToast } from './components/Toast.js';
 export { Tooltip } from './components/Tooltip.js';
-export { Heading, Text, Link, Kbd, Code, CodeBlock, Blockquote, VisuallyHidden } from './components/Typography.js';

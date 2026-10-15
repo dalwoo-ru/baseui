@@ -1,16 +1,15 @@
-import { h } from '../react.js';
-import { ToggleButtonGroup } from '../components/Button.js';
+import { h, useState } from '../react.js';
+import { ToggleButton, ToggleButtonGroup } from '../components/Button.js';
 import { meta, playground, example } from './_helpers.js';
 
-const items = [{ value: 'left', label: 'Left' }, { value: 'center', label: 'Center' }, { value: 'right', label: 'Right' }];
 export default meta({
-  title: 'Components/Toggle Button Group', component: ToggleButtonGroup, args: { items, multiple: false, size: 'small', label: 'Alignment' },
-  argTypes: { multiple: { control: 'boolean', description: 'Allow several pressed buttons' }, size: { control: 'inline-radio', options: ['xsmall', 'small', 'medium', 'large'], description: 'Size' } },
+  title: 'Components/Toggle Button Group', component: ToggleButtonGroup, args: { label: 'Alignment', type: 'single', size: 'md' },
+  argTypes: { type: { control: 'inline-radio', options: ['single', 'multiple'] }, size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] } },
 });
-export const Playground = { ...playground({ description: 'Single selection by default.', source: '{}' }), render: (args) => h(ToggleButtonGroup, { key: String(args.multiple), ...args }) };
-export const Multiple = example({
-  name: 'Multiple', description: 'Several buttons can be pressed at once.',
-  render: () => h(ToggleButtonGroup, { items: [{ value: 'b', label: 'Bold' }, { value: 'i', label: 'Italic' }, { value: 'u', label: 'Underline' }], multiple: true, defaultValue: ['b'], label: 'Text style' }),
-  source: `<ToggleButtonGroup multiple defaultValue={['b']} items={[…]} />`,
-});
-export const __namedExportsOrder = ['Playground', 'Multiple'];
+function Demo({ type, ...rest }) {
+  const [value, setValue] = useState(type === 'multiple' ? ['bold'] : 'left');
+  const items = type === 'multiple' ? ['bold', 'italic', 'underline'] : ['left', 'center', 'right'];
+  return h(ToggleButtonGroup, { key: type, type, value: type === 'multiple' && !Array.isArray(value) ? [] : value, onChange: setValue, ...rest }, items.map((v) => h(ToggleButton, { key: v, value: v, label: v[0].toUpperCase() + v.slice(1) })));
+}
+export const Playground = { ...playground({ source: `<ToggleButtonGroup label="Alignment" value={value} onChange={setValue}>\n  <ToggleButton value="left" label="Left" />\n  <ToggleButton value="center" label="Center" />\n</ToggleButtonGroup>` }), render: (args) => h(Demo, args) };
+export const __namedExportsOrder = ['Playground'];

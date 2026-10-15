@@ -1,7 +1,12 @@
 import { h } from '../react.js';
 import { ClickableCard } from '../components/Card.js';
-import { meta, playground, W } from './_helpers.js';
+import { Button } from '../components/Button.js';
+import { meta, playground, example } from './_helpers.js';
 
-export default meta({ title: 'Components/Clickable Card', component: ClickableCard, args: { children: 'Open the project' }, argTypes: { children: { control: 'text', description: 'Content' } } });
-export const Playground = { ...playground({ description: 'The whole card is one button (or a link with `href`). Hover and press change the fill.', source: `<ClickableCard onClick={open}>Open the project</ClickableCard>` }), render: (args) => W(320, h(ClickableCard, { onClick: () => {}, ...args })) };
-export const __namedExportsOrder = ['Playground'];
+export default meta({ title: 'Components/Clickable Card', component: ClickableCard, args: { label: 'Open project', isDisabled: false }, argTypes: { isDisabled: { control: 'boolean' } } });
+export const Playground = { ...playground({ source: `<ClickableCard label="Open project" onClick={open}>Project Atlas</ClickableCard>` }), render: (args) => h('div', { style: { width: 320 } }, h(ClickableCard, { onClick: () => {}, ...args }, 'Project Atlas')) };
+export const NestedAction = example({
+  name: 'Nested Action', render: () => h('div', { style: { width: 320 } }, h(ClickableCard, { label: 'Open project', onClick: () => {} }, h('div', { style: { display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start' } }, 'Project Atlas', h(Button, { label: 'Share', size: 'sm', onClick: () => {} })))),
+  source: `<ClickableCard label="Open project" onClick={open}>\n  Project Atlas\n  <Button label="Share" />\n</ClickableCard>`,
+});
+export const __namedExportsOrder = ['Playground', 'NestedAction'];

@@ -9,10 +9,10 @@ export function Tabs({ value, defaultValue, onValueChange, children, className, 
   const uid = useId();
   return h(TabsContext.Provider, { value: { current, setCurrent, uid } }, h('div', { className: cx('bui-tabs', className), ...rest }, children));
 }
-describe(Tabs, 'Switches between related views. Compose it from `TabList`, `Tab` and `TabPanel`.', {
-  value: ['string', null, 'Selected tab (controlled).'],
-  defaultValue: ['string', null, 'Initially selected tab.'],
-  onValueChange: ['(value: string) => void', null, 'Called when the selected tab changes.'],
+describe(Tabs, 'Switches between related views.', {
+  value: ['string', null, 'Selected tab'],
+  defaultValue: ['string', null, 'Initially selected tab'],
+  onValueChange: ['(value: string) => void', null, 'Called when the selected tab changes'],
 });
 
 export function TabList({ variant = 'underline', label, children, className, ...rest }) {
@@ -33,9 +33,9 @@ export function TabList({ variant = 'underline', label, children, className, ...
   };
   return h('div', { role: 'tablist', 'aria-label': label, ref, onKeyDown, className: cx('bui-tablist', `bui-tablist--${variant}`, className), ...rest }, children);
 }
-describe(TabList, 'The row of tabs. Arrow keys, Home and End move between tabs.', {
-  variant: ["'underline' | 'pill'", "'underline'", 'Visual style of the list.'],
-  label: ['string', null, 'aria-label of the list.'],
+describe(TabList, 'The row of tabs.', {
+  variant: ["'underline' | 'pill'", "'underline'", 'Visual style of the list'],
+  label: ['string', null, 'Accessible name'],
 });
 
 export function Tab({ value, disabled = false, children, className, ...rest }) {
@@ -46,9 +46,9 @@ export function Tab({ value, disabled = false, children, className, ...rest }) {
     tabIndex: selected ? 0 : -1, disabled, className: cx('bui-tab', className), onClick: () => setCurrent(value), ...rest,
   }, children);
 }
-describe(Tab, 'A single tab button.', {
-  value: ['string', null, 'Identifier matching a `TabPanel`.'],
-  disabled: ['boolean', 'false', 'Disable the tab.'],
+describe(Tab, 'A tab button.', {
+  value: ['string', null, 'Identifier matching a `TabPanel`'],
+  disabled: ['boolean', 'false', 'Disable the tab'],
 });
 
 export function TabPanel({ value, children, className, ...rest }) {
@@ -56,4 +56,4 @@ export function TabPanel({ value, children, className, ...rest }) {
   if (current !== value) return null;
   return h('div', { role: 'tabpanel', id: `${uid}-p-${value}`, 'aria-labelledby': `${uid}-t-${value}`, tabIndex: 0, className: cx('bui-tabpanel', className), ...rest }, children);
 }
-describe(TabPanel, 'Content of a tab; rendered only while selected.', { value: ['string', null, 'Identifier of its `Tab`.'] });
+describe(TabPanel, 'The content of a tab.', { value: ['string', null, 'Identifier of its `Tab`.'] });

@@ -1,57 +1,120 @@
-// Button family built around the compiled baseui Button: groups, icon-only and toggle buttons.
-import { h, cx, useControllable } from '../react.js';
-import { Icon } from './Icon.js';
+import { h, cx, createContext, useContext, useState, useControllable, useRef } from '../react.js';
+import { Button as Base } from '../base.js';
+import { Tooltip } from './Tooltip.js';
 import { describe } from '../doc.js';
-import { Button as ButtonBase } from '../base.js';
 
-export function ButtonGroup({ attached = false, size, variant, children, className, ...rest }) {
-  return h('div', { role: 'group', className: cx('bui-btn-group', attached && 'bui-btn-group--attached', className), ...rest }, children);
+const SIZE = { sm: 'small', md: 'medium', lg: 'large' };
+const GroupContext = createContext(null);
+const ToggleGroupContext = createContext(null);
+
+export function Button({
+  label, children, variant = 'secondary', size, isDisabled, isLoading = false, icon, endContent, isIconOnly = false,
+  width, tooltip, href, target, rel, type = 'button', onClick, clickAction, className, style, ...rest
+}) {
+  const group = useContext(GroupContext);
+  const [pending, setPending] = useState(false);
+  const sz = size || (group && group.size) || 'md';
+  const disabled = isDisabled ?? (group && group.isDisabled) ?? false;
+  const common = { size: SIZE[sz], loading: isLoading || pending, disabled, className: cx(isIconOnly && `bui-btn-icon bui-btn-icon--${sz}`, className), style: { width, ...style } };
+  const variantProps = variant === 'ghost' ? { variant: 'text' }
+    : variant === 'destructive' ? { variant: 'custom', customBackground: 'var(--baseui-Extensions-Background-Error)', customColor: 'var(--baseui-Extensions-Text-and-Icon-AlwaysDark)' }
+      : { variant };
+  const click = async (e) => {
+    onClick && onClick(e);
+    if (clickAction) { setPending(true); try { await clickAction(e); } finally { setPending(false); } }
+  };
+  const node = h(Base, {
+    ...common, ...variantProps, type: href ? undefined : type, 'aria-label': isIconOnly ? label : undefined, onClick: click,
+    startIcon: isIconOnly ? undefined : icon, endIcon: isIconOnly ? undefined : endContent,
+    ...(href && { render: h('a', { href, target, rel }) }), ...rest,
+  }, isIconOnly ? icon : children ?? label);
+  const tip = tooltip || (isIconOnly ? label : undefined);
+  return tip ? h(Tooltip, { content: tip }, node) : node;
 }
-describe(ButtonGroup, 'Lays out related buttons in a row. With `attached`, buttons share edges.', {
-  attached: ['boolean', 'false', 'Join buttons into one segmented control.'],
+describe(Button, 'Triggers an action or navigates.', {
+  label: ['string', null, 'Visible text and accessible name'],
+  children: ['ReactNode', null, 'Visible content in place of `label`'],
+  variant: ["'primary' | 'secondary' | 'ghost' | 'destructive'", "'secondary'", 'Visual style'],
+  size: ["'sm' | 'md' | 'lg'", "'md'", 'Button size'],
+  isDisabled: ['boolean', 'false', 'Disables the button'],
+  isLoading: ['boolean', 'false', 'Shows a spinner and blocks interaction'],
+  icon: ['ReactNode', null, 'Icon before the label'],
+  endContent: ['ReactNode', null, 'Content after the label, e.g. a chevron'],
+  isIconOnly: ['boolean', 'false', 'Square icon-only button; `label` becomes `aria-label`'],
+  width: ['number | string', null, 'Number is px; `"100%"` fills the container'],
+  tooltip: ['string', null, 'Hover text'],
+  href: ['string', null, 'Renders a link'],
+  onClick: ['(event) => void', null, 'Click handler'],
+  clickAction: ['(event) => void | Promise<void>', null, 'Async action; shows loading while pending'],
 });
 
-export function IconButton({ icon, label, variant = 'secondary', size = 'medium', iconVariant = 'outline', className, ...rest }) {
-  return h(ButtonBase, { variant, size, 'aria-label': label, title: label, className: cx('bui-icon-btn', `bui-icon-btn--${size}`, className), ...rest },
-    typeof icon === 'string' ? h(Icon, { name: icon, variant: iconVariant, size: size === 'xsmall' ? 16 : 20 }) : icon);
+export function IconButton({ icon, ...props }) {
+  return h(Button, { ...props, icon, isIconOnly: true });
 }
-describe(IconButton, 'A square button with only an icon. `label` is required: it is the accessible name and the tooltip.', {
-  icon: ['string | ReactNode', null, 'Icon name from the catalog, or an element.'],
-  label: ['string', null, 'Accessible name (required).'],
-  variant: ["'primary' | 'secondary' | 'text'", "'secondary'", 'Visual style.'],
-  size: ["'xsmall' | 'small' | 'medium' | 'large'", "'medium'", 'Size; the button is square.'],
+describe(IconButton, 'A button with only an icon.', {
+  icon: ['ReactNode', null, 'Icon element'],
+  label: ['string', null, 'Accessible name and tooltip'],
+  variant: ["'primary' | 'secondary' | 'ghost' | 'destructive'", "'secondary'", 'Visual style'],
+  size: ["'sm' | 'md' | 'lg'", "'md'", 'Button size'],
 });
 
-export function ToggleButton({ pressed, defaultPressed = false, onPressedChange, variant = 'secondary', size = 'medium', children, className, ...rest }) {
-  const [on, setOn] = useControllable(pressed, defaultPressed, onPressedChange);
-  return h(ButtonBase, {
-    variant: on ? 'primary' : variant, size, 'aria-pressed': on, className: cx('bui-toggle-btn', className),
-    onClick: (e) => { setOn(!on); rest.onClick && rest.onClick(e); }, ...rest,
-  }, children);
+export function ButtonGroup({ label, orientation = 'horizontal', size = 'md', isDisabled = false, children, className, ...rest }) {
+  const ref = useRef(null);
+  const onKeyDown = (e) => {
+    const keys = orientation === 'vertical' ? ['ArrowUp', 'ArrowDown'] : ['ArrowLeft', 'ArrowRight'];
+    if (!keys.includes(e.key)) return;
+    const items = [...ref.current.querySelectorAll('button:not(:disabled), a[href]')];
+    const i = items.indexOf(document.activeElement);
+    if (i < 0) return;
+    e.preventDefault();
+    items[(i + (e.key === keys[1] ? 1 : -1) + items.length) % items.length].focus();
+  };
+  return h(GroupContext.Provider, { value: { size, isDisabled } },
+    h('div', { ref, role: 'group', 'aria-label': label, 'aria-disabled': isDisabled || undefined, onKeyDown, className: cx('bui-btn-group', `bui-btn-group--${orientation}`, className), ...rest }, children));
 }
-describe(ToggleButton, 'A button that stays pressed. Pressed state uses the primary style.', {
-  pressed: ['boolean', null, 'Pressed state (controlled).'],
-  defaultPressed: ['boolean', 'false', 'Initial state (uncontrolled).'],
-  onPressedChange: ['(pressed: boolean) => void', null, 'Called when toggled.'],
-  variant: ["'secondary' | 'text'", "'secondary'", 'Style when not pressed.'],
-  size: ["'xsmall' | 'small' | 'medium' | 'large'", "'medium'", 'Size.'],
+describe(ButtonGroup, 'Connects related buttons into one control.', {
+  label: ['string', null, 'Accessible name of the group'],
+  orientation: ["'horizontal' | 'vertical'", "'horizontal'", 'Layout direction'],
+  size: ["'sm' | 'md' | 'lg'", "'md'", 'Default size of the buttons'],
+  isDisabled: ['boolean', 'false', 'Disables every button'],
+  children: ['ReactNode', null, '`Button` or `IconButton` elements'],
 });
 
-export function ToggleButtonGroup({ items, value, defaultValue, onValueChange, multiple = false, size = 'small', label, className, ...rest }) {
-  const [current, setCurrent] = useControllable(value, defaultValue ?? (multiple ? [] : undefined), onValueChange);
-  const isOn = (v) => (multiple ? current.includes(v) : current === v);
-  const toggle = (v) => setCurrent(multiple ? (current.includes(v) ? current.filter((x) => x !== v) : [...current, v]) : v);
-  return h('div', { role: 'group', 'aria-label': label, className: cx('bui-btn-group', className), ...rest },
-    items.map((it) => h(ButtonBase, {
-      key: it.value, size, variant: isOn(it.value) ? 'primary' : 'secondary', 'aria-pressed': isOn(it.value), disabled: it.disabled, onClick: () => toggle(it.value),
-    }, it.label)));
+export function ToggleButton({ label, isPressed = false, onPressedChange, icon, pressedIcon, value, size, isDisabled, children, ...rest }) {
+  const group = useContext(ToggleGroupContext);
+  const pressed = group && value !== undefined ? group.selected.has(value) : isPressed;
+  const toggle = (e) => {
+    if (group && value !== undefined) group.toggle(value);
+    else onPressedChange && onPressedChange(!pressed, e);
+  };
+  return h(Button, { variant: pressed ? 'secondary' : 'ghost', label, size: size || (group && group.size), isDisabled: isDisabled ?? (group && group.isDisabled), icon: pressed && pressedIcon ? pressedIcon : icon, 'aria-pressed': pressed, onClick: toggle, className: cx('bui-toggle', pressed && 'bui-toggle--pressed'), ...rest }, children);
 }
-describe(ToggleButtonGroup, 'A group of toggle buttons. Single selection by default; `multiple` allows several.', {
-  items: ['Array<{ value: string; label: ReactNode; disabled?: boolean }>', null, 'Buttons.'],
-  value: ['string | string[]', null, 'Selected value(s) (controlled).'],
-  defaultValue: ['string | string[]', null, 'Initial value(s).'],
-  onValueChange: ['(value) => void', null, 'Called when the selection changes.'],
-  multiple: ['boolean', 'false', 'Allow several selected buttons.'],
-  size: ["'xsmall' | 'small' | 'medium' | 'large'", "'small'", 'Button size.'],
-  label: ['string', null, 'aria-label of the group.'],
+describe(ToggleButton, 'A button that stays pressed.', {
+  label: ['string', null, 'Visible text and accessible name'],
+  isPressed: ['boolean', 'false', 'Pressed state; ignored inside a group'],
+  onPressedChange: ['(isPressed, event) => void', null, 'Called with the next state'],
+  icon: ['ReactNode', null, 'Icon before the label'],
+  pressedIcon: ['ReactNode', null, 'Icon while pressed'],
+  value: ['string', null, 'Identifier inside a group'],
+  size: ["'sm' | 'md' | 'lg'", "'md'", 'Button size'],
+  isDisabled: ['boolean', 'false', 'Disables the button'],
+});
+
+export function ToggleButtonGroup({ label, type = 'single', value, onChange, orientation = 'horizontal', size = 'md', isDisabled = false, children, className, ...rest }) {
+  const selected = new Set(type === 'multiple' ? value : value == null ? [] : [value]);
+  const toggle = (v) => {
+    if (type === 'multiple') onChange(selected.has(v) ? value.filter((x) => x !== v) : [...value, v]);
+    else onChange(selected.has(v) ? null : v);
+  };
+  return h(ToggleGroupContext.Provider, { value: { selected, toggle, size, isDisabled } },
+    h('div', { role: 'group', 'aria-label': label, className: cx('bui-btn-group', `bui-btn-group--${orientation}`, className), ...rest }, children));
+}
+describe(ToggleButtonGroup, 'A group of toggle buttons with single or multiple selection.', {
+  label: ['string', null, 'Accessible name of the group'],
+  type: ["'single' | 'multiple'", "'single'", 'Selection mode'],
+  value: ['string | string[] | null', null, 'Selected value(s)'],
+  onChange: ['(value) => void', null, 'Called with the new selection'],
+  orientation: ["'horizontal' | 'vertical'", "'horizontal'", 'Layout direction'],
+  size: ["'sm' | 'md' | 'lg'", "'md'", 'Default size of the buttons'],
+  isDisabled: ['boolean', 'false', 'Disables every button'],
 });

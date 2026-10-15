@@ -9,10 +9,10 @@ export function Table({ columns, rows, rowKey = 'id', caption, dense = false, cl
       h('tbody', null, rows.map((r, i) => h('tr', { key: r[rowKey] ?? i }, columns.map((c) =>
         h('td', { key: c.key, style: { textAlign: c.align } }, c.render ? c.render(r) : r[c.key])))))));
 }
-describe(Table, 'Tabular data with a header row. Rows are separated by dividers, not outlines.', {
-  columns: ['Array<{ key: string; header: ReactNode; render?: (row) => ReactNode; align?: string; width?: number | string }>', null, 'Column definitions.'],
-  rows: ['object[]', null, 'Row data.'],
-  rowKey: ['string', "'id'", 'Field used as the React key.'],
-  caption: ['string', null, 'Accessible table caption (visually hidden).'],
-  dense: ['boolean', 'false', 'Tighter row height.'],
+describe(Table, 'Tabular data.', {
+  columns: ['Array<{ key: string; header: ReactNode; render?: (row) => ReactNode; align?: string; width?: number | string }>', null, 'Column definitions'],
+  rows: ['object[]', null, 'Row data'],
+  rowKey: ['string', "'id'", 'Field used as the React key'],
+  caption: ['string', null, 'Accessible caption'],
+  dense: ['boolean', 'false', 'Tighter row height'],
 });

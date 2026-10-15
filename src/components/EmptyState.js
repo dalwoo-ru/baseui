@@ -9,9 +9,9 @@ export function EmptyState({ icon, title, description, action, className, ...res
     action && h('div', { className: 'bui-empty__action' }, action));
 }
 
-describe(EmptyState, 'Shown when there is nothing to display: no data, an empty search, a first run.', {
-  icon: ['ReactNode', null, 'Icon or illustration.'],
-  title: ['ReactNode', null, 'Heading.'],
-  description: ['ReactNode', null, 'Explanation and what to do next.'],
-  action: ['ReactNode', null, 'Primary action (usually a Button).'],
+describe(EmptyState, 'Shown when there is nothing to display.', {
+  icon: ['ReactNode', null, 'Icon or illustration'],
+  title: ['ReactNode', null, 'Heading'],
+  description: ['ReactNode', null, 'Explanation and what to do next'],
+  action: ['ReactNode', null, 'Primary action (usually a Button)'],
 });

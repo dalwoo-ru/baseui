@@ -17,7 +17,7 @@ export function Breadcrumbs({ items, label = 'Breadcrumbs', className, ...rest }
     })));
 }
 
-describe(Breadcrumbs, 'A trail of links showing where the user is. The last item is the current page.', {
-  items: ['Array<{ label: ReactNode; href?: string; onClick?: () => void }>', null, 'Items in order (Breadcrumb Item).'],
-  label: ['string', "'Breadcrumbs'", 'aria-label of the nav.'],
+describe(Breadcrumbs, 'Links that show where the user is in a hierarchy.', {
+  items: ['Array<{ label: ReactNode; href?: string; onClick?: () => void }>', null, 'Breadcrumb items in order'],
+  label: ['string', "'Breadcrumbs'", 'Accessible name'],
 });

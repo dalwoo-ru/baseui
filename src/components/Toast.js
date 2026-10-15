@@ -50,7 +50,7 @@ export function ToastProvider({ children, placement = 'bottom-right', limit = 4 
       items.map((item) => h(ToastItem, { key: item.id, item, onDismiss: dismiss }))));
 }
 
-describe(ToastProvider, 'Notification provider. Wrap the app once and call `useToast().toast({ title, description, status, duration })`. The timer pauses on hover and focus; `duration: 0` keeps the toast until dismissed.', {
-  placement: ["'bottom-right' | 'bottom-center' | 'top-right' | 'top-center'", "'bottom-right'", 'Where the stack appears (full width on narrow screens).'],
-  limit: ['number', '4', 'Maximum simultaneous toasts.'],
+describe(ToastProvider, 'Shows brief notifications. Call `useToast()` to add one.', {
+  placement: ["'bottom-right' | 'bottom-center' | 'top-right' | 'top-center'", "'bottom-right'", 'Where the stack appears'],
+  limit: ['number', '4', 'Maximum simultaneous toasts'],
 });

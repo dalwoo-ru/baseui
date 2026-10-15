@@ -20,12 +20,12 @@ export function Popover({ trigger, children, open, defaultOpen = false, onOpenCh
         : trigger),
     isOpen && h('div', { id, role: 'dialog', 'aria-label': label, className: 'bui-popover__panel', 'data-placement': placement }, children));
 }
-describe(Popover, 'A floating panel anchored to a trigger. Closes on outside click and Escape.', {
-  trigger: ['(props) => ReactElement', null, 'Render function; spread the received props onto your trigger button.'],
-  children: ['ReactNode', null, 'Panel content.'],
-  open: ['boolean', null, 'Open state (controlled).'],
-  defaultOpen: ['boolean', 'false', 'Initially open.'],
-  onOpenChange: ['(open: boolean) => void', null, 'Called when it opens or closes.'],
-  placement: ["'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'", "'bottom-start'", 'Where the panel appears.'],
-  label: ['string', null, 'Accessible name of the panel.'],
+describe(Popover, 'A floating panel anchored to a trigger.', {
+  trigger: ['(props) => ReactElement', null, 'Render function that receives the trigger props'],
+  children: ['ReactNode', null, 'Panel content'],
+  open: ['boolean', null, 'Open state'],
+  defaultOpen: ['boolean', 'false', 'Initially open'],
+  onOpenChange: ['(open: boolean) => void', null, 'Called when it opens or closes'],
+  placement: ["'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'", "'bottom-start'", 'Where the panel appears'],
+  label: ['string', null, 'Accessible name of the panel'],
 });

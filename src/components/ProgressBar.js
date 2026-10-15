@@ -14,9 +14,9 @@ export function ProgressBar({ value, size = 'medium', label, showValue = false, 
     }, h('div', { className: 'bui-progress__fill', style: determinate ? { width: `${pct}%` } : undefined })));
 }
 
-describe(ProgressBar, 'A linear progress indicator. Without `value` it is indeterminate.', {
-  value: ['number', null, 'Progress 0–100. Omit for an indeterminate bar.'],
-  size: ["'small' | 'medium'", "'medium'", 'Bar thickness: 4 / 8 px.'],
-  label: ['ReactNode', null, 'Label above the bar (also the accessible name).'],
-  showValue: ['boolean', 'false', 'Show the value as a percentage.'],
+describe(ProgressBar, 'A linear progress indicator.', {
+  value: ['number', null, 'Progress from 0 to 100; omit for indeterminate'],
+  size: ["'small' | 'medium'", "'medium'", 'Bar thickness'],
+  label: ['ReactNode', null, 'Label above the bar'],
+  showValue: ['boolean', 'false', 'Show the value as a percentage'],
 });

@@ -7,15 +7,14 @@ export default meta({
   title: 'Components/Banner', component: Banner,
   args: { status: 'info', title: 'Update available', children: 'The new version will install on the next launch.' },
   argTypes: {
-    status: { control: 'inline-radio', options: ['info', 'success', 'warning', 'error'], description: 'Type' },
-    title: { control: 'text', description: 'Heading' },
-    children: { control: 'text', description: 'Text' },
+    status: { control: 'inline-radio', options: ['info', 'success', 'warning', 'error'] },
+    title: { control: 'text' },
+    children: { control: 'text' },
   },
 });
-export const Playground = { ...playground({ description: 'An inline message inside the page.', source: '{}' }), render: (args) => W(480, h(Banner, args)) };
+export const Playground = { ...playground({ source: '{}' }), render: (args) => W(480, h(Banner, args)) };
 export const Statuses = example({
-  name: 'Statuses', description: 'Four statuses. `error` and `warning` are announced immediately (`role="alert"`).',
-  render: () => h(Stack, { width: 480 },
+  name: 'Statuses', render: () => h(Stack, { width: 480 },
     h(Banner, { status: 'info', title: 'Information' }, 'A neutral message.'),
     h(Banner, { status: 'success', title: 'Done' }, 'Changes saved.'),
     h(Banner, { status: 'warning', title: 'Heads up' }, 'Your subscription ends in 3 days.'),
@@ -28,11 +27,10 @@ export const Statuses = example({
 function Dismissible() {
   const [open, setOpen] = useState(true);
   return open ? h(Banner, { status: 'info', title: 'Dismissible', onClose: () => setOpen(false) }, 'Use the close button on the right.')
-    : h(Button, { variant: 'secondary', size: 'small', onClick: () => setOpen(true) }, 'Show again');
+    : h(Button, { variant: 'secondary', size: 'sm', onClick: () => setOpen(true) }, 'Show again');
 }
 export const Dismissable = example({
-  name: 'Dismissible', description: 'With `onClose` a close button appears.',
-  render: () => W(480, h(Dismissible)),
+  name: 'Dismissible', render: () => W(480, h(Dismissible)),
   source: `<Banner title="Dismissible" onClose={() => setOpen(false)}>Use the close button on the right.</Banner>`,
 });
 export const __namedExportsOrder = ['Playground', 'Statuses', 'Dismissable'];

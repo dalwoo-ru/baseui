@@ -28,22 +28,22 @@ export function Section({ as = 'section', padding = 24, maxWidth, className, sty
 }
 
 const GAP = ['`0` · `4` · `8` · `12` · `16` · `20` · `24` · `32` · `40` · `48` · `64` · `80`', null];
-describe(Stack, 'Flex container with a consistent gap. `HStack` and `VStack` are shortcuts for row and column.', {
-  direction: ["'row' | 'column'", "'column'", 'Main axis.'],
-  gap: ['number', '16', 'Gap in px, one of the spacing tokens: 0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80.'],
-  align: ["'start' | 'center' | 'end' | 'stretch' | 'baseline'", null, 'Cross-axis alignment.'],
-  justify: ["'start' | 'center' | 'end' | 'between' | 'around'", null, 'Main-axis distribution.'],
-  wrap: ['boolean', 'false', 'Allow items to wrap.'],
-  as: ['ElementType', "'div'", 'HTML tag.'],
+describe(Stack, 'A flex container with a consistent gap.', {
+  direction: ["'row' | 'column'", "'column'", 'Main axis'],
+  gap: ['number', '16', 'Gap in px, from the spacing scale'],
+  align: ["'start' | 'center' | 'end' | 'stretch' | 'baseline'", null, 'Cross-axis alignment'],
+  justify: ["'start' | 'center' | 'end' | 'between' | 'around'", null, 'Main-axis distribution'],
+  wrap: ['boolean', 'false', 'Allow items to wrap'],
+  as: ['ElementType', "'div'", 'HTML tag'],
 });
-describe(HStack, 'Row stack, vertically centered by default.', { gap: ['number', '16', 'Gap in px (spacing token).'] });
-describe(VStack, 'Column stack.', { gap: ['number', '16', 'Gap in px (spacing token).'] });
-describe(Center, 'Centers its children horizontally and vertically.', { as: ['ElementType', "'div'", 'HTML tag.'] });
-describe(Grid, 'CSS grid with equal columns or a custom template.', {
-  columns: ['number | string', '2', 'Number of equal columns or a `grid-template-columns` string.'],
-  gap: ['number', '16', 'Gap in px (spacing token).'],
+describe(HStack, 'A horizontal Stack.', { gap: ['number', '16', 'Gap in px (spacing token).'] });
+describe(VStack, 'A vertical Stack.', { gap: ['number', '16', 'Gap in px (spacing token).'] });
+describe(Center, 'Centers its content.', { as: ['ElementType', "'div'", 'HTML tag.'] });
+describe(Grid, 'A CSS grid with equal columns.', {
+  columns: ['number | string', '2', 'Number of columns or a template string'],
+  gap: ['number', '16', 'Gap in px, from the spacing scale'],
 });
-describe(Section, 'Padded block with an optional maximum width, rendered as a `section`.', {
-  padding: ['number', '24', 'Padding in px (spacing token).'],
-  maxWidth: ['number | string', null, 'Maximum width.'],
+describe(Section, 'A padded block with an optional maximum width.', {
+  padding: ['number', '24', 'Padding in px, from the spacing scale'],
+  maxWidth: ['number | string', null, 'Maximum width'],
 });

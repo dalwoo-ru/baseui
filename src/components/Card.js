@@ -1,49 +1,56 @@
 import { h, cx, useControllable } from '../react.js';
-import { Icon } from '../icons.js';
 import { describe } from '../doc.js';
 
-export function Card({ variant = 'filled', padding = 16, title, subtitle, actions, footer, as = 'section', children, className, ...rest }) {
-  const hasHeader = title || subtitle || actions;
-  return h(as, { className: cx('bui-card', `bui-card--${variant}`, className), style: { '--bui-card-pad': `var(--baseui-spacing-${padding})` }, ...rest },
-    hasHeader && h('header', { className: 'bui-card__header' },
-      h('div', { className: 'bui-card__heading' },
-        title && h('div', { className: 'bui-card__title' }, title),
-        subtitle && h('div', { className: 'bui-card__subtitle' }, subtitle)),
-      actions && h('div', { className: 'bui-card__actions' }, actions)),
-    children != null && h('div', { className: 'bui-card__body' }, children),
-    footer && h('footer', { className: 'bui-card__footer' }, footer));
+const px = (v) => (typeof v === 'number' ? `${v}px` : v);
+const SHADOW = { none: 'none', low: 'var(--baseui-shadow-low)', med: 'var(--baseui-shadow-med)', high: 'var(--baseui-shadow-high)' };
+const CARD_DOC = {
+  variant: ["'default' | 'transparent' | 'muted' | 'blue' | 'green' | 'orange' | 'pink' | 'red'", "'default'", 'Background'],
+  padding: ['number', '16', 'Inner padding in px (spacing token)'],
+  elevation: ["'none' | 'low' | 'med' | 'high'", "'none'", 'Shadow depth'],
+  width: ['number | string', null, 'Number is px'],
+  height: ['number | string', null, 'Number is px'],
+  maxWidth: ['number | string', null, 'Number is px'],
+  children: ['ReactNode', null, 'Card content'],
+};
+
+function cardProps({ variant = 'default', padding = 16, elevation = 'none', width, height, maxWidth, minHeight, className, style }, extra) {
+  return {
+    className: cx('bui-card', `bui-card--${variant}`, className, extra),
+    style: { padding: `var(--baseui-spacing-${padding})`, boxShadow: SHADOW[elevation], width: px(width), height: px(height), maxWidth: px(maxWidth), minHeight: px(minHeight), ...style },
+  };
 }
-describe(Card, 'A container that groups related content. Cards have no outline: a fill or a shadow separates them from the page.', {
-  variant: ["'filled' | 'raised'", "'filled'", 'Quiet fill, or a surface with a shadow.'],
-  padding: ['number', '16', 'Inner padding in px (spacing token: 0, 8, 12, 16, 20, 24, 32).'],
-  title: ['ReactNode', null, 'Heading.'],
-  subtitle: ['ReactNode', null, 'Supporting line under the heading.'],
-  actions: ['ReactNode', null, 'Actions on the right of the header.'],
-  footer: ['ReactNode', null, 'Footer content.'],
-  as: ['ElementType', "'section'", 'HTML tag.'],
+
+export function Card({ variant, padding, elevation, width, height, maxWidth, minHeight, className, style, children, ...rest }) {
+  return h('div', { ...cardProps({ variant, padding, elevation, width, height, maxWidth, minHeight, className, style }), ...rest }, children);
+}
+describe(Card, 'A container that groups related content.', CARD_DOC);
+
+export function ClickableCard({ label, onClick, href, target, isDisabled = false, variant, padding, elevation, width, height, maxWidth, minHeight, className, style, children, ...rest }) {
+  const Hit = href ? 'a' : 'button';
+  const hit = h(Hit, {
+    className: 'bui-card__hit', 'aria-label': label,
+    ...(href ? { href: isDisabled ? undefined : href, target, role: isDisabled ? 'link' : undefined, 'aria-disabled': isDisabled || undefined, tabIndex: isDisabled ? -1 : undefined } : { type: 'button', disabled: isDisabled }),
+    onClick: isDisabled ? (e) => e.preventDefault() : onClick,
+  });
+  return h('div', { ...cardProps({ variant, padding, elevation, width, height, maxWidth, minHeight, className, style }, cx('bui-card--clickable', isDisabled && 'bui-card--disabled')), ...rest }, hit, h('div', { className: 'bui-card__content' }, children));
+}
+describe(ClickableCard, 'A card that acts as one link or button.', {
+  label: ['string', null, 'Accessible name'],
+  onClick: ['(event) => void', null, 'Click handler'],
+  href: ['string', null, 'Renders a link'],
+  isDisabled: ['boolean', 'false', 'Disables the card'],
+  ...CARD_DOC,
 });
 
-export function ClickableCard({ href, onClick, children, className, ...rest }) {
-  const Tag = href ? 'a' : 'button';
-  return h(Tag, { className: cx('bui-card', 'bui-card--filled', 'bui-card--clickable', className), style: { '--bui-card-pad': 'var(--baseui-spacing-16)' }, ...(href ? { href } : { type: 'button' }), onClick, ...rest },
-    h('div', { className: 'bui-card__body' }, children));
+export function SelectableCard({ label, isSelected, onChange, isDisabled = false, variant, padding, elevation, width, height, maxWidth, minHeight, className, style, children, ...rest }) {
+  return h('div', { ...cardProps({ variant, padding, elevation, width, height, maxWidth, minHeight, className, style }, cx('bui-card--selectable', isSelected && 'bui-card--selected', isDisabled && 'bui-card--disabled')), ...rest },
+    h('input', { type: 'checkbox', className: 'bui-card__hit', 'aria-label': label, checked: isSelected, disabled: isDisabled, onChange: () => onChange(!isSelected) }),
+    h('div', { className: 'bui-card__content' }, children));
 }
-describe(ClickableCard, 'A card that is a single link or button. Gets hover and pressed feedback.', {
-  href: ['string', null, 'Renders an `a` when set, otherwise a `button`.'],
-  onClick: ['(event) => void', null, 'Click handler.'],
-});
-
-export function SelectableCard({ selected, defaultSelected = false, onSelectedChange, disabled = false, children, className, ...rest }) {
-  const [on, setOn] = useControllable(selected, defaultSelected, onSelectedChange);
-  return h('button', {
-    type: 'button', role: 'checkbox', 'aria-checked': on, disabled, onClick: () => setOn(!on),
-    className: cx('bui-card', 'bui-card--filled', 'bui-card--selectable', className), style: { '--bui-card-pad': 'var(--baseui-spacing-16)' }, ...rest,
-  }, h('div', { className: 'bui-card__body' }, children),
-  h('span', { className: 'bui-card__check', 'aria-hidden': 'true' }, on && h(Icon, { name: 'success', size: 22 })));
-}
-describe(SelectableCard, 'A card that can be selected, like a checkbox. Selection is shown with a tinted fill and a check mark.', {
-  selected: ['boolean', null, 'Selected state (controlled).'],
-  defaultSelected: ['boolean', 'false', 'Initial state.'],
-  onSelectedChange: ['(selected: boolean) => void', null, 'Called when toggled.'],
-  disabled: ['boolean', 'false', 'Disable selection.'],
+describe(SelectableCard, 'A card that can be selected.', {
+  label: ['string', null, 'Accessible name'],
+  isSelected: ['boolean', null, 'Selection state'],
+  onChange: ['(isSelected: boolean) => void', null, 'Called with the next state'],
+  isDisabled: ['boolean', 'false', 'Disables the card'],
+  ...CARD_DOC,
 });

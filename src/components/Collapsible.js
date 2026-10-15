@@ -15,13 +15,13 @@ export function Collapsible({ title, open, defaultOpen = false, onOpenChange, di
       h('div', { role: 'region', id: `${uid}-p`, 'aria-labelledby': `${uid}-t`, inert: !isOpen, className: 'bui-collapsible__content' },
         h('div', { className: 'bui-collapsible__inner' }, children))));
 }
-describe(Collapsible, 'A section that expands and collapses to show or hide its content.', {
-  title: ['ReactNode', null, 'Always-visible heading that toggles the content.'],
-  open: ['boolean', null, 'Open state (controlled).'],
-  defaultOpen: ['boolean', 'false', 'Initial state (uncontrolled).'],
-  onOpenChange: ['(open: boolean) => void', null, 'Called when toggled.'],
-  disabled: ['boolean', 'false', 'Prevent toggling.'],
-  children: ['ReactNode', null, 'Collapsible content.'],
+describe(Collapsible, 'A section that expands and collapses.', {
+  title: ['ReactNode', null, 'Heading that toggles the content'],
+  open: ['boolean', null, 'Open state'],
+  defaultOpen: ['boolean', 'false', 'Initial state'],
+  onOpenChange: ['(open: boolean) => void', null, 'Called when toggled'],
+  disabled: ['boolean', 'false', 'Prevent toggling'],
+  children: ['ReactNode', null, 'Collapsible content'],
 });
 
 export function CollapsibleGroup({ items, multiple = false, value, defaultValue = [], onValueChange, className, ...rest }) {
@@ -32,10 +32,10 @@ export function CollapsibleGroup({ items, multiple = false, value, defaultValue 
       key: it.value, title: it.title, disabled: it.disabled, open: open.includes(it.value), onOpenChange: (on) => toggle(it.value, on),
     }, it.content)));
 }
-describe(CollapsibleGroup, 'A set of collapsibles. One section is open at a time unless `multiple` is set.', {
-  items: ['Array<{ value: string; title: ReactNode; content: ReactNode; disabled?: boolean }>', null, 'Sections.'],
-  multiple: ['boolean', 'false', 'Allow several open sections.'],
-  value: ['string[]', null, 'Open sections (controlled).'],
-  defaultValue: ['string[]', '[]', 'Initially open sections.'],
-  onValueChange: ['(value: string[]) => void', null, 'Called when the open sections change.'],
+describe(CollapsibleGroup, 'A set of collapsibles.', {
+  items: ['Array<{ value: string; title: ReactNode; content: ReactNode; disabled?: boolean }>', null, 'Sections'],
+  multiple: ['boolean', 'false', 'Allow several open sections'],
+  value: ['string[]', null, 'Open sections'],
+  defaultValue: ['string[]', '[]', 'Initially open sections'],
+  onValueChange: ['(value: string[]) => void', null, 'Called when the open sections change'],
 });

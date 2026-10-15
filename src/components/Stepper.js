@@ -14,8 +14,8 @@ export function Stepper({ steps, current = 0, orientation = 'horizontal', label 
     }));
 }
 describe(Stepper, 'Shows progress through a multi-step flow.', {
-  steps: ['Array<{ title: ReactNode; description?: ReactNode }>', null, 'Steps (Step).'],
-  current: ['number', '0', 'Zero-based index of the current step; earlier steps are complete.'],
-  orientation: ["'horizontal' | 'vertical'", "'horizontal'", 'Layout.'],
-  label: ['string', "'Progress'", 'aria-label of the list.'],
+  steps: ['Array<{ title: ReactNode; description?: ReactNode }>', null, 'Steps'],
+  current: ['number', '0', 'Index of the current step'],
+  orientation: ["'horizontal' | 'vertical'", "'horizontal'", 'Layout'],
+  label: ['string', "'Progress'", 'Accessible name'],
 });
