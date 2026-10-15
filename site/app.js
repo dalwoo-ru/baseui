@@ -303,13 +303,13 @@ function App() {
   const dark = theme === 'dark';
 
   const skip = (e) => { e.preventDefault(); const m = document.getElementById('main'); m.setAttribute('tabindex', '-1'); m.focus(); };
-  return h(ViewportContext.Provider, { value: entry && entry.section === 'Components' ? viewport : 'desktop' },
+  const themeButton = h(IconButton, { variant: 'ghost', size: 'sm', label: dark ? 'Switch to light theme' : 'Switch to dark theme', icon: h(dark ? icons.Sun : icons.Moon01, { size: 20 }), onClick: () => setTheme(dark ? 'light' : 'dark') });
+  return h(ViewportContext.Provider, { value: viewport },
       h('div', { className: 'shell' + (menu ? ' menu-open' : '') },
         h('a', { className: 'skip', href: '#main', onClick: skip }, 'Skip to content'),
         h('aside', { className: 'side' },
           h('div', { className: 'side-head' },
-            h('a', { className: 'brand', href: '#/' }, 'baseui'),
-            h(IconButton, { variant: 'ghost', size: 'sm', label: dark ? 'Switch to light theme' : 'Switch to dark theme', icon: h(dark ? icons.Sun : icons.Moon01, { size: 20 }), onClick: () => setTheme(dark ? 'light' : 'dark') })),
+            h('a', { className: 'brand', href: '#/' }, 'baseui')),
           h('div', { className: 'search' }, h(TextField, {
             label: 'Search', floatingLabel: false, size: 'sm', value: q, clearable: true, actionLabel: 'Clear search', startIcon: h(icons.SearchSm, { size: 24 }),
             onChange: (e) => setQ(e.target.value),
@@ -317,9 +317,10 @@ function App() {
           h(Nav, { entry, query: q.trim().toLowerCase() })),
         h('div', { className: 'scrim', onClick: () => _setMenu(false) }),
         h('main', { id: 'main' },
-          h('div', { className: 'topbar' }, h(Button, { variant: 'secondary', size: 'xsm', onClick: () => _setMenu(!menu) }, 'Menu'), h('a', { href: '#/', className: 'brand' }, 'baseui')),
-          entry && entry.section === 'Components' && h('div', { className: 'pagebar' },
-            h(SegmentedControl, { size: 'sm', label: 'Preview width', value: viewport, onValueChange: setViewport, items: [{ value: 'desktop', label: 'Desktop' }, { value: 'mobile', label: 'Mobile' }] })),
+          h('div', { className: 'topbar' }, h(Button, { variant: 'secondary', size: 'xsm', onClick: () => _setMenu(!menu) }, 'Menu'), h('a', { href: '#/', className: 'brand' }, 'baseui'), h('span', { className: 'topbar-end' }, themeButton)),
+          h('div', { className: 'pagebar' },
+            h(SegmentedControl, { size: 'sm', label: 'Preview width', value: viewport, onValueChange: setViewport, items: [{ value: 'desktop', label: 'Desktop' }, { value: 'mobile', label: 'Mobile' }] }),
+            themeButton),
           entry ? h(Page, { entry, key: entry.slug }) : h(Home))));
 }
 

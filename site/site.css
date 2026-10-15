@@ -175,9 +175,10 @@ code, pre { font-family: var(--baseui-Typography-Font-Family-Mono); }
 @media (max-width: 860px) { .space-row, .motion-row { grid-template-columns: 1fr; } }
 
 /* sidebar header, search, preview width */
-.side-head { display: flex; align-items: center; justify-content: space-between; gap: var(--baseui-spacing-8); }
+.side-head { display: flex; align-items: center; }
 .side-head .brand { padding: 0 var(--baseui-spacing-8); }
 .search { padding-top: 0; }
-.pagebar { position: sticky; top: 0; z-index: var(--baseui-z-index-100); display: flex; justify-content: flex-end; padding: var(--baseui-spacing-12) var(--baseui-spacing-32); background: color-mix(in srgb, var(--baseui-Background-Primary) 90%, transparent); backdrop-filter: blur(8px); }
+.pagebar { position: sticky; top: 0; z-index: var(--baseui-z-index-100); display: flex; align-items: center; justify-content: flex-end; gap: var(--baseui-spacing-8); padding: var(--baseui-spacing-12) var(--baseui-spacing-32); background: color-mix(in srgb, var(--baseui-Background-Primary) 90%, transparent); backdrop-filter: blur(8px); }
 .page { padding-top: var(--baseui-spacing-24); }
+.topbar-end { margin-left: auto; }
 @media (max-width: 860px) { .pagebar { display: none; } }
