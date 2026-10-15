@@ -54,14 +54,6 @@ export const section = (title, data) => data && data.find((s) => s.title === tit
 export const Block = ({ title, id, children }) =>
   h('section', { className: 'doc-block', id }, title && h('h2', null, title), children);
 
-export function DoDont({ dos = [], donts = [] }) {
-  return h('div', { className: 'table-wrap' },
-    h('table', { className: 'dodont' },
-      h('tbody', null,
-        dos.map((t, i) => h('tr', { key: 'd' + i }, h('th', { className: 'do' }, 'Do'), h('td', null, t))),
-        donts.map((t, i) => h('tr', { key: 'n' + i }, h('th', { className: 'dont' }, 'Don’t'), h('td', null, t))))));
-}
-
 export function Swatch({ name, size = 40 }) {
   return h('span', { className: 'tok-swatch', style: { width: size, height: size, background: `var(--baseui-${name})` }, 'aria-hidden': 'true' });
 }

@@ -1,5 +1,5 @@
 import { h, Fragment } from '../react.js';
-import { useTokens, section, Block, DoDont, TokenTable, Loading } from './_kit.js';
+import { useTokens, section, Block, TokenTable, Loading } from './_kit.js';
 
 export default {
   title: 'Foundations/Spacing',
@@ -16,11 +16,6 @@ export function page() {
         h('code', null, `--baseui-${t.name}`),
         h('span', { className: 'space-bar-wrap' }, h('span', { className: 'tok-bar', style: { width: t.value === '0' ? 1 : t.value } })),
         h('span', { className: 'val' }, t.value)))),
-      h(TokenTable, { tokens })),
-    h(Block, { title: 'Best Practices' },
-      h(DoDont, {
-        dos: ['Stay on the scale.', 'Use `gap` instead of margins on children.'],
-        donts: ['Use pixel values outside the scale.', 'Mix tokens with raw values in one component.'],
-      })));
+      h(TokenTable, { tokens })));
 }
 export const __namedExportsOrder = [];

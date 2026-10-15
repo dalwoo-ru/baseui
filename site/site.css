@@ -197,10 +197,6 @@ code, pre { font-family: var(--baseui-Typography-Font-Family-Mono); }
 .tok-bar { display: inline-block; height: 12px; border-radius: 2px; background: var(--baseui-Background-Brand); min-width: 1px; }
 .tok-radius { display: inline-block; width: 32px; height: 32px; background: var(--baseui-Background-Tertiary); }
 .tok-shadow { display: inline-block; width: 32px; height: 32px; border-radius: var(--baseui-radius-8); background: var(--baseui-Extensions-Background-Surface); }
-.dodont th { width: 72px; text-align: left; font: var(--baseui-Typography-Text-14-Semi-Bold); }
-.dodont th.do { color: var(--baseui-Extensions-Text-and-Icon-Success); }
-.dodont th.dont { color: var(--baseui-Extensions-Text-and-Icon-Error); }
-.dodont td { font: var(--baseui-Typography-Text-14-Regular); }
 .space-list { display: flex; flex-direction: column; gap: var(--baseui-spacing-8); margin-bottom: var(--baseui-spacing-24); }
 .space-row { display: grid; grid-template-columns: 200px 1fr 60px; gap: var(--baseui-spacing-16); align-items: center; font: var(--baseui-Typography-Text-14-Regular); }
 .space-bar-wrap { display: flex; align-items: center; }

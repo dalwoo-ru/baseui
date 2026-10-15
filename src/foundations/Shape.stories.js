@@ -1,5 +1,5 @@
 import { h, Fragment } from '../react.js';
-import { useTokens, section, Block, DoDont, TokenTable, Loading } from './_kit.js';
+import { useTokens, section, Block, TokenTable, Loading } from './_kit.js';
 
 export default {
   title: 'Foundations/Shape',
@@ -18,11 +18,6 @@ export function page() {
       h(TokenTable, { tokens })),
     h(Block, { title: 'Concentric Radius' },
       h('p', { className: 'doc-p' }, 'Inner radius = outer radius − padding.'),
-      h('div', { className: 'concentric' }, h('div', { className: 'concentric-outer' }, h('div', { className: 'concentric-inner' }, '24 − 8 = 16')))),
-    h(Block, { title: 'Best Practices' },
-      h(DoDont, {
-        dos: ['Use 8–16 for controls and 16–24 for containers.', 'Use `full` for pills and avatars.'],
-        donts: ['Use large radii on small elements.', 'Hardcode radius values.'],
-      })));
+      h('div', { className: 'concentric' }, h('div', { className: 'concentric-outer' }, h('div', { className: 'concentric-inner' }, '24 − 8 = 16')))));
 }
 export const __namedExportsOrder = [];

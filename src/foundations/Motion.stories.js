@@ -1,5 +1,5 @@
 import { h, Fragment, useState } from '../react.js';
-import { useTokens, section, Block, DoDont, TokenTable, Loading } from './_kit.js';
+import { useTokens, section, Block, TokenTable, Loading } from './_kit.js';
 import { Button } from '../base.js';
 
 export default {
@@ -27,11 +27,6 @@ export function page() {
       h(TokenTable, { tokens: tokens.filter((t) => t.name.startsWith('duration')) })),
     h(Block, { title: 'Easing' }, h(TokenTable, { tokens: tokens.filter((t) => t.name.startsWith('ease')) })),
     h(Block, { title: 'Reduced Motion' },
-      h('p', { className: 'doc-p' }, 'Every duration becomes ', h('code', null, '0ms'), ' when the system asks for reduced motion.')),
-    h(Block, { title: 'Best Practices' },
-      h(DoDont, {
-        dos: ['Use fast for hover and press, medium for panels and content.', 'Animate only changes that help the user follow what happened.'],
-        donts: ['Slow down hover or other frequent interactions.', 'Block the next action while an animation runs.'],
-      })));
+      h('p', { className: 'doc-p' }, 'Every duration becomes ', h('code', null, '0ms'), ' when the system asks for reduced motion.')));
 }
 export const __namedExportsOrder = [];
