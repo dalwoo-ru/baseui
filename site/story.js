@@ -1,4 +1,4 @@
-// Rendering of a story: shared by the documentation site and the preview frame.
+// Rendering of a story: used by the documentation site.
 import { t as requireReact } from '../lib/react-BZJXY1be.js';
 
 export const React = requireReact();

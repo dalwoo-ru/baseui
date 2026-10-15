@@ -27,7 +27,6 @@ export function Section({ as = 'section', padding = 24, maxWidth, className, sty
   return h(as, { className: cx('bui-section', className), style: { padding: sp(padding), maxWidth, ...style }, ...rest }, children);
 }
 
-const GAP = ['`0` · `4` · `8` · `12` · `16` · `20` · `24` · `32` · `40` · `48` · `64` · `80`', null];
 describe(Stack, 'A flex container with a consistent gap.', {
   direction: ["'row' | 'column'", "'column'", 'Main axis'],
   gap: ['number', '16', 'Gap in px, from the spacing scale'],

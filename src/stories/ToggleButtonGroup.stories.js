@@ -1,6 +1,6 @@
 import { h, useState } from '../react.js';
 import { ToggleButton, ToggleButtonGroup } from '../components/Button.js';
-import { meta, playground, example } from './_helpers.js';
+import { meta, playground } from './_helpers.js';
 
 export default meta({
   title: 'Components/Toggle Button Group', component: ToggleButtonGroup, args: { label: 'Alignment', type: 'single', size: 'md' },

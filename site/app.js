@@ -10,8 +10,7 @@ import { composeStory, StoryCanvas, Boundary } from './story.js';
 const icons = await import('../lib/line-HpXc8B8J.js');
 
 const React = requireReact();
-const { createElement: h, useState, useEffect, useMemo, useRef, useContext, createContext, Fragment } = React;
-const ThemeContext = createContext('light');
+const { createElement: h, useState, useEffect, useMemo, useContext, createContext } = React;
 const ViewportContext = createContext('desktop');
 
 /* ------------------------------------------------------------- page index */
@@ -132,7 +131,7 @@ function Toc({ items }) {
     items.map((s) => h('button', { key: s.id, type: 'button', onClick: () => go(s.id) }, s.name)));
 }
 
-function Example({ meta, story, name, id, controls, overlay, file, exportName }) {
+function Example({ meta, story, name, id, controls, overlay }) {
   const viewport = useContext(ViewportContext);
   const base = useMemo(() => composeStory(meta, story).args, [meta, story]);
   const [overrides, setOverrides] = useState({});
@@ -207,7 +206,7 @@ function Page({ entry }) {
   const humanize = (k) => k.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
   const stories = (state.__namedExportsOrder || Object.keys(state))
     .filter((k) => k !== 'default' && k !== '__namedExportsOrder' && k !== 'page' && state[k])
-    .map((k) => ({ key: kebab(humanize(k)), exportName: k, id: `${stem}--${kebab(humanize(k))}`, name: state[k].name || humanize(k), story: state[k] }));
+    .map((k) => ({ key: kebab(humanize(k)), id: `${stem}--${kebab(humanize(k))}`, name: state[k].name || humanize(k), story: state[k] }));
   const playground = stories.find((s) => s.key === 'playground');
   const rest = stories.filter((s) => s !== playground);
   const desc = meta.parameters && meta.parameters.docs && meta.parameters.docs.description;
@@ -220,11 +219,11 @@ function Page({ entry }) {
     h(Md, { text: entry.lead || brief(desc && desc.component, 240) + '.', className: 'prose lead' }),
     state.page && h(state.page),
     stories.length > 4 && h(Toc, { items: stories }),
-    playground && h(Example, { key: entry.slug + 'pg', meta, story: playground.story, name: playground.name, id: playground.id, controls: true, overlay, file: entry.file, exportName: playground.exportName }),
+    playground && h(Example, { key: entry.slug + 'pg', meta, story: playground.story, name: playground.name, id: playground.id, controls: true, overlay }),
     !isFoundation && h(PropsTable, { component: meta.component }),
     rest.length > 0 && h('section', { className: 'section' },
       !isFoundation && h('h2', null, 'Examples'),
-      rest.map((s) => h(Example, { key: entry.slug + s.id, meta, story: s.story, name: s.name, id: s.id, controls: false, overlay, file: entry.file, exportName: s.exportName }))));
+      rest.map((s) => h(Example, { key: entry.slug + s.id, meta, story: s.story, name: s.name, id: s.id, controls: false, overlay }))));
 }
 
 function Home() {
@@ -304,8 +303,7 @@ function App() {
   const dark = theme === 'dark';
 
   const skip = (e) => { e.preventDefault(); const m = document.getElementById('main'); m.setAttribute('tabindex', '-1'); m.focus(); };
-  return h(ThemeContext.Provider, { value: theme },
-    h(ViewportContext.Provider, { value: entry && entry.section === 'Components' ? viewport : 'desktop' },
+  return h(ViewportContext.Provider, { value: entry && entry.section === 'Components' ? viewport : 'desktop' },
       h('div', { className: 'shell' + (menu ? ' menu-open' : '') },
         h('a', { className: 'skip', href: '#main', onClick: skip }, 'Skip to content'),
         h('aside', { className: 'side' },
@@ -322,7 +320,7 @@ function App() {
           h('div', { className: 'topbar' }, h(Button, { variant: 'secondary', size: 'xsm', onClick: () => _setMenu(!menu) }, 'Menu'), h('a', { href: '#/', className: 'brand' }, 'baseui')),
           entry && entry.section === 'Components' && h('div', { className: 'pagebar' },
             h(SegmentedControl, { size: 'sm', label: 'Preview width', value: viewport, onValueChange: setViewport, items: [{ value: 'desktop', label: 'Desktop' }, { value: 'mobile', label: 'Mobile' }] })),
-          entry ? h(Page, { entry, key: entry.slug }) : h(Home)))));
+          entry ? h(Page, { entry, key: entry.slug }) : h(Home))));
 }
 
 await initDom();

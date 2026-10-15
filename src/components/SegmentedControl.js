@@ -1,4 +1,4 @@
-import { h, cx, useControllable, useId, useRef } from '../react.js';
+import { h, cx, useControllable, useRef } from '../react.js';
 import { describe } from '../doc.js';
 
 export function SegmentedControl({ items, value, defaultValue, onValueChange, size = 'md', fullWidth = false, label, className, ...rest }) {

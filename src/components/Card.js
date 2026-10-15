@@ -1,4 +1,4 @@
-import { h, cx, useControllable } from '../react.js';
+import { h, cx } from '../react.js';
 import { describe } from '../doc.js';
 
 const px = (v) => (typeof v === 'number' ? `${v}px` : v);

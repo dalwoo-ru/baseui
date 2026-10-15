@@ -25,3 +25,4 @@ export { Table } from './components/Table.js';
 export { Tabs, TabList, Tab, TabPanel } from './components/Tabs.js';
 export { ToastProvider, useToast } from './components/Toast.js';
 export { Tooltip } from './components/Tooltip.js';
+export { TextField, Checkbox, CheckboxGroup, Switch, Chip, Select, Modal, Radio, RadioGroup, List, ListItem } from './base.js';

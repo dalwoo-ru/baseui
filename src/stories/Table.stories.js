@@ -1,4 +1,3 @@
-import { h } from '../react.js';
 import { Table } from '../components/Table.js';
 import { meta, playground } from './_helpers.js';
 
