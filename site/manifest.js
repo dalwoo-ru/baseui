@@ -78,6 +78,30 @@ export default [
   "slug": "icons"
  },
  {
+  "group": "Foundations",
+  "title": "Motion",
+  "file": "../src/stories/Motion.stories.js",
+  "slug": "motion"
+ },
+ {
+  "group": "Foundations",
+  "title": "Focus",
+  "file": "../src/stories/Focus.stories.js",
+  "slug": "focus"
+ },
+ {
+  "group": "Components",
+  "title": "Accordion",
+  "file": "../src/stories/Accordion.stories.js",
+  "slug": "accordion"
+ },
+ {
+  "group": "Components",
+  "title": "Alert",
+  "file": "../src/stories/Alert.stories.js",
+  "slug": "alert"
+ },
+ {
   "group": "Components",
   "title": "Autocomplete",
   "file": "../lib/Autocomplete.stories-CLnOUoA7.js",
@@ -203,6 +227,12 @@ export default [
  },
  {
   "group": "Components",
+  "title": "Breadcrumbs",
+  "file": "../src/stories/Breadcrumbs.stories.js",
+  "slug": "breadcrumbs"
+ },
+ {
+  "group": "Components",
   "title": "Button",
   "file": "../lib/Button.stories-BIZ8i_Er.js",
   "stories": [
@@ -218,6 +248,12 @@ export default [
    }
   ],
   "slug": "button"
+ },
+ {
+  "group": "Components",
+  "title": "Card",
+  "file": "../src/stories/Card.stories.js",
+  "slug": "card"
  },
  {
   "group": "Components",
@@ -365,6 +401,18 @@ export default [
    }
   ],
   "slug": "chipgroup"
+ },
+ {
+  "group": "Components",
+  "title": "Divider",
+  "file": "../src/stories/Divider.stories.js",
+  "slug": "divider"
+ },
+ {
+  "group": "Components",
+  "title": "EmptyState",
+  "file": "../src/stories/EmptyState.stories.js",
+  "slug": "emptystate"
  },
  {
   "group": "Components",
@@ -525,6 +573,12 @@ export default [
  },
  {
   "group": "Components",
+  "title": "Progress",
+  "file": "../src/stories/Progress.stories.js",
+  "slug": "progress"
+ },
+ {
+  "group": "Components",
   "title": "Radio",
   "file": "../lib/Radio.stories-ByX4his4.js",
   "stories": [
@@ -642,6 +696,18 @@ export default [
  },
  {
   "group": "Components",
+  "title": "Skeleton",
+  "file": "../src/stories/Skeleton.stories.js",
+  "slug": "skeleton"
+ },
+ {
+  "group": "Components",
+  "title": "Spinner",
+  "file": "../src/stories/Spinner.stories.js",
+  "slug": "spinner"
+ },
+ {
+  "group": "Components",
   "title": "Switch",
   "file": "../lib/Switch.stories-UfYPEzH7.js",
   "stories": [
@@ -667,6 +733,12 @@ export default [
    }
   ],
   "slug": "switch"
+ },
+ {
+  "group": "Components",
+  "title": "Tabs",
+  "file": "../src/stories/Tabs.stories.js",
+  "slug": "tabs"
  },
  {
   "group": "Components",
@@ -748,6 +820,30 @@ export default [
    }
   ],
   "slug": "textfield"
+ },
+ {
+  "group": "Components",
+  "title": "Toast",
+  "file": "../src/stories/Toast.stories.js",
+  "slug": "toast"
+ },
+ {
+  "group": "Components",
+  "title": "Tooltip",
+  "file": "../src/stories/Tooltip.stories.js",
+  "slug": "tooltip"
+ },
+ {
+  "group": "Patterns",
+  "title": "Settings",
+  "file": "../src/stories/Settings.stories.js",
+  "slug": "settings"
+ },
+ {
+  "group": "Patterns",
+  "title": "Sign In",
+  "file": "../src/stories/SignIn.stories.js",
+  "slug": "signin"
  },
  {
   "group": "RHF",

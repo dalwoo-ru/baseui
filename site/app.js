@@ -10,6 +10,7 @@ const { createElement: h, useState, useEffect, useMemo, useRef, Fragment } = Rea
 const GROUPS = [
   ['Foundations', 'Основы'],
   ['Components', 'Компоненты'],
+  ['Patterns', 'Паттерны'],
   ['RHF', 'React Hook Form'],
 ];
 const byGroup = (g) => manifest.filter((c) => c.group === g);
@@ -145,10 +146,26 @@ function Controls({ meta, args, setArgs }) {
 
 function Code({ source }) {
   const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   if (!source || source.trim() === '{}') return null;
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(source); setCopied(true); setTimeout(() => setCopied(false), 1500); } catch { /* clipboard unavailable */ }
+  };
   return h('div', { className: 'code' },
-    h(ui.Button, { variant: 'text', size: 'xsmall', onClick: () => setOpen(!open) }, open ? 'Скрыть код' : 'Показать код'),
+    h('div', { className: 'code-actions' },
+      h(ui.Button, { variant: 'text', size: 'xsmall', onClick: () => setOpen(!open) }, open ? 'Скрыть код' : 'Показать код'),
+      open && h(ui.Button, { variant: 'text', size: 'xsmall', onClick: copy }, copied ? 'Скопировано' : 'Копировать')),
     open && h('pre', null, h('code', null, source)));
+}
+
+/** Быстрые ссылки на примеры длинной страницы. */
+function Toc({ items }) {
+  const go = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+  };
+  return h('nav', { className: 'toc', 'aria-label': 'Примеры на странице' },
+    items.map((s) => h('button', { key: s.id, type: 'button', onClick: () => go(s.id) }, s.name)));
 }
 
 function Example({ meta, story, name, id, controls, overlay }) {
@@ -208,18 +225,22 @@ function ComponentPage({ entry }) {
   if (!state) return h('div', { className: 'loading' }, 'Загрузка…');
   if (state.error) return h('div', { className: 'error' }, String(state.error));
   const meta = state.default;
-  const stories = entry.stories.map((s) => {
-    const key = Object.keys(state).find((k) => k.toLowerCase() === s.key.replace(/-/g, ''));
-    return { ...s, story: state[key] };
-  }).filter((s) => s.story);
+  // Порядок и имена историй берём из самого модуля; manifest.stories — только переопределение имён.
+  const kebab = (k) => k.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+  const human = (k) => k.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+  const names = Object.fromEntries((entry.stories || []).map((s) => [s.key.replace(/-/g, ''), s.name]));
+  const stories = (state.__namedExportsOrder || Object.keys(state))
+    .filter((k) => k !== 'default' && k !== '__namedExportsOrder' && state[k])
+    .map((k) => ({ key: kebab(k), id: `${entry.slug}--${kebab(k)}`, name: state[k].name || names[k.toLowerCase()] || human(k), story: state[k] }));
   const playground = stories.find((s) => s.key === 'playground');
   const rest = stories.filter((s) => s !== playground);
   const desc = meta.parameters && meta.parameters.docs && meta.parameters.docs.description;
-  const isFoundation = entry.group === 'Foundations';
+  const isFoundation = entry.group === 'Foundations' || entry.group === 'Patterns';
   return h('article', { className: 'page' },
     h('div', { className: 'eyebrow' }, GROUPS.find((g) => g[0] === entry.group)[1]),
     h('h1', null, entry.title),
     h(Md, { text: desc && desc.component, className: 'prose lead' }),
+    stories.length > 3 && h(Toc, { items: stories }),
     playground && h(Example, { key: entry.slug + 'pg', meta, story: playground.story, name: playground.name, id: playground.id, controls: true, overlay: entry.title === 'Modal' }),
     !isFoundation && h(PropsTable, { component: meta.component }),
     rest.length > 0 && h('section', { className: 'section' },
@@ -235,7 +256,7 @@ function Home() {
     GROUPS.map(([g, title]) => h('section', { className: 'section', key: g },
       h('h2', null, title),
       h('div', { className: 'cards' }, byGroup(g).map((c) =>
-        h('a', { className: 'card', key: c.slug, href: routeOf(c) }, h('span', null, c.title), h('small', null, c.stories.length + ' ' + plural(c.stories.length))))))));
+        h('a', { className: 'card', key: c.slug, href: routeOf(c) }, h('span', null, c.title), c.stories && h('small', null, c.stories.length + ' ' + plural(c.stories.length))))))));
 }
 const plural = (n) => (n % 10 === 1 && n % 100 !== 11 ? 'пример' : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'примера' : 'примеров');
 
@@ -264,7 +285,9 @@ function App() {
   const { Button, TextField, Switch } = ui;
   const query = q.trim().toLowerCase();
 
+  const skip = (e) => { e.preventDefault(); const m = document.getElementById('main'); m.setAttribute('tabindex', '-1'); m.focus(); };
   return h('div', { className: 'shell' + (menu ? ' menu-open' : '') },
+    h('a', { className: 'skip', href: '#main', onClick: skip }, 'Перейти к содержимому'),
     h('aside', { className: 'side' },
       h('a', { className: 'brand', href: '#/' }, 'baseui'),
       h('div', { className: 'search' }, h(TextField, { label: 'Поиск', size: 'small', type: 'search', value: q, onChange: (e) => setQ(e.target.value) })),

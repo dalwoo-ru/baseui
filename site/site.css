@@ -152,3 +152,21 @@ code.type { white-space: pre-wrap; word-break: break-word; color: var(--baseui-T
 .range { display: flex; align-items: center; gap: var(--baseui-Space-S); }
 .range input { flex: 1; min-width: 0; height: 24px; margin: 0; accent-color: var(--baseui-Background-Accent); cursor: pointer; }
 .range output { min-width: 3ch; text-align: right; font: var(--baseui-Typography-Text-14-Semi-Bold); }
+
+/* доступность и навигация по странице */
+.skip { position: absolute; left: var(--baseui-Space-S); top: -64px; z-index: var(--baseui-ZIndex-Tooltip); padding: var(--baseui-Space-XS) var(--baseui-Space-M); border-radius: var(--baseui-Radius-S); background: var(--baseui-Extensions-Background-InversePrimary); color: var(--baseui-Text-and-Icon-OnColor); font: var(--baseui-Typography-Text-14-Semi-Bold); text-decoration: none; }
+.skip:focus-visible { top: var(--baseui-Space-S); }
+#main:focus { outline: none; }
+a:focus-visible, .toc button:focus-visible, .brand:focus-visible {
+  outline: var(--baseui-Focus-Ring-Width) solid var(--baseui-Focus-Ring-Color); outline-offset: var(--baseui-Focus-Ring-Offset);
+}
+.toc { display: flex; flex-wrap: wrap; gap: var(--baseui-Space-XS); margin-top: var(--baseui-Space-M); }
+.toc button {
+  all: unset; box-sizing: border-box; cursor: pointer; padding: 4px var(--baseui-Space-S); border-radius: var(--baseui-Radius-FullRound);
+  background: var(--baseui-Background-Secondary); font: var(--baseui-Typography-Text-14-Semi-Bold); color: var(--baseui-Text-and-Icon-Secondary);
+  transition: color var(--baseui-Motion-Duration-Fast) var(--baseui-Motion-Easing), background-color var(--baseui-Motion-Duration-Fast) var(--baseui-Motion-Easing);
+}
+@media (hover: hover) { .toc button:hover { color: var(--baseui-Text-and-Icon-Primary); background: var(--baseui-Background-Tertiary); } }
+.code-actions { display: flex; gap: var(--baseui-Space-XS); }
+.example { scroll-margin-top: var(--baseui-Space-XL2); }
+code, pre { font-family: var(--baseui-Typography-Font-Family-Mono); }

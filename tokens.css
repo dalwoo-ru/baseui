@@ -10,10 +10,10 @@
 
   /* Text and Icon */
   --baseui-Text-and-Icon-Primary: #171717;
-  --baseui-Text-and-Icon-Secondary: #848e9c;
+  --baseui-Text-and-Icon-Secondary: #5f6877;
   --baseui-Text-and-Icon-OnColor: #ffffff;
   --baseui-Text-and-Icon-Disabled: #babfca;
-  --baseui-Text-and-Icon-Accent: #575df6;
+  --baseui-Text-and-Icon-Accent: #4b51ea;
 
   /* Background */
   --baseui-Background-Primary: #ffffff;
@@ -38,9 +38,9 @@
   --baseui-Accent-Colors-Red: #e8634c;
 
   /* Extensions / Text and Icon */
-  --baseui-Extensions-Text-and-Icon-Error: #e8634c;
-  --baseui-Extensions-Text-and-Icon-Warning: #f5ba44;
-  --baseui-Extensions-Text-and-Icon-Success: #44cf5e;
+  --baseui-Extensions-Text-and-Icon-Error: #c4371f;
+  --baseui-Extensions-Text-and-Icon-Warning: #8a5a00;
+  --baseui-Extensions-Text-and-Icon-Success: #177a2f;
   --baseui-Extensions-Text-and-Icon-AlwaysDark: #171717;
   --baseui-Extensions-Text-and-Icon-AlwaysLight: #ffffff;
 
@@ -75,17 +75,17 @@
 
   /* Text and Icon */
   --baseui-Text-and-Icon-Primary: #ffffff;
-  --baseui-Text-and-Icon-Secondary: #7d7d7d;
+  --baseui-Text-and-Icon-Secondary: #999999;
   --baseui-Text-and-Icon-OnColor: #171717;
   --baseui-Text-and-Icon-Disabled: #7a7a7a;
-  --baseui-Text-and-Icon-Accent: #575df6;
+  --baseui-Text-and-Icon-Accent: #8f94ff;
 
   /* Background */
   --baseui-Background-Primary: #171717;
   --baseui-Background-Secondary: #2e2e2e;
   --baseui-Background-Tertiary: #373737;
   --baseui-Background-Disabled: #454545;
-  --baseui-Background-Accent: #575df6;
+  --baseui-Background-Accent: #8f94ff;
   --baseui-Background-Brand: #ffffff;
 
   /* Border */
@@ -103,7 +103,7 @@
   --baseui-Accent-Colors-Red: #e8634c;
 
   /* Extensions / Text and Icon */
-  --baseui-Extensions-Text-and-Icon-Error: #e8634c;
+  --baseui-Extensions-Text-and-Icon-Error: #ff8a75;
   --baseui-Extensions-Text-and-Icon-Warning: #f5ba44;
   --baseui-Extensions-Text-and-Icon-Success: #44cf5e;
   --baseui-Extensions-Text-and-Icon-AlwaysDark: #171717;
@@ -123,13 +123,13 @@
   --baseui-Extensions-Background-LightSuccess: #114119;
   --baseui-Extensions-Background-LightAccent: #24276a;
   --baseui-Extensions-Background-LightError: #51150a;
-  --baseui-Extensions-Background-LightWarning: #eac57b;
+  --baseui-Extensions-Background-LightWarning: #4d3a06;
 
   /* Extensions / Border */
   --baseui-Extensions-Border-Selected: #ffffff;
   --baseui-Extensions-Border-SelectedAlwaysDark: #171717;
   --baseui-Extensions-Border-SelectedAlwaysLight: #ffffff;
-  --baseui-Extensions-Border-Accent: #575df6;
+  --baseui-Extensions-Border-Accent: #8f94ff;
   --baseui-Extensions-Border-Error: #e8634c;
   --baseui-Extensions-Border-Warning: #f5ba44;
   --baseui-Extensions-Border-Success: #44cf5e;
@@ -174,9 +174,41 @@
   --baseui-Shadow-L: 0 4px 28px 0 var(--baseui-Shadow-Color);
 }
 
+/* Motion — длительности и кривая; уважают prefers-reduced-motion (см. ниже) */
+:root {
+  --baseui-Motion-Duration-Fast: 120ms;
+  --baseui-Motion-Duration-Base: 200ms;
+  --baseui-Motion-Duration-Slow: 320ms;
+  --baseui-Motion-Easing: cubic-bezier(0.2, 0, 0, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --baseui-Motion-Duration-Fast: 0ms;
+    --baseui-Motion-Duration-Base: 0ms;
+    --baseui-Motion-Duration-Slow: 0ms;
+  }
+}
+
+/* Focus — единое кольцо фокуса для всех интерактивных элементов */
+:root {
+  --baseui-Focus-Ring-Color: var(--baseui-Text-and-Icon-Accent);
+  --baseui-Focus-Ring-Width: 2px;
+  --baseui-Focus-Ring-Offset: 2px;
+}
+
+/* ZIndex — слои поверх страницы */
+:root {
+  --baseui-ZIndex-Sticky: 100;
+  --baseui-ZIndex-Overlay: 1000;
+  --baseui-ZIndex-Popup: 1001;
+  --baseui-ZIndex-Toast: 1100;
+  --baseui-ZIndex-Tooltip: 1200;
+}
+
 /* Typography */
 :root {
   --baseui-Typography-Font-Family:var(--font-geist,"Geist"), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --baseui-Typography-Font-Family-Mono:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --baseui-Typography-Header-48:700 48px / 64px var(--baseui-Typography-Font-Family);
   --baseui-Typography-Header-40:700 40px / 52px var(--baseui-Typography-Font-Family);
   --baseui-Typography-Header-32:700 32px / 40px var(--baseui-Typography-Font-Family);
