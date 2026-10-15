@@ -18,10 +18,15 @@ const ViewportContext = createContext('desktop');
 const kebab = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const stemOf = (file) => file.split('/').pop().replace(/\.stories.*$/, '').toLowerCase();
 
-/** manifest (sections → items) → flat list of routable pages; a page is one file or several `parts`. */
+/** manifest (sections → items → children) → flat list of routable pages: one page per story file. */
 const pages = [];
 for (const { section, items } of manifest) {
-  for (const item of items) pages.push({ section, title: item.title, slug: kebab(item.title), parts: item.parts || [{ title: item.title, file: item.file, lead: item.lead }], lead: item.lead });
+  const add = (item, parent) => {
+    const page = { section, parent, title: item.title, slug: kebab(item.title), file: item.file, lead: item.lead, examples: item.examples || [] };
+    pages.push(page);
+    (item.children || []).forEach((c) => add(c, page));
+  };
+  items.forEach((item) => add(item));
 }
 const routeOf = (p) => `#/${p.section.toLowerCase()}/${p.slug}`;
 
@@ -117,14 +122,14 @@ function Code({ source }) {
     open && h('pre', null, h('code', null, source)));
 }
 
-/** Anchors to the sections of a page, as small tokens. */
+/** Anchors of a page: every element marked with `data-anchor` (Playground, Props, each example or block). */
 function Toc({ items }) {
   const go = (id) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
   };
   return h('nav', { className: 'toc', 'aria-label': 'On this page' },
-    items.map((s) => h(ui.Chip, { key: s.id, size: 'sm', onClick: () => go(s.id) }, s.name)));
+    items.map((a) => h(ui.Chip, { key: a.id, size: 'sm', onClick: () => go(a.id) }, a.name)));
 }
 
 function Example({ meta, story, name, id, controls, overlay }) {
@@ -139,7 +144,7 @@ function Example({ meta, story, name, id, controls, overlay }) {
   const [shown, setShown] = useState(!gated);
   const [nonce, setNonce] = useState(0);
   const narrow = viewport === 'mobile';
-  return h('section', { className: 'example', id },
+  return h('section', { className: 'example', id, 'data-anchor': name },
     h('h3', null, name),
     h('div', { className: 'stage' },
       showControls && h(Controls, { meta, args: current, setOverride: (k, v) => setOverrides((o) => ({ ...o, [k]: v })), reset: () => setOverrides({}) }),
@@ -158,12 +163,12 @@ const TYPE_CLEAN = (t) => (t ? t.raw || t.name : '');
 const HIDDEN_PROPS = new Set(['ref', 'className', 'style', 'id', 'data-testid', 'contentClassName', 'portalContainer', 'keepMounted', 'initialFocus', 'finalFocus', 'name', 'form', 'labelId', 'captionId', 'focusRef', 'cellRef', 'onBlur']);
 /** One short fragment: first sentence, no @tags, no trailing period. */
 const brief = (text = '', max = 110) => text.replace(/@\w+.*$/s, '').trim().split(/(?<=[.!?])\s/)[0].replace(/\s+/g, ' ').replace(/\.$/, '').slice(0, max);
-function PropsTable({ component, part }) {
+function PropsTable({ component }) {
   const props = component && component.__docgenInfo && component.__docgenInfo.props;
   const rows = props ? Object.entries(props).filter(([n, p]) => !HIDDEN_PROPS.has(n) && !/@internal/.test(p.description || '') && brief(p.description)) : [];
   if (!rows.length) return null;
-  return h('section', { className: 'section' },
-    h(part ? 'h3' : 'h2', null, 'Props'),
+  return h('section', { className: 'section', id: 'props', 'data-anchor': 'Props' },
+    h('h2', null, 'Props'),
     h('div', { className: 'table-wrap' },
       h('table', null,
         h('thead', null, h('tr', null, ['Prop', 'Type', 'Default', 'Description'].map((t) => h('th', { key: t }, t)))),
@@ -182,49 +187,53 @@ const storiesOf = (state, stem) => (state.__namedExportsOrder || Object.keys(sta
   .filter((k) => k !== 'default' && k !== '__namedExportsOrder' && k !== 'page' && state[k])
   .map((k) => ({ key: kebab(humanize(k)), id: `${stem}--${kebab(humanize(k))}`, name: state[k].name || humanize(k), story: state[k] }));
 
-/** One component of a page: its lead, playground, props and examples. */
-function Part({ entry, part, state, single, lead }) {
-  const stem = stemOf(part.file);
+/** Every page has the same structure: title, lead, anchors, Playground, Props, Examples. */
+function Page({ entry }) {
+  const files = [entry.file, ...entry.examples.map((e) => e.file)];
+  const [states, setStates] = useState(null);
+  const [anchors, setAnchors] = useState([]);
+  useEffect(() => {
+    let alive = true;
+    setStates(null);
+    setAnchors([]);
+    Promise.all(files.map(loadModule)).then((m) => alive && setStates(m), (e) => alive && setStates({ error: e }));
+    return () => { alive = false; };
+  }, [entry]);
+  useEffect(() => {
+    if (!states || states.error) return;
+    const t = setTimeout(() => setAnchors([...document.querySelectorAll('.page [data-anchor]')].map((el) => ({ id: el.id, name: el.dataset.anchor }))), 120);
+    return () => clearTimeout(t);
+  }, [states]);
+  if (!states) return h('div', { className: 'loading' }, 'Loading…');
+  if (states.error) return h('div', { className: 'error' }, String(states.error));
+
+  const state = states[0];
   const meta = state.default;
+  const stem = stemOf(entry.file);
   const stories = storiesOf(state, stem);
   const playground = stories.find((s) => s.key === 'playground');
   const rest = stories.filter((s) => s !== playground);
   const desc = meta.parameters && meta.parameters.docs && meta.parameters.docs.description;
   const isFoundation = entry.section === 'Foundations';
-  const overlay = /^(Dialog|Alert Dialog)$/.test(part.title);
-  const key = entry.slug + stem;
-  const own = !single && !lead;
-  return h('section', { className: single ? undefined : lead ? 'part part--main' : 'part', id: single ? undefined : `part-${kebab(part.title)}` },
-    own && h('h2', { className: 'part-title' }, part.title),
-    own && h(Md, { text: part.lead || brief(desc && desc.component, 240) + '.', className: 'prose lead' }),
-    state.page && h(state.page),
-    single && !isFoundation && stories.length > 1 && h(Toc, { items: stories }),
-    playground && h(Example, { key: key + 'pg', meta, story: playground.story, name: playground.name, id: playground.id, controls: true, overlay }),
-    !isFoundation && h(PropsTable, { component: meta.component, part: !single }),
-    rest.length > 0 && h('section', { className: 'section' },
-      !isFoundation && single && h('h2', null, 'Examples'),
-      rest.map((s) => h(Example, { key: key + s.id, meta, story: s.story, name: s.name, id: s.id, controls: false, overlay }))));
-}
+  const overlay = /^(Dialog|Alert Dialog)$/.test(entry.title);
+  const extra = entry.examples.flatMap((e, i) => {
+    const st = states[i + 1];
+    const estem = stemOf(e.file);
+    return storiesOf(st, estem).map((x) => ({ ...x, name: x.key === 'playground' ? e.title : `${e.title}: ${x.name}`, meta: st.default }));
+  });
 
-function Page({ entry }) {
-  const [states, setStates] = useState(null);
-  useEffect(() => {
-    let alive = true;
-    setStates(null);
-    Promise.all(entry.parts.map((p) => loadModule(p.file))).then((m) => alive && setStates(m), (e) => alive && setStates({ error: e }));
-    return () => { alive = false; };
-  }, [entry]);
-  if (!states) return h('div', { className: 'loading' }, 'Loading…');
-  if (states.error) return h('div', { className: 'error' }, String(states.error));
-  const single = entry.parts.length === 1;
-  const first = states[0].default;
-  const desc = first.parameters && first.parameters.docs && first.parameters.docs.description;
   return h('article', { className: 'page' },
-    h('div', { className: 'eyebrow' }, entry.section),
+    h('div', { className: 'eyebrow' }, entry.parent ? `${entry.section} · ${entry.parent.title}` : entry.section),
     h('h1', null, entry.title),
     h(Md, { text: entry.lead || brief(desc && desc.component, 240) + '.', className: 'prose lead' }),
-    !single && h(Toc, { items: entry.parts.map((p) => ({ id: `part-${kebab(p.title)}`, name: p.title })) }),
-    entry.parts.map((part, i) => h(Part, { key: part.file, entry, part, state: states[i], single, lead: i === 0 && part.title === entry.title })));
+    anchors.length > 1 && h(Toc, { items: anchors }),
+    state.page && h(state.page),
+    playground && h(Example, { key: entry.slug + 'pg', meta, story: playground.story, name: playground.name, id: playground.id, controls: true, overlay }),
+    !isFoundation && h(PropsTable, { component: meta.component }),
+    (rest.length > 0 || extra.length > 0) && h('section', { className: 'section' },
+      !isFoundation && h('h2', null, 'Examples'),
+      rest.map((s) => h(Example, { key: entry.slug + s.id, meta, story: s.story, name: s.name, id: s.id, controls: false, overlay })),
+      extra.map((s) => h(Example, { key: entry.slug + s.id, meta: s.meta, story: s.story, name: s.name, id: s.id, controls: false, overlay }))));
 }
 
 function Home() {
@@ -234,18 +243,36 @@ function Home() {
     h('p', { className: 'prose lead' }, 'A universal design system: foundations and components built on Base UI. Light and dark themes switch with the ', h('code', null, 'data-theme'), ' attribute.'),
     manifest.map((s) => h('section', { className: 'section', key: s.section },
       h('h2', null, s.section),
-      h('div', { className: 'cards' }, s.items.map((i) =>
-        h('a', { className: 'card', key: i.title, href: routeOf(pages.find((p) => p.section === s.section && p.title === i.title)) }, h('span', null, i.title)))))));
+      h('div', { className: 'cards' }, pages.filter((p) => p.section === s.section && !p.parent).map((p) =>
+        h('a', { className: 'card', key: p.title, href: routeOf(p) }, h('span', null, p.title)))))));
 }
 
 /* -------------------------------------------------------------- navigation */
 
 function Nav({ entry, query }) {
-  const match = (page) => page.title.toLowerCase().includes(query) || page.parts.some((p) => p.title.toLowerCase().includes(query));
-  const sections = manifest.map(({ section }) => ({ section, shown: pages.filter((p) => p.section === section && match(p)) })).filter((x) => x.shown.length > 0);
+  const [open, setOpen] = useState({});
+  const kids = (p) => pages.filter((x) => x.parent === p);
+  const match = (p) => p.title.toLowerCase().includes(query);
+  const root = (p) => (p && p.parent ? p.parent : p);
+  useEffect(() => { const r = root(entry); if (r) setOpen((o) => ({ ...o, [r.title]: true })); }, [entry]);
+  const go = (p) => () => { location.hash = routeOf(p); };
+  const sections = manifest.map(({ section }) => ({
+    section,
+    shown: pages.filter((p) => p.section === section && !p.parent).map((p) => {
+      const sub = kids(p).filter((c) => match(c) || match(p));
+      return match(p) || sub.length ? { p, sub } : null;
+    }).filter(Boolean),
+  })).filter((x) => x.shown.length > 0);
   return h('nav', { 'aria-label': 'Documentation' }, sections.map(({ section, shown }, i) =>
     h(List, { key: section, title: section, size: 'sm', divider: i < sections.length - 1 },
-      shown.map((p) => h(ListItem, { key: p.title, active: entry === p, onClick: () => { location.hash = routeOf(p); } }, p.title)))));
+      shown.map(({ p, sub }) => {
+        const own = entry === p;
+        if (!sub.length) return h(ListItem, { key: p.title, active: own, onClick: go(p) }, p.title);
+        return h(ListItem, {
+          key: p.title, active: own, expanded: query ? true : !!open[p.title], onExpandedChange: (v) => setOpen((o) => ({ ...o, [p.title]: v })), onClick: go(p),
+          items: sub.map((c) => h(ListItem, { key: c.title, subitem: true, active: entry === c, onClick: go(c) }, c.title)),
+        }, p.title);
+      }))));
 }
 
 /* --------------------------------------------------------------------- app */

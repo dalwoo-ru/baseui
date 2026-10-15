@@ -51,8 +51,9 @@ export const section = (title, data) => data && data.find((s) => s.title === tit
 
 /* ------------------------------------------------------------- doc blocks */
 
+const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 export const Block = ({ title, id, children }) =>
-  h('section', { className: 'doc-block', id }, title && h('h2', null, title), children);
+  h('section', { className: 'doc-block', id: id || (title ? `block-${slug(title)}` : undefined), 'data-anchor': title || undefined }, title && h('h2', null, title), children);
 
 export function Swatch({ name, size = 40 }) {
   return h('span', { className: 'tok-swatch', style: { width: size, height: size, background: `var(--baseui-${name})` }, 'aria-hidden': 'true' });

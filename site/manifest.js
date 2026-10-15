@@ -1,7 +1,8 @@
 // Documentation tree. Names, order and nesting follow Astryx; page content comes from the story modules.
 //   F(name)  – foundations page          N(name) – baseui component written in src/stories
 //   B(file)  – compiled baseui component in lib/
-// A page is one `file`, or `parts` (related components on one page, each part is an anchor).
+// A page is one story `file` (one component). `children` are separate pages of its important subcomponents;
+// `examples` are the stories of minor subcomponents shown as examples on the page.
 const F = (name) => `../src/foundations/${name}.stories.js`;
 const N = (name) => `../src/stories/${name}.stories.js`;
 const B = (file) => `../lib/${file}.js`;
@@ -24,27 +25,27 @@ export default [
   {
     section: 'Components',
     items: [
-      { title: 'Avatar', parts: [{ title: 'Avatar', file: N('Avatar') }, { title: 'Avatar Group', file: N('AvatarGroup') }, { title: 'Avatar Group Overflow', file: N('AvatarGroupOverflow') }, { title: 'Avatar Status Dot', file: N('AvatarStatusDot') }] },
+      { title: 'Avatar', file: N('Avatar'), examples: [{ title: 'Avatar Status Dot', file: N('AvatarStatusDot') }], children: [{ title: 'Avatar Group', file: N('AvatarGroup'), examples: [{ title: 'Avatar Group Overflow', file: N('AvatarGroupOverflow') }] }] },
       { title: 'Badge', file: N('Badge') },
       { title: 'Banner', file: N('Banner') },
       { title: 'Breadcrumbs', file: N('Breadcrumbs') },
-      { title: 'Button', parts: [{ title: 'Button', file: N('Button') }, { title: 'Button Group', file: N('ButtonGroup') }, { title: 'Icon Button', file: N('IconButton') }, { title: 'Toggle Button', file: N('ToggleButton') }, { title: 'Toggle Button Group', file: N('ToggleButtonGroup') }] },
-      { title: 'Card', parts: [{ title: 'Card', file: N('Card') }, { title: 'Clickable Card', file: N('ClickableCard') }, { title: 'Selectable Card', file: N('SelectableCard') }] },
-      { title: 'Checkbox', parts: [{ title: 'Checkbox Input', file: B('Checkbox.stories-CjVZ5VOE'), lead: 'A box that turns one option on or off.' }, { title: 'Checkbox List', file: B('CheckboxGroup.stories-DyCBCBrP'), lead: 'A group of checkboxes for choosing several options.' }] },
-      { title: 'Collapsible', parts: [{ title: 'Collapsible', file: N('Collapsible') }, { title: 'Collapsible Group', file: N('CollapsibleGroup') }] },
-      { title: 'Dialog', parts: [{ title: 'Alert Dialog', file: N('AlertDialog') }, { title: 'Dialog', file: B('Modal.stories-BG7Qmigd'), lead: 'A modal window for focused content. On small screens it becomes a bottom sheet.' }] },
+      { title: 'Button', file: N('Button'), children: [{ title: 'Button Group', file: N('ButtonGroup') }, { title: 'Icon Button', file: N('IconButton') }, { title: 'Toggle Button', file: N('ToggleButton'), examples: [{ title: 'Toggle Button Group', file: N('ToggleButtonGroup') }] }] },
+      { title: 'Card', file: N('Card'), children: [{ title: 'Clickable Card', file: N('ClickableCard') }, { title: 'Selectable Card', file: N('SelectableCard') }] },
+      { title: 'Checkbox', file: B('Checkbox.stories-CjVZ5VOE'), lead: 'A box that turns one option on or off.', children: [{ title: 'Checkbox List', file: B('CheckboxGroup.stories-DyCBCBrP'), lead: 'A group of checkboxes for choosing several options.' }] },
+      { title: 'Collapsible', file: N('Collapsible'), examples: [{ title: 'Collapsible Group', file: N('CollapsibleGroup') }] },
+      { title: 'Dialog', file: B('Modal.stories-BG7Qmigd'), lead: 'A modal window for focused content. On small screens it becomes a bottom sheet.', children: [{ title: 'Alert Dialog', file: N('AlertDialog') }] },
       { title: 'Divider', file: N('Divider') },
       { title: 'Empty State', file: N('EmptyState') },
-      { title: 'Layout', parts: [{ title: 'Center', file: N('Center') }, { title: 'Grid', file: N('Grid') }, { title: 'Section', file: N('Section') }, { title: 'Stack', file: N('Stack') }] },
+      { title: 'Layout', file: N('Stack'), lead: 'Containers that arrange content with consistent spacing.', children: [{ title: 'Center', file: N('Center') }, { title: 'Grid', file: N('Grid') }, { title: 'Section', file: N('Section') }] },
       { title: 'Link', file: N('Link') },
-      { title: 'List', parts: [{ title: 'List', file: B('List.stories-Alo3K1f2'), lead: 'A vertical list of rows with an optional title.' }, { title: 'List Item', file: B('ListItem.stories-Dq00OmrP'), lead: 'A row with an icon or avatar, text and an optional control.' }] },
+      { title: 'List', file: B('List.stories-Alo3K1f2'), lead: 'A vertical list of rows with an optional title.', children: [{ title: 'List Item', file: B('ListItem.stories-Dq00OmrP'), lead: 'A row with an icon or avatar, text and an optional control.' }] },
       { title: 'Metadata List', file: N('MetadataList') },
       { title: 'Number Input', file: N('NumberInput') },
       { title: 'OTP Input', file: B('OtpInput.stories-DMTeWrJE'), lead: 'A field for entering a one-time code.' },
       { title: 'Pagination', file: N('Pagination') },
       { title: 'Popover', file: N('Popover') },
       { title: 'Progress Bar', file: N('ProgressBar') },
-      { title: 'Radio', parts: [{ title: 'Radio List', file: B('RadioGroup.stories-DVXazEy6'), lead: 'A group of radio buttons for choosing one option.' }, { title: 'Radio List Item', file: B('Radio.stories-ByX4his4'), lead: 'A single radio button inside a Radio List.' }] },
+      { title: 'Radio', file: B('RadioGroup.stories-DVXazEy6'), lead: 'A group of radio buttons for choosing one option.', children: [{ title: 'Radio List Item', file: B('Radio.stories-ByX4his4'), lead: 'A single radio button inside a Radio.' }] },
       { title: 'Rating', file: B('Rating.stories-B5Vm-Sbj'), lead: 'Shows or collects a rating as stars.' },
       { title: 'Segmented Control', file: N('SegmentedControl') },
       { title: 'Selector', file: B('Select.stories-vOU6jfFc'), lead: 'A field for choosing one or several options from a list.' },
@@ -58,7 +59,7 @@ export default [
       { title: 'Tabs', file: N('Tabs') },
       { title: 'Text Input', file: B('TextField.stories-JboKGoC9'), lead: 'A single-line or multi-line text field with a floating label.' },
       { title: 'Toast', file: N('Toast') },
-      { title: 'Token', parts: [{ title: 'Token', file: B('Chip.stories-BFj78RSq'), lead: 'A small chip that can be selected or removed.' }, { title: 'Token Group', file: B('ChipGroup.stories-DmXtmuTG'), lead: 'A group of tokens with single or multiple selection.' }] },
+      { title: 'Token', file: B('Chip.stories-BFj78RSq'), lead: 'A small chip that can be selected or removed.', children: [{ title: 'Token Group', file: B('ChipGroup.stories-DmXtmuTG'), lead: 'A group of tokens with single or multiple selection.' }] },
       { title: 'Tooltip', file: N('Tooltip') },
       { title: 'Typeahead', file: B('Autocomplete.stories-CLnOUoA7'), lead: 'A text field that suggests options as you type.' },
     ],

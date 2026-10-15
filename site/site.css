@@ -136,10 +136,6 @@ a:focus-visible, .brand:focus-visible {
   outline: var(--baseui-focus-outline-width) solid var(--baseui-focus-outline-color); outline-offset: var(--baseui-focus-outline-offset);
 }
 .toc { display: flex; flex-wrap: wrap; gap: var(--baseui-spacing-8); margin-top: var(--baseui-spacing-16); }
-.part { margin-top: var(--baseui-spacing-64); padding-top: var(--baseui-spacing-40); border-top: 1px solid var(--baseui-Border-Primary); scroll-margin-top: var(--baseui-spacing-32); }
-.part--main { margin-top: var(--baseui-spacing-24); padding-top: 0; border-top: 0; }
-.part-title { margin: 0 0 var(--baseui-spacing-8); }
-.part h3 { font: var(--baseui-Typography-Header-20); margin: var(--baseui-spacing-24) 0 var(--baseui-spacing-8); }
 .code-actions { display: flex; gap: var(--baseui-spacing-8); }
 .example { scroll-margin-top: var(--baseui-spacing-32); }
 code, pre { font-family: var(--baseui-Typography-Font-Family-Mono); }
