@@ -4,7 +4,7 @@ import { meta, playground, example } from './_helpers.js';
 
 export default meta({
   title: 'Components/Toggle Button Group', component: ToggleButtonGroup, args: { label: 'Alignment', type: 'single', size: 'md' },
-  argTypes: { type: { control: 'inline-radio', options: ['single', 'multiple'] }, size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] } },
+  argTypes: { type: { control: 'inline-radio', options: ['single', 'multiple'] }, size: { control: 'inline-radio', options: ['xs', 'sm', 'md', 'lg'] } },
 });
 function Demo({ type, ...rest }) {
   const [value, setValue] = useState(type === 'multiple' ? ['bold'] : 'left');

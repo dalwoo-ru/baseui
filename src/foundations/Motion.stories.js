@@ -10,7 +10,7 @@ export default {
 function Demo() {
   const [on, setOn] = useState(false);
   return h('div', { className: 'motion-demo' },
-    h('div', null, h(Button, { variant: 'secondary', size: 'small', onClick: () => setOn(!on) }, on ? 'Reset' : 'Play')),
+    h('div', null, h(Button, { variant: 'secondary', size: 'sm', onClick: () => setOn(!on) }, on ? 'Reset' : 'Play')),
     ['fast', 'medium', 'slow'].map((band) => h('div', { key: band, className: 'motion-row' },
       h('code', null, `duration-${band}`),
       h('div', { className: 'motion-track' },

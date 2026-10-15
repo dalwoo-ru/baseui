@@ -1,8 +1,8 @@
 import { t as requireReact } from '../lib/react-BZJXY1be.js';
 import { t as initDom, r as renderInto } from '../lib/react-18-D4o7zN8K.js';
 import manifest from './manifest.js';
-import { Button, TextField, Switch, List, ListItem } from '../src/base.js';
-import { IconButton } from '../src/components/Button.js';
+import { TextField, Switch, List, ListItem } from '../src/base.js';
+import { Button, IconButton } from '../src/components/Button.js';
 import { SegmentedControl } from '../src/components/SegmentedControl.js';
 import { Slider } from '../src/components/Slider.js';
 import { composeStory, StoryCanvas, Boundary } from './story.js';
@@ -103,7 +103,7 @@ function Controls({ meta, args, setOverride, reset }) {
     h('div', { className: 'controls-title' }, 'Controls'),
     items.map(([name, spec]) =>
       h(Control, { key: name, name, spec, args, value: args[name], onChange: (v) => setOverride(name, v) })),
-    h(ui.Button, { variant: 'secondary', size: 'xsmall', onClick: reset }, 'Reset'));
+    h(ui.Button, { variant: 'secondary', size: 'xs', onClick: reset }, 'Reset'));
 }
 
 /* ------------------------------------------------------------------ blocks */
@@ -117,8 +117,8 @@ function Code({ source }) {
   };
   return h('div', { className: 'code' },
     h('div', { className: 'code-actions' },
-      h(ui.Button, { variant: 'secondary', size: 'xsmall', onClick: () => setOpen(!open) }, open ? 'Hide code' : 'Show code'),
-      open && h(ui.Button, { variant: 'secondary', size: 'xsmall', onClick: copy }, copied ? 'Copied' : 'Copy')),
+      h(ui.Button, { variant: 'secondary', size: 'xs', onClick: () => setOpen(!open) }, open ? 'Hide code' : 'Show code'),
+      open && h(ui.Button, { variant: 'secondary', size: 'xs', onClick: copy }, copied ? 'Copied' : 'Copy')),
     open && h('pre', null, h('code', null, source)));
 }
 
@@ -153,9 +153,9 @@ function Example({ meta, story, name, id, controls, overlay, file, exportName })
           ? h(Boundary, { key: nonce }, h(StoryCanvas, { meta, story, args: current }))
           : h('div', { className: 'gate' }, 'This example opens on top of the page.'),
         gated && h('div', { className: 'gate-actions' },
-          !shown && h(ui.Button, { size: 'small', onClick: () => setShown(true) }, 'Open example'),
-          shown && h(ui.Button, { variant: 'secondary', size: 'xsmall', onClick: () => setNonce(nonce + 1) }, 'Reopen'),
-          shown && h(ui.Button, { variant: 'text', size: 'xsmall', onClick: () => setShown(false) }, 'Hide')))),
+          !shown && h(ui.Button, { variant: 'primary', size: 'sm', onClick: () => setShown(true) }, 'Open example'),
+          shown && h(ui.Button, { variant: 'secondary', size: 'xs', onClick: () => setNonce(nonce + 1) }, 'Reopen'),
+          shown && h(ui.Button, { variant: 'ghost', size: 'xs', onClick: () => setShown(false) }, 'Hide')))),
     h(Code, { source: doc.source && doc.source.originalSource }));
 }
 
@@ -319,7 +319,7 @@ function App() {
           h(Nav, { entry, query: q.trim().toLowerCase() })),
         h('div', { className: 'scrim', onClick: () => _setMenu(false) }),
         h('main', { id: 'main' },
-          h('div', { className: 'topbar' }, h(Button, { variant: 'secondary', size: 'xsmall', onClick: () => _setMenu(!menu) }, 'Menu'), h('a', { href: '#/', className: 'brand' }, 'baseui')),
+          h('div', { className: 'topbar' }, h(Button, { variant: 'secondary', size: 'xs', onClick: () => _setMenu(!menu) }, 'Menu'), h('a', { href: '#/', className: 'brand' }, 'baseui')),
           entry && entry.section === 'Components' && h('div', { className: 'pagebar' },
             h(SegmentedControl, { size: 'small', label: 'Preview width', value: viewport, onValueChange: setViewport, items: [{ value: 'desktop', label: 'Desktop' }, { value: 'mobile', label: 'Mobile' }] })),
           entry ? h(Page, { entry, key: entry.slug }) : h(Home)))));

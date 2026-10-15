@@ -4,7 +4,9 @@ import { describe } from '../doc.js';
 
 const PX = { xsm: 20, sm: 24, md: 36, lg: 48, xl: 128 };
 export const resolveSize = (size = 'md') => (typeof size === 'number' ? size : PX[size]);
-const RADIUS = { circle: '9999px', rounded: 'var(--baseui-radius-12)', square: '0' };
+// Rounded corners follow the size, like the other controls: about 30% of the side.
+const rounded = (px) => `var(--baseui-radius-${px <= 20 ? 4 : px <= 32 ? 8 : px <= 40 ? 12 : px <= 56 ? 16 : px <= 72 ? 20 : 28})`;
+const radiusOf = (shape, px) => (shape === 'circle' ? '9999px' : shape === 'rounded' ? rounded(px) : '0');
 
 export const AvatarGroupContext = createContext(null);
 const AvatarSizeContext = createContext(null);
@@ -37,7 +39,7 @@ export function Avatar({ name, src, fallbackSrc, alt, size = 'md', shape = 'circ
   const Tag = href ? 'a' : onClick ? 'button' : 'div';
   const props = {
     className: cx('bui-avatar', interactive && 'bui-avatar--interactive', className),
-    style: { width: px, height: px, borderRadius: RADIUS[shp], ...(group && { marginInlineStart: -group.overlap }), ...style },
+    style: { width: px, height: px, borderRadius: radiusOf(shp, px), ...(group && { marginInlineStart: -group.overlap }), ...style },
     ...(href ? { href, target, rel } : onClick ? { type: 'button', onClick } : label ? { role: 'img' } : { 'aria-hidden': 'true' }),
     ...(label && interactive && { 'aria-label': label }),
     ...(label && !interactive && { 'aria-label': label }),
@@ -78,7 +80,7 @@ export function AvatarGroupOverflow({ count, onClick, children, className, style
   const Tag = onClick ? 'button' : 'span';
   return h(Tag, {
     className: cx('bui-avatar-overflow', onClick && 'bui-avatar--interactive', className),
-    style: { height: group.px, minWidth: group.px, borderRadius: RADIUS[group.shape], fontSize: Math.max(12, Math.round(group.px * 0.35)), marginInlineStart: -group.overlap, ...style },
+    style: { height: group.px, minWidth: group.px, borderRadius: radiusOf(group.shape, group.px), fontSize: Math.max(12, Math.round(group.px * 0.35)), marginInlineStart: -group.overlap, ...style },
     'aria-label': `${n} more`, ...(onClick && { type: 'button', onClick }), ...rest,
   }, children ?? `+${n}`);
 }
