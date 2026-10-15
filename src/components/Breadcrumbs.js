@@ -2,7 +2,7 @@ import { h, cx, Fragment } from '../react.js';
 import { Icon } from '../icons.js';
 import { describe } from '../doc.js';
 
-export function Breadcrumbs({ items, label = 'Навигационная цепочка', className, ...rest }) {
+export function Breadcrumbs({ items, label = 'Breadcrumbs', className, ...rest }) {
   return h('nav', { 'aria-label': label, className: cx('bui-breadcrumbs', className), ...rest },
     h('ol', null, items.map((item, i) => {
       const last = i === items.length - 1;
@@ -17,7 +17,7 @@ export function Breadcrumbs({ items, label = 'Навигационная цеп�
     })));
 }
 
-describe(Breadcrumbs, 'Навигационная цепочка. Последний элемент — текущая страница.', {
-  items: ['Array<{ label: ReactNode; href?: string; onClick?: () => void }>', null, 'Элементы цепочки по порядку.'],
-  label: ['string', "'Навигационная цепочка'", 'aria-label для nav.'],
+describe(Breadcrumbs, 'A trail of links showing where the user is. The last item is the current page.', {
+  items: ['Array<{ label: ReactNode; href?: string; onClick?: () => void }>', null, 'Items in order (Breadcrumb Item).'],
+  label: ['string', "'Breadcrumbs'", 'aria-label of the nav.'],
 });

@@ -1,4 +1,4 @@
-// Минимальный набор служебных иконок для компонентов (24×24, stroke currentColor).
+// A minimal set of internal icons for components (24×24, stroke currentColor).
 import { h } from './react.js';
 
 const PATHS = {

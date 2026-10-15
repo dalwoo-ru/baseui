@@ -1,6 +1,6 @@
 /**
- * Подключает описание к компоненту для страницы документации (таблица свойств).
- * props: { имя: ['тип', 'по умолчанию' | null, 'описание'] }
+ * Attaches a description to a component for its documentation page (props table).
+ * props: { name: ['type', 'default' | null, 'description'] }
  */
 export function describe(component, description, props) {
   component.__docgenInfo = {

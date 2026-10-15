@@ -1,22 +1,20 @@
 import { h } from '../react.js';
 import { Breadcrumbs } from '../components/Breadcrumbs.js';
-import { meta, playground } from './_helpers.js';
+import { meta, playground, example } from './_helpers.js';
 
-export default meta({
-  title: 'Components/Breadcrumbs', component: Breadcrumbs,
-  args: { items: [{ label: 'Главная', href: '#' }, { label: 'Каталог', href: '#' }, { label: 'Электроника', href: '#' }, { label: 'Наушники' }] },
-});
+const items = [{ label: 'Home', href: '#' }, { label: 'Catalog', href: '#' }, { label: 'Audio', href: '#' }, { label: 'Headphones' }];
+export default meta({ title: 'Components/Breadcrumbs', component: Breadcrumbs, args: { items } });
 export const Playground = {
-  ...playground({ description: 'Последний элемент — текущая страница (aria-current="page").', source: `{
-  args: {
-    items: [
-      { label: 'Главная', href: '#' },
-      { label: 'Каталог', href: '#' },
-      { label: 'Наушники' },
-    ],
-  },
-}` }),
+  ...playground({ description: 'The last item is the current page (`aria-current="page"`).', source: `<Breadcrumbs items={[
+  { label: 'Home', href: '/' },
+  { label: 'Catalog', href: '/catalog' },
+  { label: 'Headphones' },
+]} />` }),
   render: (args) => h(Breadcrumbs, args),
 };
-
-export const __namedExportsOrder = ['Playground'];
+export const Item = example({
+  name: 'Breadcrumb Item', description: 'Each item is a link (`href`), a button (`onClick`) or plain text. The current page is never a link.',
+  render: () => h(Breadcrumbs, { items: [{ label: 'Link', href: '#' }, { label: 'Button', onClick: () => {} }, { label: 'Current' }] }),
+  source: `<Breadcrumbs items={[{ label: 'Link', href: '/' }, { label: 'Button', onClick }, { label: 'Current' }]} />`,
+});
+export const __namedExportsOrder = ['Playground', 'Item'];

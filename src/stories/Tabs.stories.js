@@ -1,25 +1,26 @@
 import { h } from '../react.js';
-import { Tabs } from '../components/Tabs.js';
+import { Tabs, TabList, Tab, TabPanel } from '../components/Tabs.js';
 import { meta, playground, example } from './_helpers.js';
 
-const items = [
-  { value: 'overview', label: 'Обзор', content: 'Общая информация о проекте.' },
-  { value: 'activity', label: 'Активность', content: 'Последние действия участников.' },
-  { value: 'settings', label: 'Настройки', content: 'Параметры проекта и доступ.' },
-  { value: 'billing', label: 'Оплата', content: 'Недоступно на вашем тарифе.', disabled: true },
-];
 export default meta({
-  title: 'Components/Tabs', component: Tabs, args: { variant: 'underline', items, label: 'Разделы проекта' },
-  argTypes: { variant: { control: 'inline-radio', options: ['underline', 'segmented'], description: 'Оформление' } },
+  title: 'Components/Tabs', component: Tabs, args: { defaultValue: 'overview' },
+  argTypes: {},
 });
+const tabs = (variant) => h(Tabs, { defaultValue: 'overview' },
+  h(TabList, { variant, label: 'Project sections' }, h(Tab, { value: 'overview' }, 'Overview'), h(Tab, { value: 'activity' }, 'Activity'), h(Tab, { value: 'settings' }, 'Settings'), h(Tab, { value: 'billing', disabled: true }, 'Billing')),
+  h(TabPanel, { value: 'overview' }, 'General project information.'), h(TabPanel, { value: 'activity' }, 'Recent activity.'), h(TabPanel, { value: 'settings' }, 'Project settings.'));
 export const Playground = {
-  ...playground({ description: 'Стрелки ← →, Home и End переключают вкладки; недоступные пропускаются.', source: '{}' }),
-  render: (args) => h('div', { style: { width: 480, maxWidth: '100%' } }, h(Tabs, args)),
+  ...playground({ description: 'Arrow keys, Home and End move between tabs; disabled tabs are skipped.', source: `<Tabs defaultValue="overview">
+  <TabList label="Project sections">
+    <Tab value="overview">Overview</Tab>
+    <Tab value="activity">Activity</Tab>
+  </TabList>
+  <TabPanel value="overview">…</TabPanel>
+  <TabPanel value="activity">…</TabPanel>
+</Tabs>` }),
+  render: () => h('div', { style: { width: 480, maxWidth: '100%' } }, tabs('underline')),
 };
-export const Segmented = example({
-  name: 'Segmented', description: 'Сегментированный вид — для переключения режимов отображения.',
-  render: () => h(Tabs, { variant: 'segmented', label: 'Режим', items: [{ value: 'list', label: 'Список', content: 'Вид списком.' }, { value: 'grid', label: 'Сетка', content: 'Вид сеткой.' }] }),
-  source: `<Tabs variant="segmented" items={[{ value: 'list', label: 'Список', content: '…' }, { value: 'grid', label: 'Сетка', content: '…' }]} />`,
-});
-
-export const __namedExportsOrder = ['Playground', 'Segmented'];
+export const TabListPill = example({ name: 'Tab List', description: '`TabList` takes `variant="underline"` (default) or `"pill"`.', render: () => h('div', { style: { width: 480, maxWidth: '100%' } }, tabs('pill')), source: `<TabList variant="pill">…</TabList>` });
+export const SingleTab = example({ name: 'Tab', description: 'A `Tab` and its `TabPanel` share a `value`.', render: () => h(Tabs, { defaultValue: 'a' }, h(TabList, { label: 'Demo' }, h(Tab, { value: 'a' }, 'First'), h(Tab, { value: 'b' }, 'Second')), h(TabPanel, { value: 'a' }, 'First panel'), h(TabPanel, { value: 'b' }, 'Second panel')), source: `<Tab value="a">First</Tab>
+<TabPanel value="a">First panel</TabPanel>` });
+export const __namedExportsOrder = ['Playground', 'TabListPill', 'SingleTab'];

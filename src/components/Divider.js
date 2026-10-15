@@ -10,8 +10,8 @@ export function Divider({ orientation = 'horizontal', label, className, ...rest 
   }, label && orientation === 'horizontal' ? h('span', { className: 'bui-divider__label' }, label) : null);
 }
 
-describe(Divider, 'Разделитель: горизонтальная или вертикальная линия, опционально с подписью.', {
-  orientation: ["'horizontal' | 'vertical'", "'horizontal'", 'Направление линии.'],
-  label: ['ReactNode', null, 'Подпись по центру (только горизонтальный).'],
-  className: ['string', null, 'Дополнительный класс.'],
+describe(Divider, 'A horizontal or vertical line, optionally with a label.', {
+  orientation: ["'horizontal' | 'vertical'", "'horizontal'", 'Line direction.'],
+  label: ['ReactNode', null, 'Centered label (horizontal only).'],
+  className: ['string', null, 'Extra class name.'],
 });

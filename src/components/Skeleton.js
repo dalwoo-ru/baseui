@@ -14,9 +14,9 @@ export function Skeleton({ variant = 'text', width, height, lines = 1, className
   });
 }
 
-describe(Skeleton, 'Заглушка контента на время загрузки. Скрыта от скринридеров — сообщайте о загрузке через aria-busy на контейнере.', {
-  variant: ["'text' | 'rect' | 'circle'", "'text'", 'Форма заглушки.'],
-  width: ['number | string', null, 'Ширина.'],
-  height: ['number | string', null, 'Высота (для rect и circle).'],
-  lines: ['number', '1', 'Количество строк для variant="text"; последняя короче.'],
+describe(Skeleton, 'A content placeholder while loading. Hidden from screen readers: announce loading with `aria-busy` on the container.', {
+  variant: ["'text' | 'rect' | 'circle'", "'text'", 'Placeholder shape.'],
+  width: ['number | string', null, 'Width.'],
+  height: ['number | string', null, 'Height (rect and circle).'],
+  lines: ['number', '1', 'Number of lines for `variant="text"`; the last one is shorter.'],
 });

@@ -5,33 +5,33 @@ import manifest from './manifest.js';
 const React = requireReact();
 const { createElement: h, useState, useEffect, useMemo, useRef, Fragment } = React;
 
+/* ------------------------------------------------------------- page index */
+
+const kebab = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const stemOf = (file) => file.split('/').pop().replace(/\.stories.*$/, '').toLowerCase();
+
+/** manifest (sections → items → children) → flat list of routable pages. */
+const pages = [];
+for (const { section, items } of manifest) {
+  const add = (item, group) => pages.push({ section, group, title: item.title, slug: kebab(item.title), file: item.file, anchor: item.anchor });
+  for (const item of items) {
+    if (item.children) item.children.forEach((c) => add(c, item.title));
+    else add(item);
+  }
+}
+const routeOf = (p) => `#/${p.section.toLowerCase()}/${p.slug}`;
+
 /* ------------------------------------------------------------------ utils */
 
-const GROUPS = [
-  ['Foundations', 'Основы'],
-  ['Components', 'Компоненты'],
-  ['Patterns', 'Паттерны'],
-  ['RHF', 'React Hook Form'],
-];
-const byGroup = (g) => manifest.filter((c) => c.group === g);
-const routeOf = (c) => `#/${c.group.toLowerCase()}/${c.slug}`;
-
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-function inline(s) {
-  return esc(s)
-    .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-}
+const inline = (s) => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
 function markdown(src = '') {
-  const blocks = src.trim().split(/\n\s*\n/);
-  return blocks
-    .map((b) => {
-      const lines = b.split('\n');
-      if (lines.every((l) => /^\s*[-*]\s+/.test(l)))
-        return '<ul>' + lines.map((l) => `<li>${inline(l.replace(/^\s*[-*]\s+/, ''))}</li>`).join('') + '</ul>';
-      return `<p>${inline(lines.join(' '))}</p>`;
-    })
-    .join('');
+  return src.trim().split(/\n\s*\n/).map((b) => {
+    const lines = b.split('\n');
+    if (lines.every((l) => /^\s*[-*]\s+/.test(l)))
+      return '<ul>' + lines.map((l) => `<li>${inline(l.replace(/^\s*[-*]\s+/, ''))}</li>`).join('') + '</ul>';
+    return `<p>${inline(lines.join(' '))}</p>`;
+  }).join('');
 }
 const Md = ({ text, className = 'prose' }) =>
   text ? h('div', { className, dangerouslySetInnerHTML: { __html: markdown(text) } }) : null;
@@ -50,8 +50,8 @@ const loadModule = (file) => {
 };
 const ui = {};
 async function loadUi() {
-  const pick = async (slug) => (await loadModule(manifest.find((c) => c.slug === slug).file)).default.component;
-  [ui.Button, ui.TextField, ui.Switch] = await Promise.all([pick('button'), pick('textfield'), pick('switch')]);
+  const pick = async (title) => (await loadModule(pages.find((p) => p.title === title).file)).default.component;
+  [ui.Button, ui.TextField, ui.Switch] = await Promise.all([pick('Button'), pick('Text Input'), pick('Switch')]);
 }
 
 /* ----------------------------------------------------------------- stories */
@@ -84,7 +84,7 @@ class Boundary extends React.Component {
   static getDerivedStateFromError(error) { return { error }; }
   render() {
     return this.state.error
-      ? h('div', { className: 'error' }, 'Не удалось отобразить пример: ', String(this.state.error.message || this.state.error))
+      ? h('div', { className: 'error' }, 'Could not render this example: ', String(this.state.error.message || this.state.error))
       : this.props.children;
   }
 }
@@ -136,10 +136,10 @@ function Controls({ meta, args, setArgs }) {
   const items = Object.entries(meta.argTypes || {}).filter(([, s]) => s.control);
   if (!items.length) return null;
   return h('div', { className: 'controls' },
-    h('div', { className: 'controls-title' }, 'Параметры'),
+    h('div', { className: 'controls-title' }, 'Controls'),
     items.map(([name, spec]) =>
       h(Control, { key: name, name, spec, args, value: args[name], onChange: (v) => setArgs({ ...args, [name]: v }) })),
-    h(ui.Button, { variant: 'secondary', size: 'xsmall', onClick: () => setArgs(null) }, 'Сбросить'));
+    h(ui.Button, { variant: 'secondary', size: 'xsmall', onClick: () => setArgs(null) }, 'Reset'));
 }
 
 /* ------------------------------------------------------------------ blocks */
@@ -153,18 +153,18 @@ function Code({ source }) {
   };
   return h('div', { className: 'code' },
     h('div', { className: 'code-actions' },
-      h(ui.Button, { variant: 'text', size: 'xsmall', onClick: () => setOpen(!open) }, open ? 'Скрыть код' : 'Показать код'),
-      open && h(ui.Button, { variant: 'text', size: 'xsmall', onClick: copy }, copied ? 'Скопировано' : 'Копировать')),
+      h(ui.Button, { variant: 'text', size: 'xsmall', onClick: () => setOpen(!open) }, open ? 'Hide code' : 'Show code'),
+      open && h(ui.Button, { variant: 'text', size: 'xsmall', onClick: copy }, copied ? 'Copied' : 'Copy')),
     open && h('pre', null, h('code', null, source)));
 }
 
-/** Быстрые ссылки на примеры длинной страницы. */
+/** Quick links to the examples of a long page. */
 function Toc({ items }) {
   const go = (id) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
   };
-  return h('nav', { className: 'toc', 'aria-label': 'Примеры на странице' },
+  return h('nav', { className: 'toc', 'aria-label': 'On this page' },
     items.map((s) => h('button', { key: s.id, type: 'button', onClick: () => go(s.id) }, s.name)));
 }
 
@@ -185,11 +185,11 @@ function Example({ meta, story, name, id, controls, overlay }) {
       h('div', { className: 'canvas' },
         shown
           ? h(Boundary, { key: nonce }, h(StoryCanvas, { meta, story, args: current }))
-          : h('div', { className: 'gate' }, 'Этот пример открывается поверх страницы.'),
+          : h('div', { className: 'gate' }, 'This example opens on top of the page.'),
         gated && h('div', { className: 'gate-actions' },
-          !shown && h(ui.Button, { size: 'small', onClick: () => setShown(true) }, 'Открыть пример'),
-          shown && h(ui.Button, { variant: 'secondary', size: 'xsmall', onClick: () => setNonce(nonce + 1) }, 'Открыть заново'),
-          shown && h(ui.Button, { variant: 'text', size: 'xsmall', onClick: () => setShown(false) }, 'Скрыть'))),
+          !shown && h(ui.Button, { size: 'small', onClick: () => setShown(true) }, 'Open example'),
+          shown && h(ui.Button, { variant: 'secondary', size: 'xsmall', onClick: () => setNonce(nonce + 1) }, 'Reopen'),
+          shown && h(ui.Button, { variant: 'text', size: 'xsmall', onClick: () => setShown(false) }, 'Hide'))),
       showControls && h(Controls, { meta, args: current, setArgs: (a) => setArgs(a) })),
     h(Code, { source: doc.source && doc.source.originalSource }));
 }
@@ -200,13 +200,13 @@ function PropsTable({ component }) {
   const rows = props ? Object.entries(props).filter(([, p]) => p.description || p.tsType) : [];
   if (!rows.length) return null;
   return h('section', { className: 'section' },
-    h('h2', null, 'Свойства'),
+    h('h2', null, 'Props'),
     h('div', { className: 'table-wrap' },
       h('table', null,
-        h('thead', null, h('tr', null, ['Свойство', 'Тип', 'По умолчанию', 'Описание'].map((t) => h('th', { key: t }, t)))),
+        h('thead', null, h('tr', null, ['Prop', 'Type', 'Default', 'Description'].map((t) => h('th', { key: t }, t)))),
         h('tbody', null, rows.map(([name, p]) =>
           h('tr', { key: name },
-            h('td', null, h('code', null, name), p.required && h('span', { className: 'req', title: 'Обязательное' }, '*')),
+            h('td', null, h('code', null, name), p.required && h('span', { className: 'req', title: 'Required' }, '*')),
             h('td', null, h('code', { className: 'type' }, TYPE_CLEAN(p.tsType))),
             h('td', null, p.defaultValue ? h('code', null, p.defaultValue.value) : '—'),
             h('td', null, h(Md, { text: p.description, className: 'prose small' }))))))));
@@ -214,7 +214,7 @@ function PropsTable({ component }) {
 
 /* ------------------------------------------------------------------- pages */
 
-function ComponentPage({ entry }) {
+function Page({ entry }) {
   const [state, setState] = useState(null);
   useEffect(() => {
     let alive = true;
@@ -222,46 +222,93 @@ function ComponentPage({ entry }) {
     loadModule(entry.file).then((m) => alive && setState(m), (e) => alive && setState({ error: e }));
     return () => { alive = false; };
   }, [entry]);
-  if (!state) return h('div', { className: 'loading' }, 'Загрузка…');
+
+  const stem = stemOf(entry.file);
+  useEffect(() => {
+    if (!state || state.error) return;
+    const t = setTimeout(() => {
+      const el = entry.anchor && document.getElementById(`${stem}--${entry.anchor}`);
+      if (el) el.scrollIntoView({ block: 'start' });
+    }, 60);
+    return () => clearTimeout(t);
+  }, [state, entry, stem]);
+
+  if (!state) return h('div', { className: 'loading' }, 'Loading…');
   if (state.error) return h('div', { className: 'error' }, String(state.error));
   const meta = state.default;
-  // Порядок и имена историй берём из самого модуля; manifest.stories — только переопределение имён.
-  const kebab = (k) => k.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
-  const human = (k) => k.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
-  const names = Object.fromEntries((entry.stories || []).map((s) => [s.key.replace(/-/g, ''), s.name]));
+  const humanize = (k) => k.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
   const stories = (state.__namedExportsOrder || Object.keys(state))
-    .filter((k) => k !== 'default' && k !== '__namedExportsOrder' && state[k])
-    .map((k) => ({ key: kebab(k), id: `${entry.slug}--${kebab(k)}`, name: state[k].name || names[k.toLowerCase()] || human(k), story: state[k] }));
+    .filter((k) => k !== 'default' && k !== '__namedExportsOrder' && k !== 'page' && state[k])
+    .map((k) => ({ key: kebab(humanize(k)), id: `${stem}--${kebab(humanize(k))}`, name: state[k].name || humanize(k), story: state[k] }));
   const playground = stories.find((s) => s.key === 'playground');
   const rest = stories.filter((s) => s !== playground);
   const desc = meta.parameters && meta.parameters.docs && meta.parameters.docs.description;
-  const isFoundation = entry.group === 'Foundations' || entry.group === 'Patterns';
+  const isFoundation = entry.section === 'Foundations';
+  const overlay = /^(Dialog|Alert Dialog)$/.test(entry.title);
+
   return h('article', { className: 'page' },
-    h('div', { className: 'eyebrow' }, GROUPS.find((g) => g[0] === entry.group)[1]),
+    h('div', { className: 'eyebrow' }, entry.group ? `${entry.section} · ${entry.group}` : entry.section),
     h('h1', null, entry.title),
     h(Md, { text: desc && desc.component, className: 'prose lead' }),
+    state.page && h(state.page),
     stories.length > 3 && h(Toc, { items: stories }),
-    playground && h(Example, { key: entry.slug + 'pg', meta, story: playground.story, name: playground.name, id: playground.id, controls: true, overlay: entry.title === 'Modal' }),
+    playground && h(Example, { key: entry.slug + 'pg', meta, story: playground.story, name: playground.name, id: playground.id, controls: true, overlay }),
     !isFoundation && h(PropsTable, { component: meta.component }),
     rest.length > 0 && h('section', { className: 'section' },
-      !isFoundation && rest.length > 0 && h('h2', null, 'Примеры'),
-      rest.map((s) => h(Example, { key: entry.slug + s.id, meta, story: s.story, name: s.name, id: s.id, controls: false, overlay: entry.title === 'Modal' }))));
+      !isFoundation && h('h2', null, 'Examples'),
+      rest.map((s) => h(Example, { key: entry.slug + s.id, meta, story: s.story, name: s.name, id: s.id, controls: false, overlay }))));
 }
 
 function Home() {
+  const sections = manifest.map((s) => ({
+    ...s,
+    cards: s.items.map((i) => i.children ? { title: i.title, page: pages.find((p) => p.title === i.children[0].title && p.group === i.title), count: i.children.length } : { title: i.title, page: pages.find((p) => p.title === i.title && !p.group) }),
+  }));
   return h('article', { className: 'page' },
-    h('div', { className: 'eyebrow' }, 'Дизайн-система'),
+    h('div', { className: 'eyebrow' }, 'Design system'),
     h('h1', null, 'baseui'),
-    h('p', { className: 'prose lead' }, 'Универсальная дизайн-система: токены, типографика и набор компонентов на Base UI. Светлая и тёмная темы переключаются атрибутом ', h('code', null, 'data-theme'), '.'),
-    GROUPS.map(([g, title]) => h('section', { className: 'section', key: g },
-      h('h2', null, title),
-      h('div', { className: 'cards' }, byGroup(g).map((c) =>
-        h('a', { className: 'card', key: c.slug, href: routeOf(c) }, h('span', null, c.title), c.stories && h('small', null, c.stories.length + ' ' + plural(c.stories.length))))))));
+    h('p', { className: 'prose lead' }, 'A universal design system: foundations and components built on Base UI. Light and dark themes switch with the ', h('code', null, 'data-theme'), ' attribute.'),
+    sections.map((s) => h('section', { className: 'section', key: s.section },
+      h('h2', null, s.section),
+      h('div', { className: 'cards' }, s.cards.map((c) =>
+        h('a', { className: 'card', key: c.title, href: routeOf(c.page) }, h('span', null, c.title), c.count && h('small', null, `${c.count} pages`)))))));
 }
-const plural = (n) => (n % 10 === 1 && n % 100 !== 11 ? 'пример' : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 'примера' : 'примеров');
+
+/* -------------------------------------------------------------- navigation */
+
+function Nav({ entry, query }) {
+  const [open, setOpen] = useState({});
+  const match = (t) => t.toLowerCase().includes(query);
+  useEffect(() => { if (entry && entry.group) setOpen((o) => ({ ...o, [entry.group]: true })); }, [entry]);
+  return h('nav', { 'aria-label': 'Documentation' }, manifest.map(({ section, items }) => {
+    const shown = items.map((item) => {
+      if (!item.children) return match(item.title) ? { item } : null;
+      const kids = item.children.filter((c) => match(c.title) || match(item.title));
+      return kids.length ? { item, kids } : null;
+    }).filter(Boolean);
+    return shown.length > 0 && h(Fragment, { key: section },
+      h('div', { className: 'nav-title' }, section),
+      shown.map(({ item, kids }) => {
+        if (!kids) {
+          const p = pages.find((x) => x.title === item.title && !x.group);
+          return h('a', { key: item.title, href: routeOf(p), 'aria-current': entry === p ? 'page' : undefined }, item.title);
+        }
+        const expanded = query ? true : !!open[item.title];
+        return h(Fragment, { key: item.title },
+          h('button', { type: 'button', className: 'nav-group', 'aria-expanded': expanded, onClick: () => setOpen({ ...open, [item.title]: !expanded }) },
+            h('svg', { viewBox: '0 0 10 10', width: 10, height: 10, fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, 'aria-hidden': 'true' }, h('path', { d: 'M3 1l4 4-4 4' })),
+            item.title),
+          expanded && h('div', { className: 'nav-children' }, kids.map((c) => {
+            const p = pages.find((x) => x.title === c.title && x.group === item.title);
+            return h('a', { key: c.title, href: routeOf(p), 'aria-current': entry === p ? 'page' : undefined }, c.title);
+          })));
+      }));
+  }));
+}
 
 /* --------------------------------------------------------------------- app */
 
+let setMenu = () => {};
 function useRoute() {
   const [hash, setHash] = useState(location.hash);
   useEffect(() => {
@@ -269,10 +316,9 @@ function useRoute() {
     window.addEventListener('hashchange', f);
     return () => window.removeEventListener('hashchange', f);
   }, []);
-  const [, group, slug] = hash.split('/');
-  return manifest.find((c) => c.group.toLowerCase() === group && c.slug === slug) || null;
+  const [, section, slug] = hash.split('/');
+  return pages.find((p) => p.section.toLowerCase() === section && p.slug === slug) || null;
 }
-let setMenu = () => {};
 
 function App() {
   const entry = useRoute();
@@ -283,25 +329,19 @@ function App() {
   useEffect(() => { document.documentElement.setAttribute('data-theme', theme); store.set('baseui-theme', theme); }, [theme]);
   useEffect(() => { document.title = entry ? `${entry.title} — baseui` : 'baseui'; }, [entry]);
   const { Button, TextField, Switch } = ui;
-  const query = q.trim().toLowerCase();
 
   const skip = (e) => { e.preventDefault(); const m = document.getElementById('main'); m.setAttribute('tabindex', '-1'); m.focus(); };
   return h('div', { className: 'shell' + (menu ? ' menu-open' : '') },
-    h('a', { className: 'skip', href: '#main', onClick: skip }, 'Перейти к содержимому'),
+    h('a', { className: 'skip', href: '#main', onClick: skip }, 'Skip to content'),
     h('aside', { className: 'side' },
       h('a', { className: 'brand', href: '#/' }, 'baseui'),
-      h('div', { className: 'search' }, h(TextField, { label: 'Поиск', size: 'small', type: 'search', value: q, onChange: (e) => setQ(e.target.value) })),
-      h('nav', { 'aria-label': 'Разделы' }, GROUPS.map(([g, title]) => {
-        const items = byGroup(g).filter((c) => c.title.toLowerCase().includes(query));
-        return items.length > 0 && h(Fragment, { key: g },
-          h('div', { className: 'nav-title' }, title),
-          items.map((c) => h('a', { key: c.slug, href: routeOf(c), 'aria-current': entry === c ? 'page' : undefined }, c.title)));
-      })),
-      h('div', { className: 'theme' }, h(Switch, { label: 'Тёмная тема', checked: theme === 'dark', onCheckedChange: (v) => setTheme(v ? 'dark' : 'light') }))),
+      h('div', { className: 'search' }, h(TextField, { label: 'Search', size: 'small', type: 'search', value: q, onChange: (e) => setQ(e.target.value) })),
+      h(Nav, { entry, query: q.trim().toLowerCase() }),
+      h('div', { className: 'theme' }, h(Switch, { label: 'Dark theme', checked: theme === 'dark', onCheckedChange: (v) => setTheme(v ? 'dark' : 'light') }))),
     h('div', { className: 'scrim', onClick: () => _setMenu(false) }),
     h('main', { id: 'main' },
-      h('div', { className: 'topbar' }, h(Button, { variant: 'secondary', size: 'xsmall', onClick: () => _setMenu(!menu) }, 'Меню'), h('a', { href: '#/', className: 'brand' }, 'baseui')),
-      entry ? h(ComponentPage, { entry, key: entry.slug }) : h(Home)));
+      h('div', { className: 'topbar' }, h(Button, { variant: 'secondary', size: 'xsmall', onClick: () => _setMenu(!menu) }, 'Menu'), h('a', { href: '#/', className: 'brand' }, 'baseui')),
+      entry ? h(Page, { entry, key: entry.slug }) : h(Home)));
 }
 
 await loadUi();

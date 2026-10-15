@@ -4,10 +4,10 @@ import { describe } from '../doc.js';
 
 const ToastContext = createContext(null);
 
-/** Хук: const { toast, dismiss } = useToast(); toast({ title, description, status, duration }) */
+/** Hook: const { toast, dismiss } = useToast(); toast({ title, description, status, duration }) */
 export function useToast() {
   const ctx = useContext(ToastContext);
-  if (!ctx) throw new Error('useToast: оберните приложение в <ToastProvider>');
+  if (!ctx) throw new Error('useToast: wrap your app in <ToastProvider>');
   return ctx;
 }
 
@@ -31,7 +31,7 @@ function ToastItem({ item, onDismiss }) {
     h('div', { className: 'bui-toast__body' },
       item.title && h('div', { className: 'bui-toast__title' }, item.title),
       item.description && h('div', { className: 'bui-toast__text' }, item.description)),
-    h('button', { type: 'button', className: 'bui-toast__close', 'aria-label': 'Закрыть уведомление', onClick: () => onDismiss(item.id) },
+    h('button', { type: 'button', className: 'bui-toast__close', 'aria-label': 'Dismiss notification', onClick: () => onDismiss(item.id) },
       h(Icon, { name: 'close', size: 20 })));
 }
 
@@ -46,11 +46,11 @@ export function ToastProvider({ children, placement = 'bottom-right', limit = 4 
   }, [limit]);
   const api = useMemo(() => ({ toast, dismiss }), [toast, dismiss]);
   return h(ToastContext.Provider, { value: api }, children,
-    h('div', { className: cx('bui-toast-region', `bui-toast-region--${placement}`), role: 'region', 'aria-label': 'Уведомления' },
+    h('div', { className: cx('bui-toast-region', `bui-toast-region--${placement}`), role: 'region', 'aria-label': 'Notifications' },
       items.map((item) => h(ToastItem, { key: item.id, item, onDismiss: dismiss }))));
 }
 
-describe(ToastProvider, 'Провайдер уведомлений. Оберните приложение один раз, вызывайте useToast().toast({ title, description, status, duration }). Пауза таймера при наведении и фокусе; duration: 0 — не закрывать автоматически.', {
-  placement: ["'bottom-right' | 'bottom-center' | 'top-right' | 'top-center'", "'bottom-right'", 'Положение стека (на узких экранах — по ширине).'],
-  limit: ['number', '4', 'Максимум одновременных уведомлений.'],
+describe(ToastProvider, 'Notification provider. Wrap the app once and call `useToast().toast({ title, description, status, duration })`. The timer pauses on hover and focus; `duration: 0` keeps the toast until dismissed.', {
+  placement: ["'bottom-right' | 'bottom-center' | 'top-right' | 'top-center'", "'bottom-right'", 'Where the stack appears (full width on narrow screens).'],
+  limit: ['number', '4', 'Maximum simultaneous toasts.'],
 });

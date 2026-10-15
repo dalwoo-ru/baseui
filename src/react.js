@@ -1,4 +1,4 @@
-// Единая точка доступа к React и общим хелперам для компонентов baseui.
+// Single access point for React and shared helpers of baseui components.
 import { t as requireReact } from '../lib/react-BZJXY1be.js';
 
 export const React = requireReact();
@@ -7,12 +7,12 @@ export const {
   Fragment, createContext, useCallback, useContext, useEffect, useId, useMemo, useRef, useState,
 } = React;
 
-/** Склейка классов: cx('a', cond && 'b') */
+/** Join class names: cx('a', cond && 'b') */
 export const cx = (...parts) => parts.filter(Boolean).join(' ');
 
 /**
- * Контролируемое/неконтролируемое состояние: value + defaultValue + onChange.
- * Соглашение всех компонентов baseui: `value`, `defaultValue`, `onValueChange`.
+ * Controlled / uncontrolled state: value + defaultValue + onChange.
+ * Convention for all baseui components: `value`, `defaultValue`, `onValueChange`.
  */
 export function useControllable(value, defaultValue, onChange) {
   const [inner, setInner] = useState(defaultValue);

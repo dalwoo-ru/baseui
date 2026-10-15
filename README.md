@@ -1,37 +1,38 @@
-# baseui — универсальная дизайн-система
+# baseui
 
-Токены и набор компонентов на Base UI + CSS Modules, плюс страница документации,
-собранная на самих компонентах. Всё работает локально: без CDN, внешних шрифтов и сторонних рантаймов.
+A universal design system: foundations and components built on Base UI, plus a documentation site built from the components themselves.
+Everything runs locally: no CDN, no external fonts, no third-party runtime.
 
-## Принципы
+Structure, names and order of the documentation follow [Astryx](https://astryx.atmeta.com/): **Foundations** and **Components**, with components grouped the same way (Button → Button, Button Group, Icon Button…). Values and look stay baseui's: filled controls, generous radii, no outlines around elements.
 
-1. **Универсальный минимум.** Только то, что нужно любому продукту. Нет компонента — сначала составьте его из существующих.
-2. **Три слоя:** Основы (токены) → Компоненты → Паттерны (готовые композиции, показывают, как компоненты работают вместе).
-3. **Всё через токены.** Цвет, отступ, радиус, тень, движение, фокус, слой — только `--baseui-*`. Тема меняет значения, а не компоненты.
-4. **Единые соглашения** (см. ниже): компонент, которого вы не видели, ведёт себя предсказуемо.
-5. **Доступность по умолчанию:** контраст текста ≥ 4.5:1 в обеих темах, видимый фокус с клавиатуры, `prefers-reduced-motion`.
+## Principles
 
-## Структура
+1. **Minimal and universal.** Only what every product needs. If a component is missing, compose it from existing ones first.
+2. **Tokens only.** Color, spacing, radius, shadow, motion, focus and layers come from `--baseui-*`. A theme changes values, not components.
+3. **No outlines.** Components are separated by fills, spacing and shadows. Borders appear only for focus, selection and validation.
+4. **Consistent API** (below): a component you have not seen behaves predictably.
+5. **Accessible by default:** text contrast ≥ 4.5:1 in both themes, visible keyboard focus, `prefers-reduced-motion` (all durations become `0ms`).
 
-| Путь | Что это |
+## Structure
+
+| Path | What it is |
 |---|---|
-| `tokens.css` | Токены: цвета (светлая/тёмная тема через `data-theme`), Space, Radius, Shadow, Motion, Focus, ZIndex, Typography + `@font-face` |
+| `tokens.css` | The single source of truth for tokens (see below) + `@font-face` |
 | `fonts/` | Geist (woff2) |
-| `lib/` | Скомпилированные компоненты (ES-модули) и `components.css` |
-| `src/` | Компоненты на чистом ES-модуле без сборки: `components/`, `components.css`, `stories/` (документация) |
-| `site/` | Страница документации: `app.js`, `site.css`, `manifest.js` (список страниц) |
-| `scripts/sync-tokens.py` | Синхронизирует значения цветов из `tokens.css` в копию для страницы Colors |
-| `index.html` | Точка входа |
+| `lib/` | Compiled baseui components (ES modules) and `components.css` |
+| `src/` | Components written as plain ES modules, no build: `components/`, `components.css`, `stories/` (docs), `foundations/` (docs pages) |
+| `site/` | The documentation site: `app.js`, `site.css`, `manifest.js` (the page tree) |
+| `index.html` | Entry point |
 
-## Запуск
+## Run
 
-Нужен любой статический сервер (ES-модули не работают с `file://`):
+Any static server (ES modules do not work from `file://`):
 
 ```sh
 python3 -m http.server 8000   # http://localhost:8000
 ```
 
-## Подключение
+## Use
 
 ```html
 <link rel="stylesheet" href="tokens.css">
@@ -39,39 +40,43 @@ python3 -m http.server 8000   # http://localhost:8000
 <link rel="stylesheet" href="src/components.css">
 ```
 
-Тема — атрибут `data-theme="light|dark"` на `<html>`.
+Theme: `data-theme="light|dark"` on `<html>`.
 
 ```js
-import { Tabs, Alert, ToastProvider, useToast } from './src/index.js';
+import { Tabs, TabList, Tab, TabPanel, Banner, ToastProvider, useToast } from './src/index.js';
 ```
 
-## Соглашения по API
+## Tokens
 
-| Тема | Правило |
+Names follow Astryx contexts; values are baseui's. Order matches the Astryx “All Tokens” page.
+
+| Group | Tokens |
 |---|---|
-| Размеры | `size`: `xsmall` · `small` · `medium` · `large` |
-| Варианты | `variant` — оформление; `status` — семантика (`error` · `warning` · `success`, у Alert ещё `info`) |
-| Состояние | `value` / `defaultValue` / `onValueChange` (контролируемый и нет) |
-| Доступность | `label` — доступное имя; `*Label` — локализуемые строки по умолчанию на русском |
-| Расширение | `className` склеивается; остальные пропсы уходят на корневой элемент |
-| Тексты | Строки по умолчанию на русском; все переопределяются пропсами |
+| Color | `--baseui-color-accent`, `-accent-muted`, `-on-accent`, `-brand`; `-background-body / surface / muted / inverted`; `-text-primary / secondary / disabled / accent`; `-icon-*`; `-success / error / warning` (+ `-muted`, `-background-*-inverted`); `-border`, `-border-emphasized`; `-track`; `-overlay*`; `-shadow` |
+| Spacing | `--baseui-spacing-0 · 4 · 8 · 12 · 16 · 20 · 24 · 32 · 40 · 48 · 64 · 80` (named by pixel value) |
+| Size | `--baseui-size-element-xs · sm · md · lg` (32 · 40 · 48 · 56) |
+| Radius | `--baseui-radius-none · 4 · 8 · 12 · 16 · 20 · 24 · 28 · 32 · full` (named by pixel value) |
+| Shadow | `--baseui-shadow-low · med · high` |
+| Focus | `--baseui-focus-outline-width · style · color · offset` |
+| Duration / easing | `--baseui-duration-fast-min … slow-max` (130–1300 ms), `--baseui-ease-standard` |
+| Z-index | `--baseui-z-index-sticky · overlay · popup · toast · tooltip` |
+| Typography | `font: var(--baseui-Typography-Text-16-Semi-Bold)`, `--baseui-Typography-Header-*`, `--baseui-Typography-Font-Family-Mono` |
 
-## Токены
+## API conventions
 
-| Группа | Примеры |
+| Topic | Rule |
 |---|---|
-| Цвет | `--baseui-Background-Primary`, `--baseui-Text-and-Icon-Secondary`, `--baseui-Extensions-Border-Error` |
-| Отступы, радиусы, тени | `--baseui-Space-M`, `--baseui-Radius-S`, `--baseui-Shadow-M` |
-| Движение | `--baseui-Motion-Duration-Fast / Base / Slow`, `--baseui-Motion-Easing` |
-| Фокус | `--baseui-Focus-Ring-Color / Width / Offset` |
-| Слои | `--baseui-ZIndex-Sticky / Overlay / Popup / Toast / Tooltip` |
-| Типографика | `font: var(--baseui-Typography-Text-16-Semi-Bold)`, `--baseui-Typography-Font-Family-Mono` |
+| Sizes | `size`: `xsmall` · `small` · `medium` · `large` |
+| Variants | `variant` is appearance; `status` is meaning (`error` · `warning` · `success`, Banner also `info`) |
+| State | `value` / `defaultValue` / `onValueChange` (controlled and uncontrolled) |
+| Accessibility | `label` is the accessible name; `*Label` props are overridable default strings |
+| Extending | `className` is merged; other props go to the root element |
 
-## Как добавить компонент
+## Add a component
 
-1. `src/components/Name.js` — компонент на `h()` из `src/react.js`, в конце `describe(Name, 'описание', { проп: [тип, по умолчанию, описание] })`.
-2. Стили — в `src/components.css`, префикс `.bui-`, только токены.
-3. `src/stories/Name.stories.js` — `meta()`, `Playground` и примеры (`src/stories/_helpers.js`). Порядок историй — `__namedExportsOrder`.
-4. Строка в `site/manifest.js`.
+1. `src/components/Name.js`: a component using `h()` from `src/react.js`, ending with `describe(Name, 'description', { prop: [type, default, description] })`.
+2. Styles in `src/components.css`: prefix `.bui-`, tokens only, no outlines.
+3. `src/stories/Name.stories.js`: `meta()`, `Playground` and examples (`src/stories/_helpers.js`), and `__namedExportsOrder`.
+4. One entry in `site/manifest.js`, at the right place in the Astryx order.
 
-Исходные `.tsx` скомпилированных компонентов в `lib/` недоступны.
+The sources (`.tsx`) of the compiled components in `lib/` are not available.

@@ -1,48 +1,59 @@
-import { h, cx, useId, useRef, useControllable } from '../react.js';
+import { h, cx, useId, useRef, createContext, useContext, useControllable } from '../react.js';
 import { describe } from '../doc.js';
 
-export function Tabs({ items, value, defaultValue, onValueChange, variant = 'underline', label, className, ...rest }) {
-  const first = items.find((i) => !i.disabled);
-  const [current, setCurrent] = useControllable(value, defaultValue ?? (first && first.value), onValueChange);
-  const uid = useId();
-  const listRef = useRef(null);
-  const enabled = items.filter((i) => !i.disabled);
+const TabsContext = createContext(null);
+const useTabs = () => useContext(TabsContext);
 
+export function Tabs({ value, defaultValue, onValueChange, children, className, ...rest }) {
+  const [current, setCurrent] = useControllable(value, defaultValue, onValueChange);
+  const uid = useId();
+  return h(TabsContext.Provider, { value: { current, setCurrent, uid } }, h('div', { className: cx('bui-tabs', className), ...rest }, children));
+}
+describe(Tabs, 'Switches between related views. Compose it from `TabList`, `Tab` and `TabPanel`.', {
+  value: ['string', null, 'Selected tab (controlled).'],
+  defaultValue: ['string', null, 'Initially selected tab.'],
+  onValueChange: ['(value: string) => void', null, 'Called when the selected tab changes.'],
+});
+
+export function TabList({ variant = 'underline', label, children, className, ...rest }) {
+  const { current, setCurrent } = useTabs();
+  const ref = useRef(null);
   const onKeyDown = (e) => {
-    const idx = enabled.findIndex((i) => i.value === current);
+    const tabs = [...ref.current.querySelectorAll('[role="tab"]:not(:disabled)')];
+    const i = tabs.indexOf(document.activeElement);
     let next;
-    if (e.key === 'ArrowRight') next = enabled[(idx + 1) % enabled.length];
-    else if (e.key === 'ArrowLeft') next = enabled[(idx - 1 + enabled.length) % enabled.length];
-    else if (e.key === 'Home') next = enabled[0];
-    else if (e.key === 'End') next = enabled[enabled.length - 1];
+    if (e.key === 'ArrowRight') next = tabs[(i + 1) % tabs.length];
+    else if (e.key === 'ArrowLeft') next = tabs[(i - 1 + tabs.length) % tabs.length];
+    else if (e.key === 'Home') next = tabs[0];
+    else if (e.key === 'End') next = tabs[tabs.length - 1];
     if (!next) return;
     e.preventDefault();
-    setCurrent(next.value);
-    listRef.current.querySelector(`[data-value="${CSS.escape(String(next.value))}"]`)?.focus();
+    next.focus();
+    setCurrent(next.dataset.value);
   };
-  const active = items.find((i) => i.value === current);
-
-  return h('div', { className: cx('bui-tabs', `bui-tabs--${variant}`, className), ...rest },
-    h('div', { role: 'tablist', 'aria-label': label, className: 'bui-tabs__list', ref: listRef, onKeyDown },
-      items.map((item) => {
-        const selected = item.value === current;
-        return h('button', {
-          key: item.value, type: 'button', role: 'tab', id: `${uid}-t-${item.value}`, 'data-value': item.value,
-          'aria-selected': selected, 'aria-controls': `${uid}-p-${item.value}`, tabIndex: selected ? 0 : -1,
-          disabled: item.disabled, className: 'bui-tabs__tab', onClick: () => setCurrent(item.value),
-        }, item.label);
-      })),
-    active && active.content != null && h('div', {
-      role: 'tabpanel', id: `${uid}-p-${active.value}`, 'aria-labelledby': `${uid}-t-${active.value}`,
-      tabIndex: 0, className: 'bui-tabs__panel',
-    }, active.content));
+  return h('div', { role: 'tablist', 'aria-label': label, ref, onKeyDown, className: cx('bui-tablist', `bui-tablist--${variant}`, className), ...rest }, children);
 }
-
-describe(Tabs, 'Вкладки: переключение между равноправными представлениями. Стрелки, Home/End — навигация с клавиатуры.', {
-  items: ['Array<{ value: string; label: ReactNode; content?: ReactNode; disabled?: boolean }>', null, 'Вкладки и их содержимое.'],
-  value: ['string', null, 'Активная вкладка (контролируемый режим).'],
-  defaultValue: ['string', null, 'Активная вкладка по умолчанию (первая доступная).'],
-  onValueChange: ['(value: string) => void', null, 'Вызывается при смене вкладки.'],
-  variant: ["'underline' | 'segmented'", "'underline'", 'Оформление списка вкладок.'],
-  label: ['string', null, 'aria-label для списка вкладок.'],
+describe(TabList, 'The row of tabs. Arrow keys, Home and End move between tabs.', {
+  variant: ["'underline' | 'pill'", "'underline'", 'Visual style of the list.'],
+  label: ['string', null, 'aria-label of the list.'],
 });
+
+export function Tab({ value, disabled = false, children, className, ...rest }) {
+  const { current, setCurrent, uid } = useTabs();
+  const selected = current === value;
+  return h('button', {
+    type: 'button', role: 'tab', id: `${uid}-t-${value}`, 'data-value': value, 'aria-selected': selected, 'aria-controls': `${uid}-p-${value}`,
+    tabIndex: selected ? 0 : -1, disabled, className: cx('bui-tab', className), onClick: () => setCurrent(value), ...rest,
+  }, children);
+}
+describe(Tab, 'A single tab button.', {
+  value: ['string', null, 'Identifier matching a `TabPanel`.'],
+  disabled: ['boolean', 'false', 'Disable the tab.'],
+});
+
+export function TabPanel({ value, children, className, ...rest }) {
+  const { current, uid } = useTabs();
+  if (current !== value) return null;
+  return h('div', { role: 'tabpanel', id: `${uid}-p-${value}`, 'aria-labelledby': `${uid}-t-${value}`, tabIndex: 0, className: cx('bui-tabpanel', className), ...rest }, children);
+}
+describe(TabPanel, 'Content of a tab; rendered only while selected.', { value: ['string', null, 'Identifier of its `Tab`.'] });

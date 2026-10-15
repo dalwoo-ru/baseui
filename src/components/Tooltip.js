@@ -24,9 +24,9 @@ export function Tooltip({ content, placement = 'top', delay = 300, children, cla
     open && h('span', { role: 'tooltip', id, className: 'bui-tooltip__bubble', 'data-placement': placement }, content));
 }
 
-describe(Tooltip, 'Короткая подсказка по наведению и фокусу. Закрывается по Escape. Позиционируется рядом с элементом без портала, поэтому может обрезаться контейнером с overflow: hidden.', {
-  content: ['ReactNode', null, 'Текст подсказки. Не кладите сюда интерактивные элементы.'],
-  placement: ["'top' | 'bottom' | 'left' | 'right'", "'top'", 'Сторона появления.'],
-  delay: ['number', '300', 'Задержка показа, мс.'],
-  children: ['ReactElement', null, 'Элемент-триггер (получает aria-describedby).'],
+describe(Tooltip, 'A short hint on hover and focus. Escape closes it. It is positioned next to the element without a portal, so a container with `overflow: hidden` can clip it.', {
+  content: ['ReactNode', null, 'Hint text. Do not put interactive elements here.'],
+  placement: ["'top' | 'bottom' | 'left' | 'right'", "'top'", 'Side it appears on.'],
+  delay: ['number', '300', 'Show delay, ms.'],
+  children: ['ReactElement', null, 'Trigger element (receives `aria-describedby`).'],
 });

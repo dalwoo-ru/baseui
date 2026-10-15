@@ -1,45 +1,39 @@
 import { h } from '../react.js';
 import { Card } from '../components/Card.js';
 import { Button } from './_ui.js';
-import { meta, playground, example, Row } from './_helpers.js';
+import { meta, playground, example, Row, W } from './_helpers.js';
 
 export default meta({
   title: 'Components/Card', component: Card,
-  args: { variant: 'outlined', padding: 'medium', title: 'Заголовок карточки', subtitle: 'Короткое пояснение', children: 'Содержимое карточки: текст, форма или список.' },
+  args: { variant: 'filled', padding: 16, title: 'Card title', subtitle: 'Supporting line', children: 'Card content: text, a form or a list.' },
   argTypes: {
-    variant: { control: 'inline-radio', options: ['outlined', 'filled', 'raised'], description: 'Оформление' },
-    padding: { control: 'inline-radio', options: ['none', 'small', 'medium', 'large'], description: 'Отступы' },
-    title: { control: 'text', description: 'Заголовок' },
-    subtitle: { control: 'text', description: 'Подзаголовок' },
-    children: { control: 'text', description: 'Содержимое' },
+    variant: { control: 'inline-radio', options: ['filled', 'raised'], description: 'Fill or shadow' },
+    padding: { control: 'inline-radio', options: [8, 12, 16, 24, 32], description: 'Padding, px' },
+    title: { control: 'text', description: 'Heading' },
+    subtitle: { control: 'text', description: 'Subtitle' },
+    children: { control: 'text', description: 'Content' },
   },
 });
-export const Playground = {
-  ...playground({ description: 'Контейнер для связанного контента.', source: '{}' }),
-  render: (args) => h('div', { style: { width: 400, maxWidth: '100%' } }, h(Card, args)),
-};
+export const Playground = { ...playground({ description: 'Groups related content. Cards have no outline.', source: '{}' }), render: (args) => W(400, h(Card, args)) };
 export const Variants = example({
-  name: 'Variants', description: 'Рамка, заливка или тень — выбирайте по фону страницы.',
-  render: () => h(Row, { align: 'stretch' }, ['outlined', 'filled', 'raised'].map((v) => h(Card, { key: v, variant: v, title: v, style: { width: 220 } }, 'Текст карточки'))),
-  source: `<Card variant="outlined" title="outlined">Текст карточки</Card>
-<Card variant="filled" title="filled">Текст карточки</Card>
-<Card variant="raised" title="raised">Текст карточки</Card>`,
+  name: 'Variants', description: 'A quiet fill on a white page, or a raised surface with a shadow.',
+  render: () => h(Row, { align: 'stretch' }, ['filled', 'raised'].map((v) => h(Card, { key: v, variant: v, title: v, style: { width: 220 } }, 'Card text'))),
+  source: `<Card variant="filled" title="filled">Card text</Card>
+<Card variant="raised" title="raised">Card text</Card>`,
 });
-export const WithActionsAndFooter = example({
-  name: 'Actions And Footer', description: 'Действия в шапке и подвал с основными кнопками.',
-  render: () => h('div', { style: { width: 420, maxWidth: '100%' } }, h(Card, {
-    title: 'Команда', subtitle: '3 участника',
-    actions: h(Button, { variant: 'secondary', size: 'xsmall' }, 'Изменить'),
-    footer: [h(Button, { key: 1, size: 'small' }, 'Пригласить'), h(Button, { key: 2, size: 'small', variant: 'secondary' }, 'Отмена')],
-  }, 'Участники команды получают доступ ко всем проектам.')),
+export const HeaderAndFooter = example({
+  name: 'Header And Footer', description: 'Actions in the header and a footer with the main buttons.',
+  render: () => W(420, h(Card, {
+    title: 'Team', subtitle: '3 members', actions: h(Button, { variant: 'text', size: 'xsmall' }, 'Edit'),
+    footer: [h(Button, { key: 1, size: 'small' }, 'Invite'), h(Button, { key: 2, size: 'small', variant: 'secondary' }, 'Cancel')],
+  }, 'Team members get access to every project.')),
   source: `<Card
-  title="Команда"
-  subtitle="3 участника"
-  actions={<Button variant="secondary" size="xsmall">Изменить</Button>}
-  footer={<><Button size="small">Пригласить</Button><Button size="small" variant="secondary">Отмена</Button></>}
+  title="Team"
+  subtitle="3 members"
+  actions={<Button variant="text" size="xsmall">Edit</Button>}
+  footer={<><Button size="small">Invite</Button><Button size="small" variant="secondary">Cancel</Button></>}
 >
-  Участники команды получают доступ ко всем проектам.
+  Team members get access to every project.
 </Card>`,
 });
-
-export const __namedExportsOrder = ['Playground', 'Variants', 'WithActionsAndFooter'];
+export const __namedExportsOrder = ['Playground', 'Variants', 'HeaderAndFooter'];

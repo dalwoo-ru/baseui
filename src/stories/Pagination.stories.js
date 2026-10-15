@@ -1,0 +1,8 @@
+import { h, useState } from '../react.js';
+import { Pagination } from '../components/Pagination.js';
+import { meta, playground } from './_helpers.js';
+
+export default meta({ title: 'Components/Pagination', component: Pagination, args: { total: 20, siblings: 1 }, argTypes: { total: { control: { type: 'range', min: 1, max: 50, step: 1 }, description: 'Pages' }, siblings: { control: { type: 'range', min: 0, max: 3, step: 1 }, description: 'Siblings' } } });
+function Demo(args) { const [page, setPage] = useState(5); return h(Pagination, { ...args, page: Math.min(page, args.total), onPageChange: setPage }); }
+export const Playground = { ...playground({ description: 'Collapses long ranges into “…”.', source: `<Pagination page={page} total={20} onPageChange={setPage} />` }), render: (args) => h(Demo, args) };
+export const __namedExportsOrder = ['Playground'];

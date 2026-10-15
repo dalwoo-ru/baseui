@@ -6,22 +6,19 @@ import { meta, example, Row } from './_helpers.js';
 function Demo() {
   const { toast } = useToast();
   return h(Row, null,
-    h(Button, { variant: 'secondary', onClick: () => toast({ title: 'Сохранено', description: 'Изменения применены.', status: 'success' }) }, 'Success'),
-    h(Button, { variant: 'secondary', onClick: () => toast({ title: 'Нет соединения', description: 'Проверьте подключение к сети.', status: 'error' }) }, 'Error'),
-    h(Button, { variant: 'secondary', onClick: () => toast({ title: 'Подсказка', description: 'Не закрывается сам.', duration: 0 }) }, 'Sticky'));
+    h(Button, { variant: 'secondary', onClick: () => toast({ title: 'Saved', description: 'Your changes are applied.', status: 'success' }) }, 'Success'),
+    h(Button, { variant: 'secondary', onClick: () => toast({ title: 'No connection', description: 'Check your network.', status: 'error' }) }, 'Error'),
+    h(Button, { variant: 'secondary', onClick: () => toast({ title: 'Tip', description: 'This one stays until closed.', duration: 0 }) }, 'Sticky'));
 }
 export default meta({ title: 'Components/Toast', component: ToastProvider, args: {}, argTypes: {} });
-export const Playground = {
-  ...example({
-    name: 'Playground', description: 'Вызывайте toast() из любого места внутри ToastProvider. Таймер приостанавливается при наведении и фокусе.',
-    render: () => h(ToastProvider, null, h(Demo)),
-    source: `// В корне приложения
+export const Playground = example({
+  name: 'Playground', description: 'Call `toast()` from anywhere inside `ToastProvider` (see `useToast`). The timer pauses on hover and focus.',
+  render: () => h(ToastProvider, null, h(Demo)),
+  source: `// Once, at the app root
 <ToastProvider>…</ToastProvider>
 
-// В любом компоненте
+// Anywhere below
 const { toast } = useToast();
-toast({ title: 'Сохранено', description: 'Изменения применены.', status: 'success' });`,
-  }),
-};
-
+toast({ title: 'Saved', description: 'Your changes are applied.', status: 'success' });`,
+});
 export const __namedExportsOrder = ['Playground'];

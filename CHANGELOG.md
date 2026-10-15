@@ -1,21 +1,23 @@
-# Изменения
+# Changelog
 
-## Улучшения дизайн-системы
+## Astryx alignment (experimental)
 
-### Исправлено
-- **Контраст текста.** Вторичный текст в светлой теме 3.3:1 → 5.6:1, акцентный текст в тёмной 3.7:1 → 6.7:1;
-  цвета Error / Warning / Success для текста в светлой теме были 1.8–3.3:1 (жёлтый и зелёный на белом нечитаемы) — теперь ≥ 5:1.
-- **Тёмная тема, акцент.** Акцентный фон и рамка стали светлее (`#8f94ff`): тёмный текст на нём читается (6.7:1 вместо 3.7:1).
-- **Тёмная тема, Warning.** Заливка `LightWarning` была светлой (`#eac57b`) при белом тексте — стала тёмно-янтарной, как остальные заливки.
-- **Повторяющиеся значения.** Кольцо фокуса и z-index в компонентах теперь ссылаются на токены, а не повторяют `2px solid …` / `1000` / `1001`.
+### Documentation
+- Everything is in English.
+- Two sections, **Foundations** and **Components**, in Astryx order and nesting. Components that Astryx groups are nested the same way (Button, Card, Checkbox, Collapsible, Dialog, Layout, Radio, Selector, Stepper, Tabs, Token…). Children without a page of their own open the parent page at the right example.
+- Foundations: All Tokens, Color, Icons, Motion, Shadow, Shape, Spacing, Typography. Elevation and Illustrations are not taken; Shadow replaces Elevation.
+- Pages are rendered from `tokens.css`, so they cannot drift from the real values.
 
-### Добавлено
-- **Токены:** `Motion` (3 длительности, кривая, поддержка reduced motion), `Focus`, `ZIndex`, `Typography-Font-Family-Mono`.
-- **Компоненты:** Accordion, Alert, Breadcrumbs, Card, Divider, EmptyState, Progress, Skeleton, Spinner, Tabs, Toast, Tooltip.
-- **Паттерны:** Sign In, Settings.
-- **Основы:** страницы Motion и Focus.
-- **Документация:** быстрая навигация по примерам, копирование кода, ссылка «Перейти к содержимому», фокус-кольцо на всех ссылках.
+### Tokens
+- **Color:** baseui values, Astryx-style names by context: `color-text-primary`, `color-background-body / surface / muted`, `color-accent`, `color-border`, `color-success-muted`…
+- **Motion:** taken from Astryx as is: nine durations (130–1300 ms) and `ease-standard`; all durations are `0ms` under `prefers-reduced-motion`. Compiled components now use these tokens.
+- **Spacing and Shape:** a short list of recommended values named by pixel value, instead of the former size names.
+- **Shadow:** baseui values, named `low / med / high`.
+- Added `size-element-*`, `focus-outline-*` (Astryx names), `z-index-*`.
 
-### Осознанно не менялось
-- Радиусы Button (14 / 10 px) не из шкалы токенов — они пропорциональны высоте кнопки, правка изменит узнаваемый вид главного компонента.
-- Тег `brand` по-прежнему зелёный (LightSuccess), хотя Brand-цвет теперь чёрно-белый.
+### Components
+- Added in Astryx style, without outlines: Aspect Ratio, Avatar Group, Banner, Blockquote, Button Group, Icon Button, Toggle Button, Toggle Button Group, Card, Clickable Card, Selectable Card, Code, Code Block, Collapsible, Collapsible Group, Alert Dialog, Divider, Dropdown Menu, Empty State, Field, File Input, Heading, Icon, Kbd, Stack (+ H Stack, V Stack), Grid, Center, Section, Link, Metadata List, Number Input, Pagination, Popover, Progress Bar, Segmented Control, Skeleton, Slider, Spinner, Stepper, Table, Tabs (Tab, Tab List, Tab Panel), Text, Toast, Tooltip, Visually Hidden, Breadcrumbs.
+- Existing baseui components keep their implementation and are placed by their Astryx name: Autocomplete → Typeahead, Select → Selector, TextField → Text Input / Text Area, Tag → Badge, Badge → Status Dot, Chip → Token, ChipGroup → Token Group, Checkbox → Checkbox Input, CheckboxGroup → Checkbox List, RadioGroup → Radio List, Radio → Radio List Item, Modal → Dialog. OTP Input, Rating and the React Hook Form wrappers have no Astryx counterpart and stay as extras.
+
+### Not taken
+- Elevation and Illustrations; data visualization and syntax color tokens; Astryx's outlines around elements.
