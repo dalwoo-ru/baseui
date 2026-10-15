@@ -129,7 +129,7 @@ function Toc({ items }) {
     if (el) el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
   };
   return h('nav', { className: 'toc', 'aria-label': 'On this page' },
-    items.map((a) => h(ui.Chip, { key: a.id, size: 'sm', onClick: () => go(a.id) }, a.name)));
+    items.map((a) => h(ui.Chip, { key: a.id, size: 'sm', action: 'press', onClick: () => go(a.id) }, a.name)));
 }
 
 function Example({ meta, story, name, id, controls, overlay }) {
