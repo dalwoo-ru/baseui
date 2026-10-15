@@ -340,7 +340,7 @@ function App() {
             h('a', { className: 'brand', href: '#/' }, 'baseui'),
             h(IconButton, { variant: 'ghost', size: 'sm', label: dark ? 'Switch to light theme' : 'Switch to dark theme', icon: h(dark ? icons.Sun : icons.Moon01, { size: 20 }), onClick: () => setTheme(dark ? 'light' : 'dark') })),
           h('div', { className: 'search' }, h(TextField, {
-            label: 'Search', size: 'small', value: q, clearable: true, actionLabel: 'Clear search', startIcon: h(icons.SearchLg, { size: 24 }),
+            label: 'Search', floatingLabel: false, size: 'small', value: q, clearable: true, actionLabel: 'Clear search', startIcon: h(icons.SearchSm, { size: 24 }),
             onChange: (e) => setQ(e.target.value),
           })),
           h(Nav, { entry, query: q.trim().toLowerCase() })),
