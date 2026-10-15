@@ -16,3 +16,4 @@
 - Selector: `trigger` lets any element open the list (icon button, button, text); lists now open above dialogs; in the mobile sheet the option text lines up with the dialog content.
 - Dialogs: every dialog in a stack has its own dimming layer; the mobile Selector sheet takes the field label as its header (none for icon triggers).
 - List and List Item: new size `xsm` (40px); the docs menu uses it.
+- Text Input, Selector and Typeahead in size `sm`: 14px value and label text (12px when the label floats).
