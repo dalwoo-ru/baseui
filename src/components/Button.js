@@ -3,7 +3,7 @@ import { Button as Base } from '../base.js';
 import { Tooltip } from './Tooltip.js';
 import { describe } from '../doc.js';
 
-const SIZE = { xs: 'xsmall', sm: 'small', md: 'medium', lg: 'large' };
+const SIZE = { xsm: 'xsmall', sm: 'small', md: 'medium', lg: 'large' };
 const GroupContext = createContext(null);
 const ToggleGroupContext = createContext(null);
 
@@ -35,7 +35,7 @@ describe(Button, 'Triggers an action or navigates.', {
   label: ['string', null, 'Visible text and accessible name'],
   children: ['ReactNode', null, 'Visible content in place of `label`'],
   variant: ["'primary' | 'secondary' | 'ghost' | 'destructive'", "'secondary'", 'Visual style'],
-  size: ["'xs' | 'sm' | 'md' | 'lg'", "'md'", 'Height: 32 / 40 / 48 / 56 px'],
+  size: ["'xsm' | 'sm' | 'md' | 'lg'", "'md'", 'Height: 32 / 40 / 48 / 56 px'],
   isDisabled: ['boolean', 'false', 'Disables the button'],
   isLoading: ['boolean', 'false', 'Shows a spinner and blocks interaction'],
   icon: ['ReactNode', null, 'Icon before the label'],
@@ -55,7 +55,7 @@ describe(IconButton, 'A button with only an icon.', {
   icon: ['ReactNode', null, 'Icon element'],
   label: ['string', null, 'Accessible name and tooltip'],
   variant: ["'primary' | 'secondary' | 'ghost' | 'destructive'", "'secondary'", 'Visual style'],
-  size: ["'xs' | 'sm' | 'md' | 'lg'", "'md'", 'Height: 32 / 40 / 48 / 56 px'],
+  size: ["'xsm' | 'sm' | 'md' | 'lg'", "'md'", 'Height: 32 / 40 / 48 / 56 px'],
 });
 
 export function ButtonGroup({ label, orientation = 'horizontal', size = 'md', isDisabled = false, children, className, ...rest }) {
@@ -75,7 +75,7 @@ export function ButtonGroup({ label, orientation = 'horizontal', size = 'md', is
 describe(ButtonGroup, 'Connects related buttons into one control.', {
   label: ['string', null, 'Accessible name of the group'],
   orientation: ["'horizontal' | 'vertical'", "'horizontal'", 'Layout direction'],
-  size: ["'xs' | 'sm' | 'md' | 'lg'", "'md'", 'Default size of the buttons'],
+  size: ["'xsm' | 'sm' | 'md' | 'lg'", "'md'", 'Default size of the buttons'],
   isDisabled: ['boolean', 'false', 'Disables every button'],
   children: ['ReactNode', null, '`Button` or `IconButton` elements'],
 });
@@ -96,7 +96,7 @@ describe(ToggleButton, 'A button that stays pressed.', {
   icon: ['ReactNode', null, 'Icon before the label'],
   pressedIcon: ['ReactNode', null, 'Icon while pressed'],
   value: ['string', null, 'Identifier inside a group'],
-  size: ["'xs' | 'sm' | 'md' | 'lg'", "'md'", 'Height: 32 / 40 / 48 / 56 px'],
+  size: ["'xsm' | 'sm' | 'md' | 'lg'", "'md'", 'Height: 32 / 40 / 48 / 56 px'],
   isDisabled: ['boolean', 'false', 'Disables the button'],
 });
 
@@ -115,6 +115,6 @@ describe(ToggleButtonGroup, 'A group of toggle buttons with single or multiple s
   value: ['string | string[] | null', null, 'Selected value(s)'],
   onChange: ['(value) => void', null, 'Called with the new selection'],
   orientation: ["'horizontal' | 'vertical'", "'horizontal'", 'Layout direction'],
-  size: ["'xs' | 'sm' | 'md' | 'lg'", "'md'", 'Default size of the buttons'],
+  size: ["'xsm' | 'sm' | 'md' | 'lg'", "'md'", 'Default size of the buttons'],
   isDisabled: ['boolean', 'false', 'Disables every button'],
 });

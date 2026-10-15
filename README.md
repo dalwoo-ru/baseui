@@ -39,7 +39,7 @@ import { Button, Card, Tabs, TabList, Tab, TabPanel } from './src/index.js';
 |---|---|
 | Color | baseui names: `Text-and-Icon-*`, `Background-*`, `Border-*`, `Accent-Colors-*`, `Extensions-*` |
 | Spacing | `spacing-0 … 80`, named by pixels |
-| Radius | `radius-none · 4 … 32 · full`, named by pixels |
+| Radius | `radius-none · 4 · 6 · 8 · 10 · 12 … 32 · full`, named by pixels |
 | Shadow | `shadow-low · med · high` |
 | Focus | `focus-outline-width · style · color · offset` |
 | Motion | `duration-fast · medium · slow`, `ease-standard · emphasized` |
@@ -48,7 +48,7 @@ import { Button, Card, Tabs, TabList, Tab, TabPanel } from './src/index.js';
 
 ## Conventions
 
-- **Props follow Astryx:** `label`, `variant`, `size` (`sm · md · lg`), `isDisabled`, `isLoading`, `isSelected`, `onChange`.
+- **Props follow Astryx:** `label`, `variant`, `size` (`xsm · sm · md · lg · xl`), `isDisabled`, `isLoading`, `isSelected`, `onChange`.
 - **No outlines.** Fills, spacing and shadows separate elements. Rings appear for focus and selection.
 - **Accessible by default.** Text contrast ≥ 4.5:1, visible focus, reduced motion.
 

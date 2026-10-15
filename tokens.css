@@ -159,7 +159,9 @@
 :root {
   --baseui-radius-none: 0;
   --baseui-radius-4: 4px;
+  --baseui-radius-6: 6px;
   --baseui-radius-8: 8px;
+  --baseui-radius-10: 10px;
   --baseui-radius-12: 12px;
   --baseui-radius-16: 16px;
   --baseui-radius-20: 20px;

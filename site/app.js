@@ -71,7 +71,7 @@ function Control({ name, spec, value, onChange, args }) {
   } else if (type === 'inline-radio' || type === 'radio' || type === 'select') {
     const options = spec.options || [];
     input = h(SegmentedControl, {
-      size: 'small', label: name, value: String(value), onValueChange: (v) => onChange(options.find((o) => String(o) === v) ?? v),
+      size: 'sm', label: name, value: String(value), onValueChange: (v) => onChange(options.find((o) => String(o) === v) ?? v),
       items: options.map((o) => ({ value: String(o), label: String(o) })),
     });
   } else if (type === 'range') {
@@ -79,15 +79,15 @@ function Control({ name, spec, value, onChange, args }) {
     input = h(Slider, { min, max, step, value: value ?? min, label: name, showValue: true, onValueChange: onChange });
   } else if (type === 'number') {
     input = h(TextField, {
-      label: name, type: 'number', size: 'small', value: value ?? '',
+      label: name, type: 'number', size: 'sm', value: value ?? '',
       onChange: (e) => onChange(e.target.value === '' ? undefined : Number(e.target.value)),
     });
   } else if (type === 'color') {
     input = h('div', { className: 'color-row' },
-      h(TextField, { label: name, size: 'small', value: value ?? '', onChange: (e) => onChange(e.target.value || undefined) }),
+      h(TextField, { label: name, size: 'sm', value: value ?? '', onChange: (e) => onChange(e.target.value || undefined) }),
       h('input', { type: 'color', className: 'swatch', 'aria-label': name, value: /^#[0-9a-f]{6}$/i.test(value || '') ? value : '#575df6', onChange: (e) => onChange(e.target.value) }));
   } else if (type === 'text') {
-    input = h(TextField, { label: name, size: 'small', value: value ?? '', onChange: (e) => onChange(e.target.value) });
+    input = h(TextField, { label: name, size: 'sm', value: value ?? '', onChange: (e) => onChange(e.target.value) });
   }
   if (!input) return null;
   const inlineLabel = type === 'boolean' || type === 'inline-radio' || type === 'radio' || type === 'select';
@@ -103,7 +103,7 @@ function Controls({ meta, args, setOverride, reset }) {
     h('div', { className: 'controls-title' }, 'Controls'),
     items.map(([name, spec]) =>
       h(Control, { key: name, name, spec, args, value: args[name], onChange: (v) => setOverride(name, v) })),
-    h(ui.Button, { variant: 'secondary', size: 'xs', onClick: reset }, 'Reset'));
+    h(ui.Button, { variant: 'secondary', size: 'xsm', onClick: reset }, 'Reset'));
 }
 
 /* ------------------------------------------------------------------ blocks */
@@ -117,8 +117,8 @@ function Code({ source }) {
   };
   return h('div', { className: 'code' },
     h('div', { className: 'code-actions' },
-      h(ui.Button, { variant: 'secondary', size: 'xs', onClick: () => setOpen(!open) }, open ? 'Hide code' : 'Show code'),
-      open && h(ui.Button, { variant: 'secondary', size: 'xs', onClick: copy }, copied ? 'Copied' : 'Copy')),
+      h(ui.Button, { variant: 'secondary', size: 'xsm', onClick: () => setOpen(!open) }, open ? 'Hide code' : 'Show code'),
+      open && h(ui.Button, { variant: 'secondary', size: 'xsm', onClick: copy }, copied ? 'Copied' : 'Copy')),
     open && h('pre', null, h('code', null, source)));
 }
 
@@ -154,8 +154,8 @@ function Example({ meta, story, name, id, controls, overlay, file, exportName })
           : h('div', { className: 'gate' }, 'This example opens on top of the page.'),
         gated && h('div', { className: 'gate-actions' },
           !shown && h(ui.Button, { variant: 'primary', size: 'sm', onClick: () => setShown(true) }, 'Open example'),
-          shown && h(ui.Button, { variant: 'secondary', size: 'xs', onClick: () => setNonce(nonce + 1) }, 'Reopen'),
-          shown && h(ui.Button, { variant: 'ghost', size: 'xs', onClick: () => setShown(false) }, 'Hide')))),
+          shown && h(ui.Button, { variant: 'secondary', size: 'xsm', onClick: () => setNonce(nonce + 1) }, 'Reopen'),
+          shown && h(ui.Button, { variant: 'ghost', size: 'xsm', onClick: () => setShown(false) }, 'Hide')))),
     h(Code, { source: doc.source && doc.source.originalSource }));
 }
 
@@ -258,7 +258,7 @@ function Nav({ entry, query }) {
     }).filter(Boolean),
   })).filter((x) => x.shown.length > 0);
   return h('nav', { 'aria-label': 'Documentation' }, sections.map(({ section, shown }, i) =>
-    h(List, { key: section, title: section, size: 'small', divider: i < sections.length - 1 },
+    h(List, { key: section, title: section, size: 'sm', divider: i < sections.length - 1 },
       shown.map(({ item, kids }) => {
         if (!kids) {
           const p = pages.find((x) => x.title === item.title && !x.group);
@@ -313,15 +313,15 @@ function App() {
             h('a', { className: 'brand', href: '#/' }, 'baseui'),
             h(IconButton, { variant: 'ghost', size: 'sm', label: dark ? 'Switch to light theme' : 'Switch to dark theme', icon: h(dark ? icons.Sun : icons.Moon01, { size: 20 }), onClick: () => setTheme(dark ? 'light' : 'dark') })),
           h('div', { className: 'search' }, h(TextField, {
-            label: 'Search', floatingLabel: false, size: 'small', value: q, clearable: true, actionLabel: 'Clear search', startIcon: h(icons.SearchSm, { size: 24 }),
+            label: 'Search', floatingLabel: false, size: 'sm', value: q, clearable: true, actionLabel: 'Clear search', startIcon: h(icons.SearchSm, { size: 24 }),
             onChange: (e) => setQ(e.target.value),
           })),
           h(Nav, { entry, query: q.trim().toLowerCase() })),
         h('div', { className: 'scrim', onClick: () => _setMenu(false) }),
         h('main', { id: 'main' },
-          h('div', { className: 'topbar' }, h(Button, { variant: 'secondary', size: 'xs', onClick: () => _setMenu(!menu) }, 'Menu'), h('a', { href: '#/', className: 'brand' }, 'baseui')),
+          h('div', { className: 'topbar' }, h(Button, { variant: 'secondary', size: 'xsm', onClick: () => _setMenu(!menu) }, 'Menu'), h('a', { href: '#/', className: 'brand' }, 'baseui')),
           entry && entry.section === 'Components' && h('div', { className: 'pagebar' },
-            h(SegmentedControl, { size: 'small', label: 'Preview width', value: viewport, onValueChange: setViewport, items: [{ value: 'desktop', label: 'Desktop' }, { value: 'mobile', label: 'Mobile' }] })),
+            h(SegmentedControl, { size: 'sm', label: 'Preview width', value: viewport, onValueChange: setViewport, items: [{ value: 'desktop', label: 'Desktop' }, { value: 'mobile', label: 'Mobile' }] })),
           entry ? h(Page, { entry, key: entry.slug }) : h(Home)))));
 }
 

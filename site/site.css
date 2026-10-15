@@ -11,7 +11,7 @@ body {
 a { color: inherit; }
 code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .9em; }
 code {
-  padding: 1px 6px; border-radius: var(--baseui-radius-4);
+  padding: 1px 6px; border-radius: var(--baseui-radius-6);
   background: var(--baseui-Background-Secondary);
 }
 

@@ -1,7 +1,7 @@
 import { h, cx } from '../react.js';
 import { describe } from '../doc.js';
 
-export function ProgressBar({ value, size = 'medium', label, showValue = false, className, ...rest }) {
+export function ProgressBar({ value, size = 'md', label, showValue = false, className, ...rest }) {
   const determinate = typeof value === 'number';
   const pct = determinate ? Math.min(100, Math.max(0, value)) : undefined;
   return h('div', { className: cx('bui-progress', `bui-progress--${size}`, className), ...rest },
@@ -16,7 +16,7 @@ export function ProgressBar({ value, size = 'medium', label, showValue = false, 
 
 describe(ProgressBar, 'A linear progress indicator.', {
   value: ['number', null, 'Progress from 0 to 100; omit for indeterminate'],
-  size: ["'small' | 'medium'", "'medium'", 'Bar thickness'],
+  size: ["'sm' | 'md'", "'md'", 'Bar thickness'],
   label: ['ReactNode', null, 'Label above the bar'],
   showValue: ['boolean', 'false', 'Show the value as a percentage'],
 });

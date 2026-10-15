@@ -23,5 +23,5 @@ describe(NumberInput, 'A text input for numbers.', {
   onValueChange: ['(value: number | string) => void', null, 'Called when the value changes'],
   min: ['number', null, 'Minimum'], max: ['number', null, 'Maximum.'], step: ['number', '1', 'Step.'],
   label: ['string', null, 'Floating label'],
-  size: ["'small' | 'medium'", null, 'Input size (same as Text Input)'],
+  size: ["'sm' | 'md'", null, 'Input size (same as Text Input)'],
 });

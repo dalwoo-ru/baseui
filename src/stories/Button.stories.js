@@ -8,7 +8,7 @@ export default meta({
   argTypes: {
     label: { control: 'text' },
     variant: { control: 'inline-radio', options: ['primary', 'secondary', 'ghost', 'destructive'] },
-    size: { control: 'inline-radio', options: ['xs', 'sm', 'md', 'lg'] },
+    size: { control: 'inline-radio', options: ['xsm', 'sm', 'md', 'lg'] },
     isDisabled: { control: 'boolean' },
     isLoading: { control: 'boolean' },
   },
@@ -19,7 +19,7 @@ export const Variants = example({
   source: `<Button variant="primary" label="Save" />`,
 });
 export const Sizes = example({
-  name: 'Sizes', render: () => h(Row, null, ['xs', 'sm', 'md', 'lg'].map((s) => h(Button, { key: s, size: s, label: s }))),
+  name: 'Sizes', render: () => h(Row, null, ['xsm', 'sm', 'md', 'lg'].map((s) => h(Button, { key: s, size: s, label: s }))),
   source: `<Button size="lg" label="Save" />`,
 });
 export const Icons = example({

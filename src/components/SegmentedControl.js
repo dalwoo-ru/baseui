@@ -1,7 +1,7 @@
 import { h, cx, useControllable, useId, useRef } from '../react.js';
 import { describe } from '../doc.js';
 
-export function SegmentedControl({ items, value, defaultValue, onValueChange, size = 'medium', fullWidth = false, label, className, ...rest }) {
+export function SegmentedControl({ items, value, defaultValue, onValueChange, size = 'md', fullWidth = false, label, className, ...rest }) {
   const [current, setCurrent] = useControllable(value, defaultValue ?? items.find((i) => !i.disabled)?.value, onValueChange);
   const ref = useRef(null);
   const enabled = items.filter((i) => !i.disabled);
@@ -25,7 +25,7 @@ describe(SegmentedControl, 'A control for switching between a few exclusive opti
   value: ['string', null, 'Selected value'],
   defaultValue: ['string', null, 'Initial value (first enabled)'],
   onValueChange: ['(value: string) => void', null, 'Called when the selection changes'],
-  size: ["'small' | 'medium'", "'medium'", 'Control height'],
+  size: ["'sm' | 'md'", "'md'", 'Control height'],
   fullWidth: ['boolean', 'false', 'Fill the container width'],
   label: ['string', null, 'Accessible name'],
 });

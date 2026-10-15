@@ -3,9 +3,9 @@ import { ProgressBar } from '../components/ProgressBar.js';
 import { meta, playground, example, Stack, W } from './_helpers.js';
 
 export default meta({
-  title: 'Components/Progress Bar', component: ProgressBar, args: { value: 60, size: 'medium', label: 'Uploading', showValue: true },
+  title: 'Components/Progress Bar', component: ProgressBar, args: { value: 60, size: 'md', label: 'Uploading', showValue: true },
   argTypes: {
-    value: { control: { type: 'range', min: 0, max: 100, step: 5 } }, size: { control: 'inline-radio', options: ['small', 'medium'] },
+    value: { control: { type: 'range', min: 0, max: 100, step: 5 } }, size: { control: 'inline-radio', options: ['sm', 'md'] },
     label: { control: 'text' }, showValue: { control: 'boolean' },
   },
 });
