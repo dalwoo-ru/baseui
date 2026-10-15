@@ -19,7 +19,7 @@
   --baseui-Text-and-Icon-Secondary: #5f6877;
   --baseui-Text-and-Icon-OnColor: #ffffff;
   --baseui-Text-and-Icon-Disabled: #babfca;
-  --baseui-Text-and-Icon-Accent: #4b51ea;
+  --baseui-Text-and-Icon-Accent: #575df6;
 
   /* Background */
   --baseui-Background-Primary: #ffffff;
@@ -44,9 +44,9 @@
   --baseui-Accent-Colors-Red: #e8634c;
 
   /* Extensions / Text and Icon */
-  --baseui-Extensions-Text-and-Icon-Error: #c4371f;
-  --baseui-Extensions-Text-and-Icon-Warning: #8a5a00;
-  --baseui-Extensions-Text-and-Icon-Success: #177a2f;
+  --baseui-Extensions-Text-and-Icon-Error: #e8634c;
+  --baseui-Extensions-Text-and-Icon-Warning: #f5ba44;
+  --baseui-Extensions-Text-and-Icon-Success: #44cf5e;
   --baseui-Extensions-Text-and-Icon-AlwaysDark: #171717;
   --baseui-Extensions-Text-and-Icon-AlwaysLight: #ffffff;
 
@@ -84,14 +84,14 @@
   --baseui-Text-and-Icon-Secondary: #999999;
   --baseui-Text-and-Icon-OnColor: #171717;
   --baseui-Text-and-Icon-Disabled: #7a7a7a;
-  --baseui-Text-and-Icon-Accent: #8f94ff;
+  --baseui-Text-and-Icon-Accent: #575df6;
 
   /* Background */
   --baseui-Background-Primary: #171717;
   --baseui-Background-Secondary: #2e2e2e;
   --baseui-Background-Tertiary: #373737;
   --baseui-Background-Disabled: #454545;
-  --baseui-Background-Accent: #8f94ff;
+  --baseui-Background-Accent: #575df6;
   --baseui-Background-Brand: #ffffff;
 
   /* Border */
@@ -109,7 +109,7 @@
   --baseui-Accent-Colors-Red: #e8634c;
 
   /* Extensions / Text and Icon */
-  --baseui-Extensions-Text-and-Icon-Error: #ff8a75;
+  --baseui-Extensions-Text-and-Icon-Error: #e8634c;
   --baseui-Extensions-Text-and-Icon-Warning: #f5ba44;
   --baseui-Extensions-Text-and-Icon-Success: #44cf5e;
   --baseui-Extensions-Text-and-Icon-AlwaysDark: #171717;
@@ -129,13 +129,13 @@
   --baseui-Extensions-Background-LightSuccess: #114119;
   --baseui-Extensions-Background-LightAccent: #24276a;
   --baseui-Extensions-Background-LightError: #51150a;
-  --baseui-Extensions-Background-LightWarning: #4d3a06;
+  --baseui-Extensions-Background-LightWarning: #eac57b;
 
   /* Extensions / Border */
   --baseui-Extensions-Border-Selected: #ffffff;
   --baseui-Extensions-Border-SelectedAlwaysDark: #171717;
   --baseui-Extensions-Border-SelectedAlwaysLight: #ffffff;
-  --baseui-Extensions-Border-Accent: #8f94ff;
+  --baseui-Extensions-Border-Accent: #575df6;
   --baseui-Extensions-Border-Error: #e8634c;
   --baseui-Extensions-Border-Warning: #f5ba44;
   --baseui-Extensions-Border-Success: #44cf5e;
