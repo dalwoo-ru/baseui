@@ -4,6 +4,7 @@ import manifest from './manifest.js';
 import { Button, TextField, Switch } from '../src/base.js';
 import { IconButton } from '../src/components/Button.js';
 import { SegmentedControl } from '../src/components/SegmentedControl.js';
+import { Slider } from '../src/components/Slider.js';
 import { composeStory, StoryCanvas, Boundary } from './story.js';
 
 const icons = await import('../lib/line-HpXc8B8J.js');
@@ -12,7 +13,6 @@ const React = requireReact();
 const { createElement: h, useState, useEffect, useMemo, useRef, useContext, createContext, Fragment } = React;
 const ThemeContext = createContext('light');
 const ViewportContext = createContext('desktop');
-const WIDTHS = { tablet: 768, mobile: 375 };
 
 /* ------------------------------------------------------------- page index */
 
@@ -61,14 +61,6 @@ const ui = { Button, TextField, Switch };
 
 /* ---------------------------------------------------------------- controls */
 
-function Segmented({ options, value, onChange }) {
-  return h('div', { className: 'seg', role: 'radiogroup' },
-    options.map((o) => h('button', {
-      key: String(o), type: 'button', role: 'radio', 'aria-checked': o === value,
-      onClick: () => onChange(o),
-    }, String(o))));
-}
-
 function Control({ name, spec, value, onChange, args }) {
   if (spec.if && args[spec.if.arg] !== spec.if.eq) return null;
   const { Switch, TextField } = ui;
@@ -77,12 +69,14 @@ function Control({ name, spec, value, onChange, args }) {
   if (type === 'boolean') {
     input = h(Switch, { checked: !!value, onCheckedChange: onChange, 'aria-label': name });
   } else if (type === 'inline-radio' || type === 'radio' || type === 'select') {
-    input = h(Segmented, { options: spec.options || [], value, onChange });
+    const options = spec.options || [];
+    input = h(SegmentedControl, {
+      size: 'small', label: name, value: String(value), onValueChange: (v) => onChange(options.find((o) => String(o) === v) ?? v),
+      items: options.map((o) => ({ value: String(o), label: String(o) })),
+    });
   } else if (type === 'range') {
     const { min = 0, max = 100, step = 1 } = spec.control;
-    input = h('div', { className: 'range' },
-      h('input', { type: 'range', min, max, step, value: value ?? min, 'aria-label': name, onChange: (e) => onChange(Number(e.target.value)) }),
-      h('output', null, value ?? min));
+    input = h(Slider, { min, max, step, value: value ?? min, label: name, showValue: true, onValueChange: onChange });
   } else if (type === 'number') {
     input = h(TextField, {
       label: name, type: 'number', size: 'small', value: value ?? '',
@@ -96,9 +90,9 @@ function Control({ name, spec, value, onChange, args }) {
     input = h(TextField, { label: name, size: 'small', value: value ?? '', onChange: (e) => onChange(e.target.value) });
   }
   if (!input) return null;
-  const inlineLabel = type === 'range' || type === 'boolean' || type === 'inline-radio' || type === 'radio' || type === 'select';
+  const inlineLabel = type === 'boolean' || type === 'inline-radio' || type === 'radio' || type === 'select';
   return h('div', { className: 'control' },
-    inlineLabel && h('div', { className: 'control-head' }, h('code', null, name)),
+    inlineLabel && h('code', { className: 'control-name' }, name),
     input);
 }
 
@@ -138,27 +132,6 @@ function Toc({ items }) {
     items.map((s) => h('button', { key: s.id, type: 'button', onClick: () => go(s.id) }, s.name)));
 }
 
-/** Renders a story in an iframe of a fixed width, so media queries behave as on a real device. */
-function Frame({ file, exportName, overrides, width }) {
-  const theme = useContext(ThemeContext);
-  const ref = useRef(null);
-  const ready = useRef(false);
-  const [height, setHeight] = useState(120);
-  const post = () => ref.current && ref.current.contentWindow && ref.current.contentWindow.postMessage({ type: 'bui-init', overrides, theme }, '*');
-  useEffect(() => {
-    const on = (e) => {
-      if (!ref.current || e.source !== ref.current.contentWindow || !e.data) return;
-      if (e.data.type === 'bui-ready') { ready.current = true; post(); }
-      if (e.data.type === 'bui-height') setHeight(e.data.value);
-    };
-    window.addEventListener('message', on);
-    return () => window.removeEventListener('message', on);
-  });
-  useEffect(() => { if (ready.current) post(); }, [overrides, theme]);
-  const src = `preview.html?file=${encodeURIComponent(file)}&story=${exportName}&theme=${theme}`;
-  return h('div', { className: 'frame', style: { width } }, h('iframe', { ref, src, title: 'Preview', style: { height } }));
-}
-
 function Example({ meta, story, name, id, controls, overlay, file, exportName }) {
   const viewport = useContext(ViewportContext);
   const base = useMemo(() => composeStory(meta, story).args, [meta, story]);
@@ -170,15 +143,13 @@ function Example({ meta, story, name, id, controls, overlay, file, exportName })
   const gated = overlay || /defaultOpen/.test((doc.source && doc.source.originalSource) || '');
   const [shown, setShown] = useState(!gated);
   const [nonce, setNonce] = useState(0);
-  const framed = viewport !== 'desktop';
+  const narrow = viewport === 'mobile';
   return h('section', { className: 'example', id },
     h('h3', null, name),
-    h('div', { className: showControls ? 'stage with-controls' : 'stage' },
-      h('div', { className: 'canvas' + (framed ? ' canvas--framed' : '') },
+    h('div', { className: 'stage' },
+      h('div', { className: 'canvas' + (narrow ? ' canvas--mobile' : '') },
         shown
-          ? framed
-            ? h(Frame, { key: nonce, file, exportName, overrides, width: WIDTHS[viewport] })
-            : h(Boundary, { key: nonce }, h(StoryCanvas, { meta, story, args: current }))
+          ? h(Boundary, { key: nonce }, h(StoryCanvas, { meta, story, args: current }))
           : h('div', { className: 'gate' }, 'This example opens on top of the page.'),
         gated && h('div', { className: 'gate-actions' },
           !shown && h(ui.Button, { size: 'small', onClick: () => setShown(true) }, 'Open example'),
@@ -320,7 +291,7 @@ function useRoute() {
 function App() {
   const entry = useRoute();
   const [theme, setTheme] = useState(() => store.get('baseui-theme', matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
-  const [viewport, setViewport] = useState(() => store.get('baseui-viewport', 'desktop'));
+  const [viewport, setViewport] = useState(() => (store.get('baseui-viewport', 'desktop') === 'mobile' ? 'mobile' : 'desktop'));
   const [q, setQ] = useState('');
   const [menu, _setMenu] = useState(false);
   setMenu = _setMenu;
@@ -332,7 +303,7 @@ function App() {
 
   const skip = (e) => { e.preventDefault(); const m = document.getElementById('main'); m.setAttribute('tabindex', '-1'); m.focus(); };
   return h(ThemeContext.Provider, { value: theme },
-    h(ViewportContext.Provider, { value: viewport },
+    h(ViewportContext.Provider, { value: entry && entry.section === 'Components' ? viewport : 'desktop' },
       h('div', { className: 'shell' + (menu ? ' menu-open' : '') },
         h('a', { className: 'skip', href: '#main', onClick: skip }, 'Skip to content'),
         h('aside', { className: 'side' },
@@ -348,7 +319,7 @@ function App() {
         h('main', { id: 'main' },
           h('div', { className: 'topbar' }, h(Button, { variant: 'secondary', size: 'xsmall', onClick: () => _setMenu(!menu) }, 'Menu'), h('a', { href: '#/', className: 'brand' }, 'baseui')),
           entry && entry.section === 'Components' && h('div', { className: 'pagebar' },
-            h(SegmentedControl, { size: 'small', label: 'Preview width', value: viewport, onValueChange: setViewport, items: [{ value: 'desktop', label: 'Desktop' }, { value: 'tablet', label: 'Tablet' }, { value: 'mobile', label: 'Mobile' }] })),
+            h(SegmentedControl, { size: 'small', label: 'Preview width', value: viewport, onValueChange: setViewport, items: [{ value: 'desktop', label: 'Desktop' }, { value: 'mobile', label: 'Mobile' }] })),
           entry ? h(Page, { entry, key: entry.slug }) : h(Home)))));
 }
 

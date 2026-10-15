@@ -55,7 +55,6 @@
   --baseui-Extensions-Background-InversePrimary: #171717;
   --baseui-Extensions-Background-OverlayDark: rgba(0, 0, 0, 0.5);
   --baseui-Extensions-Background-OverlayLight: rgba(255, 255, 255, 0.7);
-  --baseui-Extensions-Background-OverlayImage: rgba(23, 23, 23, 0.06);
   --baseui-Extensions-Background-AlwaysDark: #171717;
   --baseui-Extensions-Background-AlwaysLight: #ffffff;
   --baseui-Extensions-Background-Error: #e8634c;
@@ -120,7 +119,6 @@
   --baseui-Extensions-Background-InversePrimary: #ffffff;
   --baseui-Extensions-Background-OverlayDark: rgba(0, 0, 0, 0.7);
   --baseui-Extensions-Background-OverlayLight: rgba(23, 23, 23, 0.7);
-  --baseui-Extensions-Background-OverlayImage: rgba(23, 23, 23, 0);
   --baseui-Extensions-Background-AlwaysDark: #171717;
   --baseui-Extensions-Background-AlwaysLight: #ffffff;
   --baseui-Extensions-Background-Error: #e8634c;
@@ -157,14 +155,6 @@
   --baseui-spacing-80: 80px;
 }
 
-/* ---------- Size ---------- */
-:root {
-  --baseui-size-element-xs: 32px;
-  --baseui-size-element-sm: 40px;
-  --baseui-size-element-md: 48px;
-  --baseui-size-element-lg: 56px;
-}
-
 /* ---------- Radius ---------- */
 :root {
   --baseui-radius-none: 0;
@@ -197,38 +187,27 @@
 
 /* ---------- Duration & easing (instant under prefers-reduced-motion) ---------- */
 :root {
-  --baseui-duration-fast-min: 130ms;
-  --baseui-duration-fast: 175ms;
-  --baseui-duration-fast-max: 230ms;
-  --baseui-duration-medium-min: 310ms;
-  --baseui-duration-medium: 410ms;
-  --baseui-duration-medium-max: 550ms;
-  --baseui-duration-slow-min: 730ms;
-  --baseui-duration-slow: 975ms;
-  --baseui-duration-slow-max: 1300ms;
-  --baseui-ease-standard: cubic-bezier(0.24, 1, 0.4, 1);
+  --baseui-duration-fast: 150ms;
+  --baseui-duration-medium: 300ms;
+  --baseui-duration-slow: 500ms;
+  --baseui-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --baseui-ease-emphasized: cubic-bezier(0.05, 0.7, 0.1, 1);
 }
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --baseui-duration-fast-min: 0ms;
     --baseui-duration-fast: 0ms;
-    --baseui-duration-fast-max: 0ms;
-    --baseui-duration-medium-min: 0ms;
     --baseui-duration-medium: 0ms;
-    --baseui-duration-medium-max: 0ms;
-    --baseui-duration-slow-min: 0ms;
     --baseui-duration-slow: 0ms;
-    --baseui-duration-slow-max: 0ms;
   }
 }
 
 /* ---------- Z-index ---------- */
 :root {
-  --baseui-z-index-sticky: 100;
-  --baseui-z-index-overlay: 1000;
-  --baseui-z-index-popup: 1001;
-  --baseui-z-index-toast: 1100;
-  --baseui-z-index-tooltip: 1200;
+  --baseui-z-index-100: 100;
+  --baseui-z-index-200: 200;
+  --baseui-z-index-300: 300;
+  --baseui-z-index-400: 400;
+  --baseui-z-index-500: 500;
 }
 
 /* Typography */
@@ -250,5 +229,4 @@
   --baseui-Typography-Text-14-Semi-Bold:600 14px / 20px var(--baseui-Typography-Font-Family);
   --baseui-Typography-Text-14-Regular:400 14px / 20px var(--baseui-Typography-Font-Family);
   --baseui-Typography-Text-12-Regular:400 12px / 16px var(--baseui-Typography-Font-Family);
-  --baseui-Typography-Text-10-Regular:400 10px / 14px var(--baseui-Typography-Font-Family);
 }

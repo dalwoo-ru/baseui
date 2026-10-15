@@ -39,12 +39,11 @@ import { Button, Card, Tabs, TabList, Tab, TabPanel } from './src/index.js';
 |---|---|
 | Color | baseui names: `Text-and-Icon-*`, `Background-*`, `Border-*`, `Accent-Colors-*`, `Extensions-*` |
 | Spacing | `spacing-0 … 80`, named by pixels |
-| Size | `size-element-xs · sm · md · lg` |
 | Radius | `radius-none · 4 … 32 · full`, named by pixels |
 | Shadow | `shadow-low · med · high` |
 | Focus | `focus-outline-width · style · color · offset` |
-| Motion | `duration-fast · medium · slow` (+ `-min`, `-max`), `ease-standard` |
-| Z-index | `z-index-sticky · overlay · popup · toast · tooltip` |
+| Motion | `duration-fast · medium · slow`, `ease-standard · emphasized` |
+| Z-index | `z-index-100 … 500` |
 | Typography | `Typography-Text-*`, `Typography-Header-*` |
 
 ## Conventions
