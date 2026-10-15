@@ -14,6 +14,7 @@ export default [
     items: [
       { title: 'All Tokens', file: F('AllTokens') },
       { title: 'Color', file: F('Color') },
+      { title: 'Focus', file: F('Focus') },
       { title: 'Icons', file: B('Icons.stories-n14M4pOg'), lead: 'The icon catalog. Choose outline or filled, and the stroke width for outline.' },
       { title: 'Motion', file: F('Motion') },
       { title: 'Shadow', file: F('Shadow') },

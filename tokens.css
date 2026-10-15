@@ -183,7 +183,7 @@
 :root {
   --baseui-focus-outline-width: 2px;
   --baseui-focus-outline-style: solid;
-  --baseui-focus-outline-color: var(--baseui-Text-and-Icon-Accent);
+  --baseui-focus-outline-color: var(--baseui-Text-and-Icon-Primary);
   --baseui-focus-outline-offset: 2px;
 }
 

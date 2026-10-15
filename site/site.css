@@ -102,7 +102,7 @@ code.type { white-space: pre-wrap; word-break: break-word; color: var(--baseui-T
 }
 .card small { font: var(--baseui-Typography-Text-12-Regular); color: var(--baseui-Text-and-Icon-Secondary); }
 .card:hover { background: var(--baseui-Background-Secondary); }
-.card:focus-visible { outline: 2px solid var(--baseui-Text-and-Icon-Accent); outline-offset: 2px; }
+.card:focus-visible { outline: var(--baseui-focus-outline-width) var(--baseui-focus-outline-style) var(--baseui-focus-outline-color); outline-offset: var(--baseui-focus-outline-offset); }
 
 .loading, .error { padding: var(--baseui-spacing-48); color: var(--baseui-Text-and-Icon-Secondary); }
 .error { color: var(--baseui-Extensions-Text-and-Icon-Error); }
@@ -176,3 +176,8 @@ code, pre { font-family: var(--baseui-Typography-Font-Family-Mono); }
 .page { padding-top: var(--baseui-spacing-24); }
 .topbar-end { margin-left: auto; }
 @media (max-width: 860px) { .pagebar { display: none; } }
+
+/* focus page */
+.focus-demo { display: flex; flex-wrap: wrap; gap: var(--baseui-spacing-24); align-items: center; padding: var(--baseui-spacing-24); border: 1px solid var(--baseui-Border-Primary); border-radius: var(--baseui-radius-20); margin-bottom: var(--baseui-spacing-24); }
+.focus-demo__field { width: 260px; }
+.focus-demo__list { max-width: 320px; }
