@@ -258,7 +258,7 @@ function Nav({ entry, query }) {
     }).filter(Boolean),
   })).filter((x) => x.shown.length > 0);
   return h('nav', { 'aria-label': 'Documentation' }, sections.map(({ section, shown }, i) =>
-    h(List, { key: section, title: section, divider: i < sections.length - 1 },
+    h(List, { key: section, title: section, size: 'small', divider: i < sections.length - 1 },
       shown.map(({ item, kids }) => {
         if (!kids) {
           const p = pages.find((x) => x.title === item.title && !x.group);
