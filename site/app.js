@@ -271,7 +271,7 @@ function Nav({ entry, query }) {
     }).filter(Boolean),
   })).filter((x) => x.shown.length > 0);
   return h('nav', { 'aria-label': 'Documentation' }, sections.map(({ section, shown }, i) =>
-    h(List, { key: section, title: section, size: 'sm', divider: i < sections.length - 1 },
+    h(List, { key: section, title: section, size: 'xsm', divider: i < sections.length - 1 },
       shown.map(({ p, sub }) => {
         const own = entry === p;
         if (!sub.length) return h(ListItem, { key: p.title, active: own, onClick: go(p) }, p.title);
