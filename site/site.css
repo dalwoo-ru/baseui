@@ -86,12 +86,6 @@ h3 { font: var(--baseui-Typography-Header-20); margin: 0 0 var(--baseui-spacing-
 .code code { background: none; padding: 0; }
 
 /* props table */
-.table-wrap { overflow-x: auto; border: 1px solid var(--baseui-Border-Primary); border-radius: var(--baseui-radius-16); }
-table { width: 100%; border-collapse: collapse; font: var(--baseui-Typography-Text-14-Regular); }
-th, td { text-align: left; vertical-align: top; padding: var(--baseui-spacing-12) var(--baseui-spacing-16); }
-th { font: var(--baseui-Typography-Text-14-Semi-Bold); color: var(--baseui-Text-and-Icon-Secondary); background: var(--baseui-Background-Secondary); white-space: nowrap; }
-tr + tr td { border-top: 1px solid var(--baseui-Border-Primary); }
-td:nth-child(2) { max-width: 280px; }
 code.type { white-space: pre-wrap; word-break: break-word; color: var(--baseui-Text-and-Icon-Accent); background: var(--baseui-Extensions-Background-LightAccent); }
 .req { color: var(--baseui-Extensions-Text-and-Icon-Error); margin-left: 2px; }
 
@@ -146,8 +140,7 @@ code, pre { font-family: var(--baseui-Typography-Font-Family-Mono); }
 .doc-block { margin-top: var(--baseui-spacing-40); }
 .doc-block h3 { margin: var(--baseui-spacing-24) 0 var(--baseui-spacing-8); }
 .doc-p { max-width: 760px; margin: 0 0 var(--baseui-spacing-16); font: var(--baseui-Typography-Text-16-Regular); color: var(--baseui-Text-and-Icon-Secondary); }
-.token-table td.tok-preview { width: 1%; }
-.token-table .val { background: none; padding: 0; color: var(--baseui-Text-and-Icon-Secondary); white-space: pre-wrap; word-break: break-word; }
+code.val { background: none; padding: 0; color: var(--baseui-Text-and-Icon-Secondary); white-space: pre-wrap; word-break: break-word; }
 .tok-swatch { display: inline-block; border-radius: var(--baseui-radius-8); vertical-align: middle; box-shadow: inset 0 0 0 1px rgb(from var(--baseui-Text-and-Icon-Primary) r g b / 6%); }
 .tok-bar { display: inline-block; height: 12px; border-radius: 2px; background: var(--baseui-Background-Brand); min-width: 1px; }
 .tok-radius { display: inline-block; width: 32px; height: 32px; background: var(--baseui-Background-Tertiary); }

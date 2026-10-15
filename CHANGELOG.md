@@ -12,3 +12,4 @@
 - Sizes use one vocabulary: `xsm · sm · md · lg · xl`. Old names (`small`, `medium`, `large`…) are removed everywhere, including the compiled components.
 - Radius follows control height; new tokens `radius-6` and `radius-10`.
 - Cleanup: dead CSS and unused code removed; `src/index.js` also exports the compiled components.
+- Table rebuilt in the look of the documentation tables and now used by the docs (props and token tables). New: density, dividers, striped rows, hover, sorting, selection, clickable rows, sticky header, truncation, column widths (`pixel`, `proportional`), loading and empty states, children mode.

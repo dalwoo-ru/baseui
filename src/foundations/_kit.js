@@ -1,5 +1,6 @@
 // Shared helpers for Foundations pages: reads tokens.css (single source of truth) and renders common blocks.
 import { h, useState, useEffect, Fragment } from '../react.js';
+import { Table, pixel, proportional } from '../components/Table.js';
 
 let cache;
 /** Parses tokens.css into sections → groups → tokens. */
@@ -60,16 +61,15 @@ export function Swatch({ name, size = 40 }) {
 }
 
 export function TokenTable({ tokens, themed, preview }) {
-  return h('div', { className: 'table-wrap' },
-    h('table', { className: 'token-table' },
-      h('thead', null, h('tr', null,
-        preview && h('th', null, ''), h('th', null, 'Token'),
-        themed ? h(Fragment, null, h('th', null, 'Light'), h('th', null, 'Dark')) : h('th', null, 'Value'))),
-      h('tbody', null, tokens.map((t) => h('tr', { key: t.name },
-        preview && h('td', { className: 'tok-preview' }, preview(t)),
-        h('td', null, h('code', null, `--baseui-${t.name}`)),
-        themed ? h(Fragment, null, h('td', null, h('code', { className: 'val' }, t.light)), h('td', null, h('code', { className: 'val' }, t.dark)))
-          : h('td', null, h('code', { className: 'val' }, t.value)))))));
+  const val = (key) => (t) => h('code', { className: 'val' }, t[key]);
+  const columns = [
+    ...(preview ? [{ key: 'preview', header: '', width: pixel(72), renderCell: preview }] : []),
+    { key: 'name', header: 'Token', width: proportional(3, { minWidth: 220 }), renderCell: (t) => h('code', null, `--baseui-${t.name}`) },
+    ...(themed
+      ? [{ key: 'light', header: 'Light', width: proportional(2, { minWidth: 120 }), renderCell: val('light') }, { key: 'dark', header: 'Dark', width: proportional(2, { minWidth: 120 }), renderCell: val('dark') }]
+      : [{ key: 'value', header: 'Value', width: proportional(3, { minWidth: 140 }), renderCell: val('value') }]),
+  ];
+  return h(Table, { data: tokens, columns, rowKey: 'name', caption: 'Tokens' });
 }
 
 export const Loading = () => h('div', { className: 'loading' }, 'Loading tokens…');

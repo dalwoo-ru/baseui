@@ -21,7 +21,7 @@ export { Skeleton } from './components/Skeleton.js';
 export { Slider } from './components/Slider.js';
 export { Spinner } from './components/Spinner.js';
 export { Stepper } from './components/Stepper.js';
-export { Table } from './components/Table.js';
+export { Table, TableHeader, TableBody, TableRow, TableHeaderCell, TableCell, pixel, proportional } from './components/Table.js';
 export { Tabs, TabList, Tab, TabPanel } from './components/Tabs.js';
 export { ToastProvider, useToast } from './components/Toast.js';
 export { Tooltip } from './components/Tooltip.js';

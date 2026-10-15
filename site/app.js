@@ -5,12 +5,13 @@ import { TextField, Switch, Chip, List, ListItem } from '../src/base.js';
 import { Button, IconButton } from '../src/components/Button.js';
 import { SegmentedControl } from '../src/components/SegmentedControl.js';
 import { Slider } from '../src/components/Slider.js';
+import { Table, pixel, proportional } from '../src/components/Table.js';
 import { composeStory, StoryCanvas, Boundary } from './story.js';
 
 const icons = await import('../lib/line-HpXc8B8J.js');
 
 const React = requireReact();
-const { createElement: h, useState, useEffect, useMemo, useContext, createContext } = React;
+const { createElement: h, useState, useEffect, useMemo, useContext, createContext, Fragment } = React;
 const ViewportContext = createContext('desktop');
 
 /* ------------------------------------------------------------- page index */
@@ -173,19 +174,17 @@ const HIDDEN_PROPS = new Set(['ref', 'className', 'style', 'id', 'data-testid', 
 const brief = (text = '', max = 110) => text.replace(/@\w+.*$/s, '').trim().split(/(?<=[.!?])\s/)[0].replace(/\s+/g, ' ').replace(/\.$/, '').slice(0, max);
 function PropsTable({ component }) {
   const props = component && component.__docgenInfo && component.__docgenInfo.props;
-  const rows = props ? Object.entries(props).filter(([n, p]) => !HIDDEN_PROPS.has(n) && !/@internal/.test(p.description || '') && brief(p.description)) : [];
+  const rows = props ? Object.entries(props).filter(([n, p]) => !HIDDEN_PROPS.has(n) && !/@internal/.test(p.description || '') && brief(p.description)).map(([name, p]) => ({ name, ...p })) : [];
   if (!rows.length) return null;
+  const columns = [
+    { key: 'name', header: 'Prop', width: proportional(2, { minWidth: 120 }), renderCell: (r) => h(Fragment, null, h('code', null, r.name), r.required && h('span', { className: 'req', title: 'Required' }, '*')) },
+    { key: 'type', header: 'Type', width: proportional(3, { minWidth: 160 }), renderCell: (r) => h('code', { className: 'type' }, TYPE_CLEAN(r.tsType)) },
+    { key: 'default', header: 'Default', width: pixel(120), renderCell: (r) => (r.defaultValue ? h('code', null, r.defaultValue.value) : '—') },
+    { key: 'description', header: 'Description', width: proportional(4, { minWidth: 200 }), renderCell: (r) => h(Md, { text: brief(r.description), className: 'prose small' }) },
+  ];
   return h('section', { className: 'section', id: 'props', 'data-anchor': 'Props' },
     h('h2', null, 'Props'),
-    h('div', { className: 'table-wrap' },
-      h('table', null,
-        h('thead', null, h('tr', null, ['Prop', 'Type', 'Default', 'Description'].map((t) => h('th', { key: t }, t)))),
-        h('tbody', null, rows.map(([name, p]) =>
-          h('tr', { key: name },
-            h('td', null, h('code', null, name), p.required && h('span', { className: 'req', title: 'Required' }, '*')),
-            h('td', null, h('code', { className: 'type' }, TYPE_CLEAN(p.tsType))),
-            h('td', null, p.defaultValue ? h('code', null, p.defaultValue.value) : '—'),
-            h('td', null, h(Md, { text: brief(p.description), className: 'prose small' }))))))));
+    h(Table, { data: rows, columns, rowKey: 'name', caption: 'Props', verticalAlign: 'top' }));
 }
 
 /* ------------------------------------------------------------------- pages */
