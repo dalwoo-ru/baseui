@@ -1,7 +1,7 @@
 import { t as requireReact } from '../lib/react-BZJXY1be.js';
 import { t as initDom, r as renderInto } from '../lib/react-18-D4o7zN8K.js';
 import manifest from './manifest.js';
-import { TextField, Switch, List, ListItem } from '../src/base.js';
+import { TextField, Switch, Chip, List, ListItem } from '../src/base.js';
 import { Button, IconButton } from '../src/components/Button.js';
 import { SegmentedControl } from '../src/components/SegmentedControl.js';
 import { Slider } from '../src/components/Slider.js';
@@ -18,14 +18,10 @@ const ViewportContext = createContext('desktop');
 const kebab = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const stemOf = (file) => file.split('/').pop().replace(/\.stories.*$/, '').toLowerCase();
 
-/** manifest (sections → items → children) → flat list of routable pages. */
+/** manifest (sections → items) → flat list of routable pages; a page is one file or several `parts`. */
 const pages = [];
 for (const { section, items } of manifest) {
-  const add = (item, group) => pages.push({ section, group, title: item.title, slug: kebab(item.title), file: item.file, anchor: item.anchor, lead: item.lead });
-  for (const item of items) {
-    if (item.children) item.children.forEach((c) => add(c, item.title));
-    else add(item);
-  }
+  for (const item of items) pages.push({ section, title: item.title, slug: kebab(item.title), parts: item.parts || [{ title: item.title, file: item.file, lead: item.lead }], lead: item.lead });
 }
 const routeOf = (p) => `#/${p.section.toLowerCase()}/${p.slug}`;
 
@@ -56,7 +52,7 @@ const loadModule = (file) => {
   if (!modules.has(file)) modules.set(file, import(file));
   return modules.get(file);
 };
-const ui = { Button, TextField, Switch };
+const ui = { Button, TextField, Switch, Chip };
 
 /* ---------------------------------------------------------------- controls */
 
@@ -121,14 +117,14 @@ function Code({ source }) {
     open && h('pre', null, h('code', null, source)));
 }
 
-/** Quick links to the examples of a long page. */
+/** Anchors to the sections of a page, as small tokens. */
 function Toc({ items }) {
   const go = (id) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
   };
   return h('nav', { className: 'toc', 'aria-label': 'On this page' },
-    items.map((s) => h('button', { key: s.id, type: 'button', onClick: () => go(s.id) }, s.name)));
+    items.map((s) => h(ui.Chip, { key: s.id, size: 'sm', onClick: () => go(s.id) }, s.name)));
 }
 
 function Example({ meta, story, name, id, controls, overlay }) {
@@ -162,12 +158,12 @@ const TYPE_CLEAN = (t) => (t ? t.raw || t.name : '');
 const HIDDEN_PROPS = new Set(['ref', 'className', 'style', 'id', 'data-testid', 'contentClassName', 'portalContainer', 'keepMounted', 'initialFocus', 'finalFocus', 'name', 'form', 'labelId', 'captionId', 'focusRef', 'cellRef', 'onBlur']);
 /** One short fragment: first sentence, no @tags, no trailing period. */
 const brief = (text = '', max = 110) => text.replace(/@\w+.*$/s, '').trim().split(/(?<=[.!?])\s/)[0].replace(/\s+/g, ' ').replace(/\.$/, '').slice(0, max);
-function PropsTable({ component }) {
+function PropsTable({ component, part }) {
   const props = component && component.__docgenInfo && component.__docgenInfo.props;
   const rows = props ? Object.entries(props).filter(([n, p]) => !HIDDEN_PROPS.has(n) && !/@internal/.test(p.description || '') && brief(p.description)) : [];
   if (!rows.length) return null;
   return h('section', { className: 'section' },
-    h('h2', null, 'Props'),
+    h(part ? 'h3' : 'h2', null, 'Props'),
     h('div', { className: 'table-wrap' },
       h('table', null,
         h('thead', null, h('tr', null, ['Prop', 'Type', 'Default', 'Description'].map((t) => h('th', { key: t }, t)))),
@@ -181,98 +177,75 @@ function PropsTable({ component }) {
 
 /* ------------------------------------------------------------------- pages */
 
-function Page({ entry }) {
-  const [state, setState] = useState(null);
-  useEffect(() => {
-    let alive = true;
-    setState(null);
-    loadModule(entry.file).then((m) => alive && setState(m), (e) => alive && setState({ error: e }));
-    return () => { alive = false; };
-  }, [entry]);
+const humanize = (k) => k.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+const storiesOf = (state, stem) => (state.__namedExportsOrder || Object.keys(state))
+  .filter((k) => k !== 'default' && k !== '__namedExportsOrder' && k !== 'page' && state[k])
+  .map((k) => ({ key: kebab(humanize(k)), id: `${stem}--${kebab(humanize(k))}`, name: state[k].name || humanize(k), story: state[k] }));
 
-  const stem = stemOf(entry.file);
-  useEffect(() => {
-    if (!state || state.error) return;
-    const t = setTimeout(() => {
-      const el = entry.anchor && document.getElementById(`${stem}--${entry.anchor}`);
-      if (el) el.scrollIntoView({ block: 'start' });
-    }, 60);
-    return () => clearTimeout(t);
-  }, [state, entry, stem]);
-
-  if (!state) return h('div', { className: 'loading' }, 'Loading…');
-  if (state.error) return h('div', { className: 'error' }, String(state.error));
+/** One component of a page: its lead, playground, props and examples. */
+function Part({ entry, part, state, single, lead }) {
+  const stem = stemOf(part.file);
   const meta = state.default;
-  const humanize = (k) => k.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
-  const stories = (state.__namedExportsOrder || Object.keys(state))
-    .filter((k) => k !== 'default' && k !== '__namedExportsOrder' && k !== 'page' && state[k])
-    .map((k) => ({ key: kebab(humanize(k)), id: `${stem}--${kebab(humanize(k))}`, name: state[k].name || humanize(k), story: state[k] }));
+  const stories = storiesOf(state, stem);
   const playground = stories.find((s) => s.key === 'playground');
   const rest = stories.filter((s) => s !== playground);
   const desc = meta.parameters && meta.parameters.docs && meta.parameters.docs.description;
   const isFoundation = entry.section === 'Foundations';
-  const overlay = /^(Dialog|Alert Dialog)$/.test(entry.title);
+  const overlay = /^(Dialog|Alert Dialog)$/.test(part.title);
+  const key = entry.slug + stem;
+  const own = !single && !lead;
+  return h('section', { className: single ? undefined : lead ? 'part part--main' : 'part', id: single ? undefined : `part-${kebab(part.title)}` },
+    own && h('h2', { className: 'part-title' }, part.title),
+    own && h(Md, { text: part.lead || brief(desc && desc.component, 240) + '.', className: 'prose lead' }),
+    state.page && h(state.page),
+    single && !isFoundation && stories.length > 1 && h(Toc, { items: stories }),
+    playground && h(Example, { key: key + 'pg', meta, story: playground.story, name: playground.name, id: playground.id, controls: true, overlay }),
+    !isFoundation && h(PropsTable, { component: meta.component, part: !single }),
+    rest.length > 0 && h('section', { className: 'section' },
+      !isFoundation && single && h('h2', null, 'Examples'),
+      rest.map((s) => h(Example, { key: key + s.id, meta, story: s.story, name: s.name, id: s.id, controls: false, overlay }))));
+}
 
+function Page({ entry }) {
+  const [states, setStates] = useState(null);
+  useEffect(() => {
+    let alive = true;
+    setStates(null);
+    Promise.all(entry.parts.map((p) => loadModule(p.file))).then((m) => alive && setStates(m), (e) => alive && setStates({ error: e }));
+    return () => { alive = false; };
+  }, [entry]);
+  if (!states) return h('div', { className: 'loading' }, 'Loading…');
+  if (states.error) return h('div', { className: 'error' }, String(states.error));
+  const single = entry.parts.length === 1;
+  const first = states[0].default;
+  const desc = first.parameters && first.parameters.docs && first.parameters.docs.description;
   return h('article', { className: 'page' },
-    h('div', { className: 'eyebrow' }, entry.group ? `${entry.section} · ${entry.group}` : entry.section),
+    h('div', { className: 'eyebrow' }, entry.section),
     h('h1', null, entry.title),
     h(Md, { text: entry.lead || brief(desc && desc.component, 240) + '.', className: 'prose lead' }),
-    state.page && h(state.page),
-    stories.length > 4 && h(Toc, { items: stories }),
-    playground && h(Example, { key: entry.slug + 'pg', meta, story: playground.story, name: playground.name, id: playground.id, controls: true, overlay }),
-    !isFoundation && h(PropsTable, { component: meta.component }),
-    rest.length > 0 && h('section', { className: 'section' },
-      !isFoundation && h('h2', null, 'Examples'),
-      rest.map((s) => h(Example, { key: entry.slug + s.id, meta, story: s.story, name: s.name, id: s.id, controls: false, overlay }))));
+    !single && h(Toc, { items: entry.parts.map((p) => ({ id: `part-${kebab(p.title)}`, name: p.title })) }),
+    entry.parts.map((part, i) => h(Part, { key: part.file, entry, part, state: states[i], single, lead: i === 0 && part.title === entry.title })));
 }
 
 function Home() {
-  const sections = manifest.map((s) => ({
-    ...s,
-    cards: s.items.map((i) => i.children ? { title: i.title, page: pages.find((p) => p.title === i.children[0].title && p.group === i.title), count: i.children.length } : { title: i.title, page: pages.find((p) => p.title === i.title && !p.group) }),
-  }));
   return h('article', { className: 'page' },
     h('div', { className: 'eyebrow' }, 'Design system'),
     h('h1', null, 'baseui'),
     h('p', { className: 'prose lead' }, 'A universal design system: foundations and components built on Base UI. Light and dark themes switch with the ', h('code', null, 'data-theme'), ' attribute.'),
-    sections.map((s) => h('section', { className: 'section', key: s.section },
+    manifest.map((s) => h('section', { className: 'section', key: s.section },
       h('h2', null, s.section),
-      h('div', { className: 'cards' }, s.cards.map((c) =>
-        h('a', { className: 'card', key: c.title, href: routeOf(c.page) }, h('span', null, c.title), c.count && h('small', null, `${c.count} pages`)))))));
+      h('div', { className: 'cards' }, s.items.map((i) =>
+        h('a', { className: 'card', key: i.title, href: routeOf(pages.find((p) => p.section === s.section && p.title === i.title)) }, h('span', null, i.title)))))));
 }
 
 /* -------------------------------------------------------------- navigation */
 
 function Nav({ entry, query }) {
-  const [open, setOpen] = useState({});
-  const match = (t) => t.toLowerCase().includes(query);
-  useEffect(() => { if (entry && entry.group) setOpen((o) => ({ ...o, [entry.group]: true })); }, [entry]);
-  const go = (p) => () => { location.hash = routeOf(p); };
-  const sections = manifest.map(({ section, items }) => ({
-    section,
-    shown: items.map((item) => {
-      if (!item.children) return match(item.title) ? { item } : null;
-      const kids = item.children.filter((c) => match(c.title) || match(item.title));
-      return kids.length ? { item, kids } : null;
-    }).filter(Boolean),
-  })).filter((x) => x.shown.length > 0);
+  const match = (page) => page.title.toLowerCase().includes(query) || page.parts.some((p) => p.title.toLowerCase().includes(query));
+  const sections = manifest.map(({ section }) => ({ section, shown: pages.filter((p) => p.section === section && match(p)) })).filter((x) => x.shown.length > 0);
   return h('nav', { 'aria-label': 'Documentation' }, sections.map(({ section, shown }, i) =>
     h(List, { key: section, title: section, size: 'sm', divider: i < sections.length - 1 },
-      shown.map(({ item, kids }) => {
-        if (!kids) {
-          const p = pages.find((x) => x.title === item.title && !x.group);
-          return h(ListItem, { key: item.title, active: entry === p, onClick: go(p) }, item.title);
-        }
-        return h(ListItem, {
-          key: item.title,
-          expanded: query ? true : !!open[item.title],
-          onExpandedChange: (v) => setOpen((o) => ({ ...o, [item.title]: v })),
-          items: kids.map((c) => {
-            const p = pages.find((x) => x.title === c.title && x.group === item.title);
-            return h(ListItem, { key: c.title, subitem: true, active: entry === p, onClick: go(p) }, c.title);
-          }),
-        }, item.title);
-      }))));
+      shown.map((p) => h(ListItem, { key: p.title, active: entry === p, onClick: () => { location.hash = routeOf(p); } }, p.title)))));
 }
 
 /* --------------------------------------------------------------------- app */

@@ -132,16 +132,14 @@ code.type { white-space: pre-wrap; word-break: break-word; color: var(--baseui-T
 .skip { position: absolute; left: var(--baseui-spacing-12); top: -64px; z-index: var(--baseui-z-index-500); padding: var(--baseui-spacing-8) var(--baseui-spacing-16); border-radius: var(--baseui-radius-12); background: var(--baseui-Extensions-Background-InversePrimary); color: var(--baseui-Text-and-Icon-OnColor); font: var(--baseui-Typography-Text-14-Semi-Bold); text-decoration: none; }
 .skip:focus-visible { top: var(--baseui-spacing-12); }
 #main:focus { outline: none; }
-a:focus-visible, .toc button:focus-visible, .brand:focus-visible {
+a:focus-visible, .brand:focus-visible {
   outline: var(--baseui-focus-outline-width) solid var(--baseui-focus-outline-color); outline-offset: var(--baseui-focus-outline-offset);
 }
 .toc { display: flex; flex-wrap: wrap; gap: var(--baseui-spacing-8); margin-top: var(--baseui-spacing-16); }
-.toc button {
-  all: unset; box-sizing: border-box; cursor: pointer; padding: 4px var(--baseui-spacing-12); border-radius: var(--baseui-radius-full);
-  background: var(--baseui-Background-Secondary); font: var(--baseui-Typography-Text-14-Semi-Bold); color: var(--baseui-Text-and-Icon-Secondary);
-  transition: color var(--baseui-duration-fast) var(--baseui-ease-standard), background-color var(--baseui-duration-fast) var(--baseui-ease-standard);
-}
-@media (hover: hover) { .toc button:hover { color: var(--baseui-Text-and-Icon-Primary); background: var(--baseui-Background-Tertiary); } }
+.part { margin-top: var(--baseui-spacing-64); padding-top: var(--baseui-spacing-40); border-top: 1px solid var(--baseui-Border-Primary); scroll-margin-top: var(--baseui-spacing-32); }
+.part--main { margin-top: var(--baseui-spacing-24); padding-top: 0; border-top: 0; }
+.part-title { margin: 0 0 var(--baseui-spacing-8); }
+.part h3 { font: var(--baseui-Typography-Header-20); margin: var(--baseui-spacing-24) 0 var(--baseui-spacing-8); }
 .code-actions { display: flex; gap: var(--baseui-spacing-8); }
 .example { scroll-margin-top: var(--baseui-spacing-32); }
 code, pre { font-family: var(--baseui-Typography-Font-Family-Mono); }

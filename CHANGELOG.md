@@ -2,7 +2,7 @@
 
 ## Experimental: Astryx alignment
 
-- Documentation in English: Foundations and Components in Astryx order and nesting.
+- Documentation in English: Foundations and Components in Astryx order. Related components share one page (Avatar, Button, Card, Checkbox, Collapsible, Dialog, Layout, List, Radio, Token); their parts are anchors shown as tokens at the top.
 - Foundations: All Tokens, Color, Icons, Motion, Shadow, Shape, Spacing, Typography.
 - Color tokens stay baseui's. Spacing and radius are named by pixels. Motion tokens come from Astryx.
 - Avatar (with Group, Group Overflow, Status Dot), Badge, Status Dot, Button (with Group, Icon Button, Toggle Button, Toggle Button Group) and Card (with Clickable, Selectable) follow the Astryx API with baseui visuals.
