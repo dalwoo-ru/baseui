@@ -147,6 +147,7 @@ function Example({ meta, story, name, id, controls, overlay, file, exportName })
   return h('section', { className: 'example', id },
     h('h3', null, name),
     h('div', { className: 'stage' },
+      showControls && h(Controls, { meta, args: current, setOverride: (k, v) => setOverrides((o) => ({ ...o, [k]: v })), reset: () => setOverrides({}) }),
       h('div', { className: 'canvas' + (narrow ? ' canvas--mobile' : '') },
         shown
           ? h(Boundary, { key: nonce }, h(StoryCanvas, { meta, story, args: current }))
@@ -154,8 +155,7 @@ function Example({ meta, story, name, id, controls, overlay, file, exportName })
         gated && h('div', { className: 'gate-actions' },
           !shown && h(ui.Button, { size: 'small', onClick: () => setShown(true) }, 'Open example'),
           shown && h(ui.Button, { variant: 'secondary', size: 'xsmall', onClick: () => setNonce(nonce + 1) }, 'Reopen'),
-          shown && h(ui.Button, { variant: 'text', size: 'xsmall', onClick: () => setShown(false) }, 'Hide'))),
-      showControls && h(Controls, { meta, args: current, setOverride: (k, v) => setOverrides((o) => ({ ...o, [k]: v })), reset: () => setOverrides({}) })),
+          shown && h(ui.Button, { variant: 'text', size: 'xsmall', onClick: () => setShown(false) }, 'Hide')))),
     h(Code, { source: doc.source && doc.source.originalSource }));
 }
 

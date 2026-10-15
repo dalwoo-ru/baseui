@@ -88,10 +88,7 @@ h3 { font: var(--baseui-Typography-Header-20); margin: 0 0 var(--baseui-spacing-
 .color-row { display: flex; gap: var(--baseui-spacing-8); align-items: center; }
 .color-row > :first-child { flex: 1; }
 .swatch { width: 40px; height: 40px; padding: 0; border: 0; border-radius: var(--baseui-radius-12); background: none; cursor: pointer; }
-  all: unset; box-sizing: border-box; cursor: pointer; padding: 4px var(--baseui-spacing-12); border-radius: var(--baseui-radius-8);
-  font: var(--baseui-Typography-Text-14-Semi-Bold); color: var(--baseui-Text-and-Icon-Secondary);
-}
-.code { margin-top: var(--baseui-spacing-8); }
+.code { margin-top: var(--baseui-spacing-16); }
 .code pre {
   margin: var(--baseui-spacing-8) 0 0; padding: var(--baseui-spacing-16); overflow: auto; max-height: 480px;
   border-radius: var(--baseui-radius-16); background: var(--baseui-Background-Secondary);
