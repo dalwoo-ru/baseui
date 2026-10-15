@@ -148,3 +148,7 @@ code.type { white-space: pre-wrap; word-break: break-word; color: var(--baseui-T
 
 .gate { color: var(--baseui-Text-and-Icon-Secondary); font: var(--baseui-Typography-Text-14-Regular); margin-bottom: var(--baseui-Space-S); }
 .gate-actions { display: flex; gap: var(--baseui-Space-XS); align-items: center; margin-top: var(--baseui-Space-S); }
+
+.range { display: flex; align-items: center; gap: var(--baseui-Space-S); }
+.range input { flex: 1; min-width: 0; height: 24px; margin: 0; accent-color: var(--baseui-Background-Accent); cursor: pointer; }
+.range output { min-width: 3ch; text-align: right; font: var(--baseui-Typography-Text-14-Semi-Bold); }

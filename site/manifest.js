@@ -70,24 +70,9 @@ export default [
   "file": "../lib/Icons.stories-n14M4pOg.js",
   "stories": [
    {
-    "id": "foundations-icons--line",
-    "name": "Line",
-    "key": "line"
-   },
-   {
-    "id": "foundations-icons--solid",
-    "name": "Solid",
-    "key": "solid"
-   },
-   {
-    "id": "foundations-icons--duotone",
-    "name": "Duotone",
-    "key": "duotone"
-   },
-   {
-    "id": "foundations-icons--duocolor",
-    "name": "Duocolor",
-    "key": "duocolor"
+    "id": "foundations-icons--playground",
+    "name": "Каталог",
+    "key": "playground"
    }
   ],
   "slug": "icons"

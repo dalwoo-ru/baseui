@@ -98,7 +98,8 @@ function Segmented({ options, value, onChange }) {
     }, String(o))));
 }
 
-function Control({ name, spec, value, onChange }) {
+function Control({ name, spec, value, onChange, args }) {
+  if (spec.if && args[spec.if.arg] !== spec.if.eq) return null;
   const { Switch, TextField } = ui;
   const type = typeof spec.control === 'string' ? spec.control : spec.control?.type;
   let input = null;
@@ -106,6 +107,11 @@ function Control({ name, spec, value, onChange }) {
     input = h(Switch, { checked: !!value, onCheckedChange: onChange, 'aria-label': name });
   } else if (type === 'inline-radio' || type === 'radio' || type === 'select') {
     input = h(Segmented, { options: spec.options || [], value, onChange });
+  } else if (type === 'range') {
+    const { min = 0, max = 100, step = 1 } = spec.control;
+    input = h('div', { className: 'range' },
+      h('input', { type: 'range', min, max, step, value: value ?? min, 'aria-label': name, onChange: (e) => onChange(Number(e.target.value)) }),
+      h('output', null, value ?? min));
   } else if (type === 'number') {
     input = h(TextField, {
       label: name, type: 'number', size: 'small', value: value ?? '',
@@ -119,7 +125,7 @@ function Control({ name, spec, value, onChange }) {
     input = h(TextField, { label: name, size: 'small', value: value ?? '', onChange: (e) => onChange(e.target.value) });
   }
   if (!input) return null;
-  const inlineLabel = type === 'boolean' || type === 'inline-radio' || type === 'radio' || type === 'select';
+  const inlineLabel = type === 'range' || type === 'boolean' || type === 'inline-radio' || type === 'radio' || type === 'select';
   return h('div', { className: 'control' },
     inlineLabel && h('div', { className: 'control-head' }, h('code', null, name), spec.description && h('span', null, spec.description)),
     input);
@@ -131,7 +137,7 @@ function Controls({ meta, args, setArgs }) {
   return h('div', { className: 'controls' },
     h('div', { className: 'controls-title' }, 'Параметры'),
     items.map(([name, spec]) =>
-      h(Control, { key: name, name, spec, value: args[name], onChange: (v) => setArgs({ ...args, [name]: v }) })),
+      h(Control, { key: name, name, spec, args, value: args[name], onChange: (v) => setArgs({ ...args, [name]: v }) })),
     h(ui.Button, { variant: 'secondary', size: 'xsmall', onClick: () => setArgs(null) }, 'Сбросить'));
 }
 
@@ -214,7 +220,7 @@ function ComponentPage({ entry }) {
     h('div', { className: 'eyebrow' }, GROUPS.find((g) => g[0] === entry.group)[1]),
     h('h1', null, entry.title),
     h(Md, { text: desc && desc.component, className: 'prose lead' }),
-    playground && h(Example, { key: entry.slug + 'pg', meta, story: playground.story, name: 'Playground', id: playground.id, controls: true, overlay: entry.title === 'Modal' }),
+    playground && h(Example, { key: entry.slug + 'pg', meta, story: playground.story, name: playground.name, id: playground.id, controls: true, overlay: entry.title === 'Modal' }),
     !isFoundation && h(PropsTable, { component: meta.component }),
     rest.length > 0 && h('section', { className: 'section' },
       !isFoundation && rest.length > 0 && h('h2', null, 'Примеры'),
