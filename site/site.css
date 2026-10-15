@@ -179,7 +179,6 @@ code, pre { font-family: var(--baseui-Typography-Font-Family-Mono); }
 .nav-group:hover { background: var(--baseui-Background-Secondary); }
 .nav-group:focus-visible { outline: var(--baseui-focus-outline-width) var(--baseui-focus-outline-style) var(--baseui-focus-outline-color); outline-offset: var(--baseui-focus-outline-offset); }
 .nav-group svg { flex: none; color: var(--baseui-Text-and-Icon-Secondary); transition: transform var(--baseui-duration-fast) var(--baseui-ease-standard); }
-.nav-group[aria-expanded="true"] svg { transform: rotate(90deg); }
 .nav-children { display: flex; flex-direction: column; gap: 2px; margin: 0 0 var(--baseui-spacing-4) var(--baseui-spacing-16); padding-left: var(--baseui-spacing-8); box-shadow: inset 1px 0 0 var(--baseui-Border-Primary); }
 .nav-children a { font-weight: 400 !important; font: var(--baseui-Typography-Text-14-Regular) !important; color: var(--baseui-Text-and-Icon-Secondary); }
 .nav-children a[aria-current="page"] { color: var(--baseui-Text-and-Icon-Accent); font-weight: 600 !important; }
@@ -219,3 +218,17 @@ code, pre { font-family: var(--baseui-Typography-Font-Family-Mono); }
 .motion-track { position: relative; height: 40px; border-radius: var(--baseui-radius-12); background: var(--baseui-Background-Secondary); }
 .motion-ball { position: absolute; top: 4px; bottom: 4px; width: 32px; border-radius: var(--baseui-radius-8); background: var(--baseui-Background-Brand); }
 @media (max-width: 860px) { .space-row, .motion-row { grid-template-columns: 1fr; } }
+
+/* sidebar header, search, preview width */
+.side-head { display: flex; align-items: center; justify-content: space-between; gap: var(--baseui-spacing-8); }
+.side-head .brand { padding: 0 var(--baseui-spacing-8); }
+.search { padding-top: 0; }
+.nav-group { justify-content: space-between; }
+.nav-group svg { margin-left: auto; transform: none; }
+.nav-group[aria-expanded="true"] svg { transform: rotate(180deg); }
+.pagebar { position: sticky; top: 0; z-index: var(--baseui-z-index-sticky); display: flex; justify-content: flex-end; padding: var(--baseui-spacing-12) var(--baseui-spacing-32); background: color-mix(in srgb, var(--baseui-Background-Primary) 90%, transparent); backdrop-filter: blur(8px); }
+.page { padding-top: var(--baseui-spacing-24); }
+.canvas--framed { background: var(--baseui-Background-Secondary); }
+.frame { margin: 0 auto; max-width: 100%; overflow: hidden; border-radius: var(--baseui-radius-16); background: var(--baseui-Background-Primary); box-shadow: var(--baseui-shadow-low); }
+.frame iframe { display: block; width: 100%; border: 0; }
+@media (max-width: 860px) { .pagebar { display: none; } }

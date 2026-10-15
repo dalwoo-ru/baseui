@@ -2,9 +2,17 @@ import { t as requireReact } from '../lib/react-BZJXY1be.js';
 import { t as initDom, r as renderInto } from '../lib/react-18-D4o7zN8K.js';
 import manifest from './manifest.js';
 import { Button, TextField, Switch } from '../src/base.js';
+import { IconButton } from '../src/components/Button.js';
+import { SegmentedControl } from '../src/components/SegmentedControl.js';
+import { composeStory, StoryCanvas, Boundary } from './story.js';
+
+const icons = await import('../lib/line-HpXc8B8J.js');
 
 const React = requireReact();
-const { createElement: h, useState, useEffect, useMemo, useRef, Fragment } = React;
+const { createElement: h, useState, useEffect, useMemo, useRef, useContext, createContext, Fragment } = React;
+const ThemeContext = createContext('light');
+const ViewportContext = createContext('desktop');
+const WIDTHS = { tablet: 768, mobile: 375 };
 
 /* ------------------------------------------------------------- page index */
 
@@ -51,41 +59,6 @@ const loadModule = (file) => {
 };
 const ui = { Button, TextField, Switch };
 
-/* ----------------------------------------------------------------- stories */
-
-function composeStory(meta, story) {
-  const args = { ...meta.args, ...story.args };
-  const decorators = [...(story.decorators || []), ...(meta.decorators || [])];
-  const render = story.render || meta.render;
-  return { args, decorators, render, parameters: { ...meta.parameters, ...story.parameters } };
-}
-
-function StoryCanvas({ meta, story, args }) {
-  const ref = useRef(args);
-  ref.current = args;
-  const Inner = useMemo(() => {
-    const { decorators, render, parameters } = composeStory(meta, story);
-    const ctx = () => ({ args: ref.current, parameters, globals: {}, argTypes: meta.argTypes, component: meta.component });
-    let Story = () => (render ? render(ref.current, ctx()) : h(meta.component, ref.current));
-    for (const deco of decorators) {
-      const Prev = Story;
-      Story = () => deco(() => h(Prev), ctx());
-    }
-    return Story;
-  }, [meta, story]);
-  return h(Inner);
-}
-
-class Boundary extends React.Component {
-  state = { error: null };
-  static getDerivedStateFromError(error) { return { error }; }
-  render() {
-    return this.state.error
-      ? h('div', { className: 'error' }, 'Could not render this example: ', String(this.state.error.message || this.state.error))
-      : this.props.children;
-  }
-}
-
 /* ---------------------------------------------------------------- controls */
 
 function Segmented({ options, value, onChange }) {
@@ -129,14 +102,14 @@ function Control({ name, spec, value, onChange, args }) {
     input);
 }
 
-function Controls({ meta, args, setArgs }) {
+function Controls({ meta, args, setOverride, reset }) {
   const items = Object.entries(meta.argTypes || {}).filter(([, s]) => s.control);
   if (!items.length) return null;
   return h('div', { className: 'controls' },
     h('div', { className: 'controls-title' }, 'Controls'),
     items.map(([name, spec]) =>
-      h(Control, { key: name, name, spec, args, value: args[name], onChange: (v) => setArgs({ ...args, [name]: v }) })),
-    h(ui.Button, { variant: 'secondary', size: 'xsmall', onClick: () => setArgs(null) }, 'Reset'));
+      h(Control, { key: name, name, spec, args, value: args[name], onChange: (v) => setOverride(name, v) })),
+    h(ui.Button, { variant: 'secondary', size: 'xsmall', onClick: reset }, 'Reset'));
 }
 
 /* ------------------------------------------------------------------ blocks */
@@ -165,28 +138,53 @@ function Toc({ items }) {
     items.map((s) => h('button', { key: s.id, type: 'button', onClick: () => go(s.id) }, s.name)));
 }
 
-function Example({ meta, story, name, id, controls, overlay }) {
+/** Renders a story in an iframe of a fixed width, so media queries behave as on a real device. */
+function Frame({ file, exportName, overrides, width }) {
+  const theme = useContext(ThemeContext);
+  const ref = useRef(null);
+  const ready = useRef(false);
+  const [height, setHeight] = useState(120);
+  const post = () => ref.current && ref.current.contentWindow && ref.current.contentWindow.postMessage({ type: 'bui-init', overrides, theme }, '*');
+  useEffect(() => {
+    const on = (e) => {
+      if (!ref.current || e.source !== ref.current.contentWindow || !e.data) return;
+      if (e.data.type === 'bui-ready') { ready.current = true; post(); }
+      if (e.data.type === 'bui-height') setHeight(e.data.value);
+    };
+    window.addEventListener('message', on);
+    return () => window.removeEventListener('message', on);
+  });
+  useEffect(() => { if (ready.current) post(); }, [overrides, theme]);
+  const src = `preview.html?file=${encodeURIComponent(file)}&story=${exportName}&theme=${theme}`;
+  return h('div', { className: 'frame', style: { width } }, h('iframe', { ref, src, title: 'Preview', style: { height } }));
+}
+
+function Example({ meta, story, name, id, controls, overlay, file, exportName }) {
+  const viewport = useContext(ViewportContext);
   const base = useMemo(() => composeStory(meta, story).args, [meta, story]);
-  const [args, setArgs] = useState(null);
-  const current = args || base;
+  const [overrides, setOverrides] = useState({});
+  const current = { ...base, ...overrides };
   const parameters = composeStory(meta, story).parameters;
   const showControls = controls && !(parameters.controls && parameters.controls.disable);
   const doc = parameters.docs || {};
   const gated = overlay || /defaultOpen/.test((doc.source && doc.source.originalSource) || '');
   const [shown, setShown] = useState(!gated);
   const [nonce, setNonce] = useState(0);
+  const framed = viewport !== 'desktop';
   return h('section', { className: 'example', id },
     h('h3', null, name),
     h('div', { className: showControls ? 'stage with-controls' : 'stage' },
-      h('div', { className: 'canvas' },
+      h('div', { className: 'canvas' + (framed ? ' canvas--framed' : '') },
         shown
-          ? h(Boundary, { key: nonce }, h(StoryCanvas, { meta, story, args: current }))
+          ? framed
+            ? h(Frame, { key: nonce, file, exportName, overrides, width: WIDTHS[viewport] })
+            : h(Boundary, { key: nonce }, h(StoryCanvas, { meta, story, args: current }))
           : h('div', { className: 'gate' }, 'This example opens on top of the page.'),
         gated && h('div', { className: 'gate-actions' },
           !shown && h(ui.Button, { size: 'small', onClick: () => setShown(true) }, 'Open example'),
           shown && h(ui.Button, { variant: 'secondary', size: 'xsmall', onClick: () => setNonce(nonce + 1) }, 'Reopen'),
           shown && h(ui.Button, { variant: 'text', size: 'xsmall', onClick: () => setShown(false) }, 'Hide'))),
-      showControls && h(Controls, { meta, args: current, setArgs: (a) => setArgs(a) })),
+      showControls && h(Controls, { meta, args: current, setOverride: (k, v) => setOverrides((o) => ({ ...o, [k]: v })), reset: () => setOverrides({}) })),
     h(Code, { source: doc.source && doc.source.originalSource }));
 }
 
@@ -238,7 +236,7 @@ function Page({ entry }) {
   const humanize = (k) => k.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
   const stories = (state.__namedExportsOrder || Object.keys(state))
     .filter((k) => k !== 'default' && k !== '__namedExportsOrder' && k !== 'page' && state[k])
-    .map((k) => ({ key: kebab(humanize(k)), id: `${stem}--${kebab(humanize(k))}`, name: state[k].name || humanize(k), story: state[k] }));
+    .map((k) => ({ key: kebab(humanize(k)), exportName: k, id: `${stem}--${kebab(humanize(k))}`, name: state[k].name || humanize(k), story: state[k] }));
   const playground = stories.find((s) => s.key === 'playground');
   const rest = stories.filter((s) => s !== playground);
   const desc = meta.parameters && meta.parameters.docs && meta.parameters.docs.description;
@@ -251,11 +249,11 @@ function Page({ entry }) {
     h(Md, { text: entry.lead || brief(desc && desc.component, 240) + '.', className: 'prose lead' }),
     state.page && h(state.page),
     stories.length > 4 && h(Toc, { items: stories }),
-    playground && h(Example, { key: entry.slug + 'pg', meta, story: playground.story, name: playground.name, id: playground.id, controls: true, overlay }),
+    playground && h(Example, { key: entry.slug + 'pg', meta, story: playground.story, name: playground.name, id: playground.id, controls: true, overlay, file: entry.file, exportName: playground.exportName }),
     !isFoundation && h(PropsTable, { component: meta.component }),
     rest.length > 0 && h('section', { className: 'section' },
       !isFoundation && h('h2', null, 'Examples'),
-      rest.map((s) => h(Example, { key: entry.slug + s.id, meta, story: s.story, name: s.name, id: s.id, controls: false, overlay }))));
+      rest.map((s) => h(Example, { key: entry.slug + s.id, meta, story: s.story, name: s.name, id: s.id, controls: false, overlay, file: entry.file, exportName: s.exportName }))));
 }
 
 function Home() {
@@ -295,8 +293,8 @@ function Nav({ entry, query }) {
         const expanded = query ? true : !!open[item.title];
         return h(Fragment, { key: item.title },
           h('button', { type: 'button', className: 'nav-group', 'aria-expanded': expanded, onClick: () => setOpen({ ...open, [item.title]: !expanded }) },
-            h('svg', { viewBox: '0 0 10 10', width: 10, height: 10, fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, 'aria-hidden': 'true' }, h('path', { d: 'M3 1l4 4-4 4' })),
-            item.title),
+            h('span', null, item.title),
+            h('svg', { viewBox: '0 0 10 10', width: 10, height: 10, fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, 'aria-hidden': 'true' }, h('path', { d: 'm1.5 3.5 3.5 3.5 3.5-3.5' }))),
           expanded && h('div', { className: 'nav-children' }, kids.map((c) => {
             const p = pages.find((x) => x.title === c.title && x.group === item.title);
             return h('a', { key: c.title, href: routeOf(p), 'aria-current': entry === p ? 'page' : undefined }, c.title);
@@ -322,25 +320,36 @@ function useRoute() {
 function App() {
   const entry = useRoute();
   const [theme, setTheme] = useState(() => store.get('baseui-theme', matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+  const [viewport, setViewport] = useState(() => store.get('baseui-viewport', 'desktop'));
   const [q, setQ] = useState('');
   const [menu, _setMenu] = useState(false);
   setMenu = _setMenu;
   useEffect(() => { document.documentElement.setAttribute('data-theme', theme); store.set('baseui-theme', theme); }, [theme]);
+  useEffect(() => { store.set('baseui-viewport', viewport); }, [viewport]);
   useEffect(() => { document.title = entry ? `${entry.title} — baseui` : 'baseui'; }, [entry]);
-  const { Button, TextField, Switch } = ui;
+  const { Button, TextField } = ui;
+  const dark = theme === 'dark';
 
   const skip = (e) => { e.preventDefault(); const m = document.getElementById('main'); m.setAttribute('tabindex', '-1'); m.focus(); };
-  return h('div', { className: 'shell' + (menu ? ' menu-open' : '') },
-    h('a', { className: 'skip', href: '#main', onClick: skip }, 'Skip to content'),
-    h('aside', { className: 'side' },
-      h('a', { className: 'brand', href: '#/' }, 'baseui'),
-      h('div', { className: 'search' }, h(TextField, { label: 'Search', size: 'small', type: 'search', value: q, onChange: (e) => setQ(e.target.value) })),
-      h(Nav, { entry, query: q.trim().toLowerCase() }),
-      h('div', { className: 'theme' }, h(Switch, { label: 'Dark theme', checked: theme === 'dark', onCheckedChange: (v) => setTheme(v ? 'dark' : 'light') }))),
-    h('div', { className: 'scrim', onClick: () => _setMenu(false) }),
-    h('main', { id: 'main' },
-      h('div', { className: 'topbar' }, h(Button, { variant: 'secondary', size: 'xsmall', onClick: () => _setMenu(!menu) }, 'Menu'), h('a', { href: '#/', className: 'brand' }, 'baseui')),
-      entry ? h(Page, { entry, key: entry.slug }) : h(Home)));
+  return h(ThemeContext.Provider, { value: theme },
+    h(ViewportContext.Provider, { value: viewport },
+      h('div', { className: 'shell' + (menu ? ' menu-open' : '') },
+        h('a', { className: 'skip', href: '#main', onClick: skip }, 'Skip to content'),
+        h('aside', { className: 'side' },
+          h('div', { className: 'side-head' },
+            h('a', { className: 'brand', href: '#/' }, 'baseui'),
+            h(IconButton, { variant: 'ghost', size: 'sm', label: dark ? 'Switch to light theme' : 'Switch to dark theme', icon: h(dark ? icons.Sun : icons.Moon01, { size: 20 }), onClick: () => setTheme(dark ? 'light' : 'dark') })),
+          h('div', { className: 'search' }, h(TextField, {
+            label: 'Search', size: 'small', value: q, clearable: true, actionLabel: 'Clear search', startIcon: h(icons.SearchLg, { size: 24 }),
+            onChange: (e) => setQ(e.target.value),
+          })),
+          h(Nav, { entry, query: q.trim().toLowerCase() })),
+        h('div', { className: 'scrim', onClick: () => _setMenu(false) }),
+        h('main', { id: 'main' },
+          h('div', { className: 'topbar' }, h(Button, { variant: 'secondary', size: 'xsmall', onClick: () => _setMenu(!menu) }, 'Menu'), h('a', { href: '#/', className: 'brand' }, 'baseui')),
+          entry && entry.section === 'Components' && h('div', { className: 'pagebar' },
+            h(SegmentedControl, { size: 'small', label: 'Preview width', value: viewport, onValueChange: setViewport, items: [{ value: 'desktop', label: 'Desktop' }, { value: 'tablet', label: 'Tablet' }, { value: 'mobile', label: 'Mobile' }] })),
+          entry ? h(Page, { entry, key: entry.slug }) : h(Home)))));
 }
 
 await initDom();
