@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>baseui — компоненты</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font: var(--baseui-Typography-Text-14-Regular);
+    background: var(--baseui-Background-Secondary);
+    color: var(--baseui-Text-and-Icon-Primary);
+    display: grid; grid-template-columns: 280px 1fr; grid-template-rows: 100%;
+  }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  aside {
+    display: flex; flex-direction: column; min-height: 0;
+    background: var(--baseui-Background-Primary);
+    border-right: 1px solid var(--baseui-Border-Primary);
+  }
+  .brand { padding: var(--baseui-Space-M) var(--baseui-Space-M) var(--baseui-Space-XS); font: var(--baseui-Typography-Header-20); }
+  .brand small { display: block; margin-top: 2px; font: var(--baseui-Typography-Text-12-Regular); color: var(--baseui-Text-and-Icon-Secondary); }
+  .search { padding: var(--baseui-Space-XS) var(--baseui-Space-M) var(--baseui-Space-S); }
+  .search input {
+    width: 100%; height: 40px; padding: 0 var(--baseui-Space-S);
+    border: 1px solid var(--baseui-Border-Accent); border-radius: var(--baseui-Radius-S);
+    background: var(--baseui-Background-Primary); color: inherit; font: var(--baseui-Typography-Text-14-Regular); outline: none;
+  }
+  .search input:focus { border-color: var(--baseui-Extensions-Border-Accent); }
+  nav { flex: 1; overflow: auto; padding: 0 var(--baseui-Space-XS) var(--baseui-Space-M); }
+  .group-title {
+    padding: var(--baseui-Space-S) var(--baseui-Space-XS) var(--baseui-Space-XXS);
+    font: var(--baseui-Typography-Text-12-Regular); text-transform: uppercase; letter-spacing: .06em;
+    color: var(--baseui-Text-and-Icon-Secondary);
+  }
+  .comp {
+    display: flex; align-items: center; gap: var(--baseui-Space-XS); width: 100%;
+    border: 0; background: none; text-align: left; padding: 6px var(--baseui-Space-XS);
+    border-radius: var(--baseui-Radius-XS); font: var(--baseui-Typography-Text-14-Semi-Bold);
+  }
+  .comp:hover { background: var(--baseui-Background-Secondary); }
+  .comp .chev { width: 10px; transition: transform .15s; color: var(--baseui-Text-and-Icon-Secondary); }
+  .comp[aria-expanded="true"] .chev { transform: rotate(90deg); }
+  .stories { margin: 0 0 var(--baseui-Space-XXS) 18px; padding-left: var(--baseui-Space-XS); border-left: 1px solid var(--baseui-Border-Primary); }
+  .story {
+    display: block; width: 100%; text-align: left; border: 0; background: none;
+    padding: 5px var(--baseui-Space-XS); border-radius: var(--baseui-Radius-XS);
+    font: var(--baseui-Typography-Text-14-Regular); color: var(--baseui-Text-and-Icon-Secondary);
+  }
+  .story:hover { background: var(--baseui-Background-Secondary); color: var(--baseui-Text-and-Icon-Primary); }
+  .story[aria-current="true"] { background: var(--baseui-Extensions-Background-LightAccent); color: var(--baseui-Text-and-Icon-Accent); font-weight: 600; }
+  main { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+  header {
+    display: flex; align-items: center; gap: var(--baseui-Space-S); flex-wrap: wrap;
+    padding: var(--baseui-Space-S) var(--baseui-Space-M);
+    background: var(--baseui-Background-Primary); border-bottom: 1px solid var(--baseui-Border-Primary);
+  }
+  .crumbs { flex: 1; min-width: 160px; font: var(--baseui-Typography-Text-16-Semi-Bold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .crumbs span { color: var(--baseui-Text-and-Icon-Secondary); font-weight: 400; }
+  .seg { display: inline-flex; padding: 2px; border-radius: var(--baseui-Radius-S); background: var(--baseui-Background-Secondary); }
+  .seg button { border: 0; background: none; padding: 6px var(--baseui-Space-S); border-radius: 10px; font: var(--baseui-Typography-Text-14-Semi-Bold); color: var(--baseui-Text-and-Icon-Secondary); }
+  .seg button[aria-pressed="true"] { background: var(--baseui-Background-Primary); color: var(--baseui-Text-and-Icon-Primary); box-shadow: var(--baseui-Shadow-S); }
+  .ghost { border: 1px solid var(--baseui-Border-Accent); background: var(--baseui-Background-Primary); padding: 6px var(--baseui-Space-S); border-radius: var(--baseui-Radius-S); font: var(--baseui-Typography-Text-14-Semi-Bold); text-decoration: none; color: inherit; }
+  .ghost:hover { background: var(--baseui-Background-Secondary); }
+  .stage { flex: 1; min-height: 0; padding: var(--baseui-Space-M); display: flex; justify-content: center; overflow: auto; }
+  .frame {
+    width: 100%; height: 100%; border: 1px solid var(--baseui-Border-Primary); border-radius: var(--baseui-Radius-M);
+    background: var(--baseui-Background-Primary); transition: width .2s; overflow: hidden;
+  }
+  iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .menu-btn { display: none; }
+  @media (max-width: 800px) {
+    body { grid-template-columns: 1fr; }
+    aside { position: fixed; inset: 0 25% 0 0; z-index: 10; transform: translateX(-100%); transition: transform .2s; box-shadow: var(--baseui-Shadow-L); }
+    body.open aside { transform: none; }
+    .menu-btn { display: inline-block; }
+    .vp { display: none; }
+  }
+</style>
+</head>
+<body>
+<aside>
+  <div class="brand">baseui<small>Компоненты и foundations</small></div>
+  <div class="search"><input id="q" type="search" placeholder="Поиск компонента…" aria-label="Поиск"></div>
+  <nav id="nav" aria-label="Компоненты"></nav>
+</aside>
+<main>
+  <header>
+    <button class="ghost menu-btn" id="menu" aria-label="Меню">☰</button>
+    <div class="crumbs" id="crumbs"></div>
+    <div class="seg vp" id="vp" role="group" aria-label="Ширина">
+      <button data-w="100%" aria-pressed="true">Desktop</button>
+      <button data-w="768px" aria-pressed="false">Tablet</button>
+      <button data-w="375px" aria-pressed="false">Mobile</button>
+    </div>
+    <div class="seg" id="theme" role="group" aria-label="Тема">
+      <button data-t="light" aria-pressed="true">Светлая</button>
+      <button data-t="dark" aria-pressed="false">Тёмная</button>
+    </div>
+    <a class="ghost" id="open" target="_blank" rel="noopener">Открыть ↗</a>
+  </header>
+  <div class="stage"><div class="frame" id="frame"><iframe id="view" title="Предпросмотр компонента"></iframe></div></div>
+</main>
+<script>
+(function () {
+  var nav = document.getElementById('nav'), view = document.getElementById('view'),
+      crumbs = document.getElementById('crumbs'), openLink = document.getElementById('open'),
+      frame = document.getElementById('frame'), q = document.getElementById('q');
+  var entries = [], current = null, theme = 'light', open = {};
+  try { theme = localStorage.getItem('baseui-theme') || 'light'; } catch (e) {}
+
+  var RU = { docs: 'Документация' };
+  function label(e) { return e.type === 'docs' ? RU.docs : e.name; }
+
+  fetch('storybook/index.json').then(function (r) { return r.json(); }).then(function (d) {
+    entries = Object.keys(d.entries).map(function (k) { return d.entries[k]; });
+    var id = decodeURIComponent(location.hash.slice(1));
+    current = entries.filter(function (e) { return e.id === id; })[0] || entries[0];
+    current.title.split('/').length && (open[current.title] = true);
+    renderNav(); show();
+  });
+
+  function renderNav() {
+    var filter = q.value.trim().toLowerCase(), groups = {}, order = [];
+    entries.forEach(function (e) {
+      var parts = e.title.split('/'), g = parts[0];
+      if (filter && e.title.toLowerCase().indexOf(filter) < 0) return;
+      if (!groups[g]) { groups[g] = {}; order.push(g); }
+      (groups[g][e.title] = groups[g][e.title] || []).push(e);
+    });
+    nav.innerHTML = '';
+    order.forEach(function (g) {
+      var t = document.createElement('div'); t.className = 'group-title'; t.textContent = g; nav.appendChild(t);
+      Object.keys(groups[g]).forEach(function (title) {
+        var list = groups[g][title], single = title.split('/').length === 1 || list.length === 1 && false;
+        var b = document.createElement('button'); b.className = 'comp';
+        var isOpen = !!filter || open[title];
+        b.setAttribute('aria-expanded', isOpen);
+        b.innerHTML = '<svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 1l4 4-4 4"/></svg><span></span>';
+        b.lastChild.textContent = title.split('/').slice(1).join('/') || title;
+        b.onclick = function () { open[title] = !open[title]; renderNav(); };
+        nav.appendChild(b);
+        if (isOpen) {
+          var wrap = document.createElement('div'); wrap.className = 'stories';
+          list.forEach(function (e) {
+            var s = document.createElement('button'); s.className = 'story';
+            s.textContent = label(e);
+            if (current && e.id === current.id) s.setAttribute('aria-current', 'true');
+            s.onclick = function () { current = e; location.hash = e.id; document.body.classList.remove('open'); renderNav(); show(); };
+            wrap.appendChild(s);
+          });
+          nav.appendChild(wrap);
+        }
+      });
+    });
+  }
+
+  function show() {
+    if (!current) return;
+    var url = 'storybook/iframe.html?id=' + encodeURIComponent(current.id) +
+      '&viewMode=' + (current.type === 'docs' ? 'docs' : 'story') + '&globals=theme:' + theme;
+    view.src = url; openLink.href = url;
+    crumbs.innerHTML = ''; crumbs.appendChild(document.createTextNode(current.title.replace(/\//g, ' / ') + ' '));
+    var sp = document.createElement('span'); sp.textContent = '· ' + label(current); crumbs.appendChild(sp);
+    document.title = current.title + ' — base UI';
+    document.documentElement.setAttribute('data-theme', theme);
+    document.querySelectorAll('#theme button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.t === theme); });
+  }
+
+  q.oninput = renderNav;
+  document.getElementById('menu').onclick = function () { document.body.classList.toggle('open'); };
+  document.getElementById('theme').onclick = function (ev) {
+    var t = ev.target.dataset && ev.target.dataset.t; if (!t) return;
+    theme = t; try { localStorage.setItem('baseui-theme', t); } catch (e) {} show();
+  };
+  document.getElementById('vp').onclick = function (ev) {
+    var w = ev.target.dataset && ev.target.dataset.w; if (!w) return;
+    frame.style.width = w;
+    document.querySelectorAll('#vp button').forEach(function (b) { b.setAttribute('aria-pressed', b === ev.target); });
+  };
+  window.addEventListener('hashchange', function () {
+    var id = decodeURIComponent(location.hash.slice(1)), e = entries.filter(function (x) { return x.id === id; })[0];
+    if (e && e !== current) { current = e; open[e.title] = true; renderNav(); show(); }
+  });
+  document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+</body>
+</html>
