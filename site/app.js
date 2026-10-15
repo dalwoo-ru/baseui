@@ -99,10 +99,18 @@ function Control({ name, spec, value, onChange, args }) {
 function Controls({ meta, args, setOverride, reset }) {
   const items = Object.entries(meta.argTypes || {}).filter(([, s]) => s.control);
   if (!items.length) return null;
+  // Controls with the same `row` sit side by side.
+  const groups = [];
+  for (const it of items) {
+    const last = groups[groups.length - 1];
+    if (last && it[1].row && last[0][1].row === it[1].row) last.push(it); else groups.push([it]);
+  }
   return h('div', { className: 'controls' },
     h('div', { className: 'controls-title' }, 'Controls'),
-    items.map(([name, spec]) =>
-      h(Control, { key: name, name, spec, args, value: args[name], onChange: (v) => setOverride(name, v) })),
+    groups.map((g) => g.length === 1 && !g[0][1].row
+      ? h(Control, { key: g[0][0], name: g[0][0], spec: g[0][1], args, value: args[g[0][0]], onChange: (v) => setOverride(g[0][0], v) })
+      : h('div', { key: g[0][0], className: 'controls-row' }, g.map(([name, spec]) =>
+        h(Control, { key: name, name, spec, args, value: args[name], onChange: (v) => setOverride(name, v) })))),
     h(ui.Button, { variant: 'secondary', size: 'xsm', onClick: reset }, 'Reset'));
 }
 

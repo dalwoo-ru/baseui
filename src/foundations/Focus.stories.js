@@ -25,6 +25,12 @@ export function page() {
         h(SegmentedControl, { label: 'View', items: [{ value: 'a', label: 'One' }, { value: 'b', label: 'Two' }] }),
         h('div', { className: 'focus-demo__field' }, h(TextField, { label: 'Text Input' })))),
     h(Block, { title: 'Tokens' }, h(TokenTable, { tokens: s.groups[0].tokens })),
+    h(Block, { title: 'Text Fields' },
+      h('p', { className: 'doc-p' }, 'Text Input and Selector draw the ring flush against the field, with no gap. Validation outlines (error, warning, success) are also drawn outside the field, so only one outline is visible at a time.'),
+      h('div', { className: 'focus-demo' },
+        h('div', { className: 'focus-demo__field' }, h(TextField, { label: 'Focused', defaultValue: 'Tab here' })),
+        h('div', { className: 'focus-demo__field' }, h(TextField, { label: 'Error', status: 'error', caption: 'Error text', defaultValue: 'Value' })),
+        h('div', { className: 'focus-demo__field' }, h(TextField, { label: 'Success', status: 'success', caption: 'All good', defaultValue: 'Value' })))),
     h(Block, { title: 'Inside Clipped Containers' },
       h('p', { className: 'doc-p' }, 'Where a container clips its content (list rows, dropdown options, the dialog close button), the ring is drawn inside the element, with the same width and color.'),
       h('div', { className: 'focus-demo__list' }, h(List, { size: 'sm' }, h(ListItem, { onClick: () => {} }, 'Item'), h(ListItem, { onClick: () => {} }, 'Item')))));

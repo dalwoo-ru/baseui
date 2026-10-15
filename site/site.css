@@ -68,6 +68,8 @@ h3 { font: var(--baseui-Typography-Header-20); margin: 0 0 var(--baseui-spacing-
 }
 .controls > button { align-self: flex-start; }
 .controls-title { font: var(--baseui-Typography-Text-14-Semi-Bold); color: var(--baseui-Text-and-Icon-Secondary); }
+.controls-row { display: flex; gap: var(--baseui-spacing-16); }
+.controls-row > .control { flex: 1; min-width: 0; }
 .control { display: flex; flex-direction: column; gap: var(--baseui-spacing-8); }
 .control-name { align-self: flex-start; font: var(--baseui-Typography-Text-14-Semi-Bold); font-family: inherit; background: none; padding: 0; color: var(--baseui-Text-and-Icon-Primary); }
 .control .bui-segmented { align-self: flex-start; flex-wrap: wrap; max-width: 100%; }
