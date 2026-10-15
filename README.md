@@ -8,7 +8,7 @@
 | Путь | Что это |
 |---|---|
 | `tokens.css` | Дизайн-токены: цвета (светлая/тёмная тема через `data-theme`), Space, Radius, Shadow, Typography + `@font-face` |
-| `fonts/` | Geist и Hagrid Text (woff2) |
+| `fonts/` | Geist (woff2) |
 | `lib/` | Скомпилированные компоненты (ES-модули) и `components.css` |
 | `site/` | Страница документации: `app.js`, `site.css`, `manifest.js` (список страниц) |
 | `index.html` | Точка входа |
