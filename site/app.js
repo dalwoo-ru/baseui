@@ -1,7 +1,7 @@
 import { t as requireReact } from '../lib/react-BZJXY1be.js';
 import { t as initDom, r as renderInto } from '../lib/react-18-D4o7zN8K.js';
 import manifest from './manifest.js';
-import { Button, TextField, Switch } from '../src/base.js';
+import { Button, TextField, Switch, List, ListItem } from '../src/base.js';
 import { IconButton } from '../src/components/Button.js';
 import { SegmentedControl } from '../src/components/SegmentedControl.js';
 import { Slider } from '../src/components/Slider.js';
@@ -117,8 +117,8 @@ function Code({ source }) {
   };
   return h('div', { className: 'code' },
     h('div', { className: 'code-actions' },
-      h(ui.Button, { variant: 'text', size: 'xsmall', onClick: () => setOpen(!open) }, open ? 'Hide code' : 'Show code'),
-      open && h(ui.Button, { variant: 'text', size: 'xsmall', onClick: copy }, copied ? 'Copied' : 'Copy')),
+      h(ui.Button, { variant: 'secondary', size: 'xsmall', onClick: () => setOpen(!open) }, open ? 'Hide code' : 'Show code'),
+      open && h(ui.Button, { variant: 'secondary', size: 'xsmall', onClick: copy }, copied ? 'Copied' : 'Copy')),
     open && h('pre', null, h('code', null, source)));
 }
 
@@ -248,30 +248,32 @@ function Nav({ entry, query }) {
   const [open, setOpen] = useState({});
   const match = (t) => t.toLowerCase().includes(query);
   useEffect(() => { if (entry && entry.group) setOpen((o) => ({ ...o, [entry.group]: true })); }, [entry]);
-  return h('nav', { 'aria-label': 'Documentation' }, manifest.map(({ section, items }) => {
-    const shown = items.map((item) => {
+  const go = (p) => () => { location.hash = routeOf(p); };
+  const sections = manifest.map(({ section, items }) => ({
+    section,
+    shown: items.map((item) => {
       if (!item.children) return match(item.title) ? { item } : null;
       const kids = item.children.filter((c) => match(c.title) || match(item.title));
       return kids.length ? { item, kids } : null;
-    }).filter(Boolean);
-    return shown.length > 0 && h(Fragment, { key: section },
-      h('div', { className: 'nav-title' }, section),
+    }).filter(Boolean),
+  })).filter((x) => x.shown.length > 0);
+  return h('nav', { 'aria-label': 'Documentation' }, sections.map(({ section, shown }, i) =>
+    h(List, { key: section, title: section, divider: i < sections.length - 1 },
       shown.map(({ item, kids }) => {
         if (!kids) {
           const p = pages.find((x) => x.title === item.title && !x.group);
-          return h('a', { key: item.title, href: routeOf(p), 'aria-current': entry === p ? 'page' : undefined }, item.title);
+          return h(ListItem, { key: item.title, active: entry === p, onClick: go(p) }, item.title);
         }
-        const expanded = query ? true : !!open[item.title];
-        return h(Fragment, { key: item.title },
-          h('button', { type: 'button', className: 'nav-group', 'aria-expanded': expanded, onClick: () => setOpen({ ...open, [item.title]: !expanded }) },
-            h('span', null, item.title),
-            h('svg', { viewBox: '0 0 10 10', width: 10, height: 10, fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, 'aria-hidden': 'true' }, h('path', { d: 'm1.5 3.5 3.5 3.5 3.5-3.5' }))),
-          expanded && h('div', { className: 'nav-children' }, kids.map((c) => {
+        return h(ListItem, {
+          key: item.title,
+          expanded: query ? true : !!open[item.title],
+          onExpandedChange: (v) => setOpen((o) => ({ ...o, [item.title]: v })),
+          items: kids.map((c) => {
             const p = pages.find((x) => x.title === c.title && x.group === item.title);
-            return h('a', { key: c.title, href: routeOf(p), 'aria-current': entry === p ? 'page' : undefined }, c.title);
-          })));
-      }));
-  }));
+            return h(ListItem, { key: c.title, subitem: true, active: entry === p, onClick: go(p) }, c.title);
+          }),
+        }, item.title);
+      }))));
 }
 
 /* --------------------------------------------------------------------- app */

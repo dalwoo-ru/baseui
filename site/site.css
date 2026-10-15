@@ -28,19 +28,6 @@ code {
 .brand { font: var(--baseui-Typography-Header-24); text-decoration: none; padding: 0 var(--baseui-spacing-8); }
 .search { padding-top: var(--baseui-spacing-8); }
 .side nav { display: flex; flex-direction: column; gap: 2px; flex: 1; }
-.nav-title {
-  margin: var(--baseui-spacing-12) var(--baseui-spacing-8) var(--baseui-spacing-4);
-  font: var(--baseui-Typography-Text-12-Regular); text-transform: uppercase; letter-spacing: .06em;
-  color: var(--baseui-Text-and-Icon-Secondary);
-}
-.side nav a {
-  padding: var(--baseui-spacing-8) var(--baseui-spacing-12); border-radius: var(--baseui-radius-12);
-  font: var(--baseui-Typography-Text-14-Semi-Bold); text-decoration: none;
-}
-.side nav a:hover { background: var(--baseui-Background-Secondary); }
-.side nav a[aria-current="page"] {
-  background: var(--baseui-Extensions-Background-LightAccent); color: var(--baseui-Text-and-Icon-Accent);
-}
 .theme { padding: var(--baseui-spacing-12) var(--baseui-spacing-8) 0; border-top: 1px solid var(--baseui-Border-Primary); }
 
 /* main */
@@ -159,19 +146,6 @@ a:focus-visible, .toc button:focus-visible, .brand:focus-visible {
 .example { scroll-margin-top: var(--baseui-spacing-32); }
 code, pre { font-family: var(--baseui-Typography-Font-Family-Mono); }
 
-/* nested navigation */
-.nav-group {
-  all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; gap: var(--baseui-spacing-8);
-  padding: var(--baseui-spacing-8) var(--baseui-spacing-12); border-radius: var(--baseui-radius-12); font: var(--baseui-Typography-Text-14-Semi-Bold);
-}
-.nav-group:hover { background: var(--baseui-Background-Secondary); }
-.nav-group:focus-visible { outline: var(--baseui-focus-outline-width) var(--baseui-focus-outline-style) var(--baseui-focus-outline-color); outline-offset: var(--baseui-focus-outline-offset); }
-.nav-group svg { flex: none; color: var(--baseui-Text-and-Icon-Secondary); transition: transform var(--baseui-duration-fast) var(--baseui-ease-standard); }
-.nav-children { display: flex; flex-direction: column; gap: 2px; margin: 0 0 var(--baseui-spacing-4) var(--baseui-spacing-16); padding-left: var(--baseui-spacing-8); box-shadow: inset 1px 0 0 var(--baseui-Border-Primary); }
-.nav-children a { font-weight: 400 !important; font: var(--baseui-Typography-Text-14-Regular) !important; color: var(--baseui-Text-and-Icon-Secondary); }
-.nav-children a[aria-current="page"] { color: var(--baseui-Text-and-Icon-Accent); font-weight: 600 !important; }
-.nav-children a:hover { color: var(--baseui-Text-and-Icon-Primary); }
-
 /* foundations docs */
 .doc-block { margin-top: var(--baseui-spacing-40); }
 .doc-block h3 { margin: var(--baseui-spacing-24) 0 var(--baseui-spacing-8); }
@@ -207,9 +181,6 @@ code, pre { font-family: var(--baseui-Typography-Font-Family-Mono); }
 .side-head { display: flex; align-items: center; justify-content: space-between; gap: var(--baseui-spacing-8); }
 .side-head .brand { padding: 0 var(--baseui-spacing-8); }
 .search { padding-top: 0; }
-.nav-group { justify-content: space-between; }
-.nav-group svg { margin-left: auto; transform: none; }
-.nav-group[aria-expanded="true"] svg { transform: rotate(180deg); }
 .pagebar { position: sticky; top: 0; z-index: var(--baseui-z-index-100); display: flex; justify-content: flex-end; padding: var(--baseui-spacing-12) var(--baseui-spacing-32); background: color-mix(in srgb, var(--baseui-Background-Primary) 90%, transparent); backdrop-filter: blur(8px); }
 .page { padding-top: var(--baseui-spacing-24); }
 @media (max-width: 860px) { .pagebar { display: none; } }
