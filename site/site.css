@@ -167,7 +167,7 @@ code, pre { font-family: var(--baseui-Typography-Font-Family-Mono); }
 .shadow-item figcaption, .shape-item figcaption { display: flex; flex-direction: column; gap: 2px; font: var(--baseui-Typography-Text-12-Regular); color: var(--baseui-Text-and-Icon-Secondary); }
 .concentric-outer { padding: 8px; width: 240px; border-radius: 24px; background: var(--baseui-Background-Secondary); }
 .concentric-inner { padding: 24px 16px; border-radius: calc(24px - 8px); background: var(--baseui-Background-Tertiary); font: var(--baseui-Typography-Text-14-Semi-Bold); text-align: center; }
-.motion-demo { display: flex; flex-direction: column; gap: var(--baseui-spacing-16); max-width: 620px; }
+.motion-demo { display: flex; flex-direction: column; gap: var(--baseui-spacing-16); max-width: 620px; margin-bottom: var(--baseui-spacing-32); }
 .motion-row { display: grid; grid-template-columns: 200px 1fr; gap: var(--baseui-spacing-16); align-items: center; }
 .motion-row .val { display: block; font: var(--baseui-Typography-Text-12-Regular); color: var(--baseui-Text-and-Icon-Secondary); }
 .motion-track { position: relative; height: 40px; border-radius: var(--baseui-radius-12); background: var(--baseui-Background-Secondary); }
