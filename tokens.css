@@ -1,16 +1,22 @@
-/* baseui — design tokens (colors, space, radius, shadow, typography) */
+/*
+ * baseui design tokens.
+ * Color names are baseui's; spacing, radius, shadow, focus, motion follow Astryx structure.
+ * Order mirrors "All Tokens": Color, Spacing, Size, Radius, Shadow, Focus, Duration, Easing, Z-index, Typography.
+ * Theme: [data-theme="light" | "dark"] on <html>.
+ */
 
 @font-face{font-family:Geist;src:url("./fonts/geist-cyrillic-D_Kiv5N3.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap;unicode-range:U+301,U+400-45F,U+490-491,U+4B0-4B1,U+2116}
 @font-face{font-family:Geist;src:url("./fonts/geist-latin-ext-Dr5IBr7O.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap;unicode-range:U+100-2BA,U+2BD-2C5,U+2C7-2CC,U+2CE-2D7,U+2DD-2FF,U+304,U+308,U+329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:Geist;src:url("./fonts/geist-latin-BGnTDqni.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap;unicode-range:U+??,U+131,U+152-153,U+2BB-2BC,U+2C6,U+2DA,U+2DC,U+304,U+308,U+329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 
+/* ---------- Color ---------- */
 :root,
 [data-theme="light"] {
   color-scheme: light;
 
   /* Text and Icon */
   --baseui-Text-and-Icon-Primary: #171717;
-  --baseui-Text-and-Icon-Secondary: #848e9c;
+  --baseui-Text-and-Icon-Secondary: #5f6877;
   --baseui-Text-and-Icon-OnColor: #ffffff;
   --baseui-Text-and-Icon-Disabled: #babfca;
   --baseui-Text-and-Icon-Accent: #575df6;
@@ -75,7 +81,7 @@
 
   /* Text and Icon */
   --baseui-Text-and-Icon-Primary: #ffffff;
-  --baseui-Text-and-Icon-Secondary: #7d7d7d;
+  --baseui-Text-and-Icon-Secondary: #999999;
   --baseui-Text-and-Icon-OnColor: #171717;
   --baseui-Text-and-Icon-Disabled: #7a7a7a;
   --baseui-Text-and-Icon-Accent: #575df6;
@@ -135,48 +141,100 @@
   --baseui-Extensions-Border-Success: #44cf5e;
 }
 
+/* ---------- Spacing ---------- */
 :root {
-  /* Space — gap, padding, margin */
-  --baseui-Space-None: 0;
-  --baseui-Space-XXS: 4px;
-  --baseui-Space-XS: 8px;
-  --baseui-Space-S: 12px;
-  --baseui-Space-M: 16px;
-  --baseui-Space-L: 20px;
-  --baseui-Space-XL1: 24px;
-  --baseui-Space-XL2: 32px;
-  --baseui-Space-XL3: 40px;
-  --baseui-Space-XL4: 48px;
-  --baseui-Space-XL5: 64px;
-  --baseui-Space-XL6: 80px;
+  --baseui-spacing-0: 0;
+  --baseui-spacing-4: 4px;
+  --baseui-spacing-8: 8px;
+  --baseui-spacing-12: 12px;
+  --baseui-spacing-16: 16px;
+  --baseui-spacing-20: 20px;
+  --baseui-spacing-24: 24px;
+  --baseui-spacing-32: 32px;
+  --baseui-spacing-40: 40px;
+  --baseui-spacing-48: 48px;
+  --baseui-spacing-64: 64px;
+  --baseui-spacing-80: 80px;
+}
 
-  /* Radius — border-radius */
-  --baseui-Radius-None: 0;
-  --baseui-Radius-XXS: 4px;
-  --baseui-Radius-XS: 8px;
-  --baseui-Radius-S: 12px;
-  --baseui-Radius-M: 16px;
-  --baseui-Radius-L: 20px;
-  --baseui-Radius-XL1: 24px;
-  --baseui-Radius-XL2: 28px;
-  --baseui-Radius-XL3: 32px;
-  --baseui-Radius-XL4: 36px;
-  --baseui-Radius-XL5: 40px;
-  --baseui-Radius-XL6: 48px;
-  --baseui-Radius-XL7: 56px;
-  --baseui-Radius-XL8: 64px;
-  --baseui-Radius-FullRound: 1000px;
+/* ---------- Size ---------- */
+:root {
+  --baseui-size-element-xs: 32px;
+  --baseui-size-element-sm: 40px;
+  --baseui-size-element-md: 48px;
+  --baseui-size-element-lg: 56px;
+}
 
-  /* Shadow — box-shadow (Always Dark @ 12%, Figma: #1B1D22) */
+/* ---------- Radius ---------- */
+:root {
+  --baseui-radius-none: 0;
+  --baseui-radius-4: 4px;
+  --baseui-radius-8: 8px;
+  --baseui-radius-12: 12px;
+  --baseui-radius-16: 16px;
+  --baseui-radius-20: 20px;
+  --baseui-radius-24: 24px;
+  --baseui-radius-28: 28px;
+  --baseui-radius-32: 32px;
+  --baseui-radius-full: 9999px;
+}
+
+/* ---------- Shadow ---------- */
+:root {
   --baseui-Shadow-Color: rgb(from var(--baseui-Extensions-Background-AlwaysDark) r g b / 12%);
-  --baseui-Shadow-S: 0 2px 8px 0 var(--baseui-Shadow-Color);
-  --baseui-Shadow-M: 0 6px 20px 0 var(--baseui-Shadow-Color);
-  --baseui-Shadow-L: 0 4px 28px 0 var(--baseui-Shadow-Color);
+  --baseui-shadow-low: 0 2px 8px 0 var(--baseui-Shadow-Color);
+  --baseui-shadow-med: 0 6px 20px 0 var(--baseui-Shadow-Color);
+  --baseui-shadow-high: 0 4px 28px 0 var(--baseui-Shadow-Color);
+}
+
+/* ---------- Focus ---------- */
+:root {
+  --baseui-focus-outline-width: 2px;
+  --baseui-focus-outline-style: solid;
+  --baseui-focus-outline-color: var(--baseui-Text-and-Icon-Accent);
+  --baseui-focus-outline-offset: 2px;
+}
+
+/* ---------- Duration & easing (instant under prefers-reduced-motion) ---------- */
+:root {
+  --baseui-duration-fast-min: 130ms;
+  --baseui-duration-fast: 175ms;
+  --baseui-duration-fast-max: 230ms;
+  --baseui-duration-medium-min: 310ms;
+  --baseui-duration-medium: 410ms;
+  --baseui-duration-medium-max: 550ms;
+  --baseui-duration-slow-min: 730ms;
+  --baseui-duration-slow: 975ms;
+  --baseui-duration-slow-max: 1300ms;
+  --baseui-ease-standard: cubic-bezier(0.24, 1, 0.4, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --baseui-duration-fast-min: 0ms;
+    --baseui-duration-fast: 0ms;
+    --baseui-duration-fast-max: 0ms;
+    --baseui-duration-medium-min: 0ms;
+    --baseui-duration-medium: 0ms;
+    --baseui-duration-medium-max: 0ms;
+    --baseui-duration-slow-min: 0ms;
+    --baseui-duration-slow: 0ms;
+    --baseui-duration-slow-max: 0ms;
+  }
+}
+
+/* ---------- Z-index ---------- */
+:root {
+  --baseui-z-index-sticky: 100;
+  --baseui-z-index-overlay: 1000;
+  --baseui-z-index-popup: 1001;
+  --baseui-z-index-toast: 1100;
+  --baseui-z-index-tooltip: 1200;
 }
 
 /* Typography */
 :root {
   --baseui-Typography-Font-Family:var(--font-geist,"Geist"), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --baseui-Typography-Font-Family-Mono:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --baseui-Typography-Header-48:700 48px / 64px var(--baseui-Typography-Font-Family);
   --baseui-Typography-Header-40:700 40px / 52px var(--baseui-Typography-Font-Family);
   --baseui-Typography-Header-32:700 32px / 40px var(--baseui-Typography-Font-Family);

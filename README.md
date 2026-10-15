@@ -1,43 +1,61 @@
-# baseui — универсальная дизайн-система
+# baseui
 
-Токены и набор компонентов на Base UI + CSS Modules, плюс страница документации,
-собранная на самих компонентах. Всё работает локально: без CDN, внешних шрифтов и сторонних рантаймов.
+A design system on Base UI with a documentation site built from its own components. Runs locally, no external dependencies.
 
-## Структура
+Documentation structure, names and order follow [Astryx](https://astryx.atmeta.com/): **Foundations** and **Components**. Values and look stay baseui's.
 
-| Путь | Что это |
-|---|---|
-| `tokens.css` | Дизайн-токены: цвета (светлая/тёмная тема через `data-theme`), Space, Radius, Shadow, Typography + `@font-face` |
-| `fonts/` | Geist (woff2) |
-| `lib/` | Скомпилированные компоненты (ES-модули) и `components.css` |
-| `site/` | Страница документации: `app.js`, `site.css`, `manifest.js` (список страниц) |
-| `index.html` | Точка входа |
-
-## Запуск
-
-Нужен любой статический сервер (ES-модули не работают с `file://`):
+## Run
 
 ```sh
-python3 -m http.server 8000   # http://localhost:8000
+python3 -m http.server 8000   # any static server
 ```
 
-## Токены
+## Use
 
 ```html
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="lib/components.css">
+<link rel="stylesheet" href="src/components.css">
 ```
 
-Тема — атрибут `data-theme="light|dark"` на `<html>`. Переменные: `--baseui-Background-Primary`,
-`--baseui-Space-M`, `--baseui-Radius-S`, `--baseui-Shadow-M`, `font: var(--baseui-Typography-Text-16-Semi-Bold)`.
+Theme: `data-theme="light|dark"` on `<html>`.
 
-## Документация
+```js
+import { Button, Card, Tabs, TabList, Tab, TabPanel } from './src/index.js';
+```
 
-Каждая страница показывает описание, интерактивный Playground с параметрами, таблицу свойств,
-примеры состояний и их код. Элементы самой страницы (поиск, переключатель темы, кнопки, поля
-параметров) — те же компоненты baseui. Основы: Colors, Typography, Space, Radius, Shadow, Icons.
-Компоненты: Autocomplete, Avatar, Badge, Button, Checkbox, CheckboxGroup, Chip, ChipGroup, List,
-ListItem, Modal, OtpInput, Radio, RadioGroup, Rating, Select, Switch, Tag, TextField и
-обёртки для React Hook Form (`*Field`).
+## Structure
 
-Исходные `.tsx` недоступны — компоненты поставляются в скомпилированном виде в `lib/`.
+| Path | Contents |
+|---|---|
+| `tokens.css` | Design tokens and fonts |
+| `lib/` | Compiled components: Typeahead, Checkbox, Dialog, List, OTP Input, Radio, Rating, Selector, Switch, Text Input, Token |
+| `src/` | Components as plain ES modules, their docs pages and styles |
+| `site/` | Documentation site and its page tree (`manifest.js`) |
+
+## Tokens
+
+| Group | Names |
+|---|---|
+| Color | baseui names: `Text-and-Icon-*`, `Background-*`, `Border-*`, `Accent-Colors-*`, `Extensions-*` |
+| Spacing | `spacing-0 … 80`, named by pixels |
+| Size | `size-element-xs · sm · md · lg` |
+| Radius | `radius-none · 4 … 32 · full`, named by pixels |
+| Shadow | `shadow-low · med · high` |
+| Focus | `focus-outline-width · style · color · offset` |
+| Motion | `duration-fast · medium · slow` (+ `-min`, `-max`), `ease-standard` |
+| Z-index | `z-index-sticky · overlay · popup · toast · tooltip` |
+| Typography | `Typography-Text-*`, `Typography-Header-*` |
+
+## Conventions
+
+- **Props follow Astryx:** `label`, `variant`, `size` (`sm · md · lg`), `isDisabled`, `isLoading`, `isSelected`, `onChange`.
+- **No outlines.** Fills, spacing and shadows separate elements. Rings appear for focus and selection.
+- **Accessible by default.** Text contrast ≥ 4.5:1, visible focus, reduced motion.
+
+## Add a component
+
+1. `src/components/Name.js`, ending with `describe(Name, 'One sentence.', { prop: [type, default, 'Short fragment'] })`.
+2. Styles in `src/components.css`, prefix `.bui-`, tokens only.
+3. `src/stories/Name.stories.js` with `meta()`, `Playground` and a few examples.
+4. An entry in `site/manifest.js`.
