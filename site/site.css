@@ -167,7 +167,8 @@ code.val { background: none; padding: 0; color: var(--baseui-Text-and-Icon-Secon
 .side-head { display: flex; align-items: center; }
 .side-head .brand { padding: 0 var(--baseui-spacing-8); }
 .search { padding-top: 0; }
-.pagebar { position: sticky; top: 0; z-index: var(--baseui-z-index-100); display: flex; align-items: center; justify-content: flex-end; gap: var(--baseui-spacing-8); padding: var(--baseui-spacing-12) var(--baseui-spacing-32); background: color-mix(in srgb, var(--baseui-Background-Primary) 90%, transparent); backdrop-filter: blur(8px); }
+.pagebar { position: sticky; top: 0; z-index: var(--baseui-z-index-100); background: color-mix(in srgb, var(--baseui-Background-Primary) 90%, transparent); backdrop-filter: blur(8px); }
+.pagebar__in { max-width: 1040px; margin: 0 auto; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-end; gap: var(--baseui-spacing-12); padding: var(--baseui-spacing-12) var(--baseui-spacing-32); }
 .page { padding-top: var(--baseui-spacing-24); }
 .topbar-end { margin-left: auto; }
 @media (max-width: 860px) { .pagebar { display: none; } }

@@ -2,7 +2,7 @@ import { t as requireReact } from '../lib/react-BZJXY1be.js';
 import { t as initDom, r as renderInto } from '../lib/react-18-D4o7zN8K.js';
 import manifest from './manifest.js';
 import { TextField, Switch, Chip, List, ListItem } from '../src/base.js';
-import { Button, IconButton } from '../src/components/Button.js';
+import { Button } from '../src/components/Button.js';
 import { SegmentedControl } from '../src/components/SegmentedControl.js';
 import { Slider } from '../src/components/Slider.js';
 import { Table, pixel, proportional } from '../src/components/Table.js';
@@ -310,7 +310,8 @@ function App() {
   const dark = theme === 'dark';
 
   const skip = (e) => { e.preventDefault(); const m = document.getElementById('main'); m.setAttribute('tabindex', '-1'); m.focus(); };
-  const themeButton = h(IconButton, { variant: 'ghost', size: 'sm', label: dark ? 'Switch to light theme' : 'Switch to dark theme', icon: h(dark ? icons.Sun : icons.Moon01, { size: 20 }), onClick: () => setTheme(dark ? 'light' : 'dark') });
+  const themeControl = h(SegmentedControl, { size: 'sm', iconOnly: true, label: 'Theme', value: theme, onValueChange: setTheme, items: [{ value: 'light', label: 'Light theme', icon: h(icons.Sun) }, { value: 'dark', label: 'Dark theme', icon: h(icons.Moon01) }] });
+  const viewControl = h(SegmentedControl, { size: 'sm', iconOnly: true, label: 'Preview width', value: viewport, onValueChange: setViewport, items: [{ value: 'desktop', label: 'Desktop', icon: h(icons.Monitor01) }, { value: 'mobile', label: 'Mobile', icon: h(icons.Phone01) }] });
   return h(ViewportContext.Provider, { value: viewport },
       h('div', { className: 'shell' + (menu ? ' menu-open' : '') },
         h('a', { className: 'skip', href: '#main', onClick: skip }, 'Skip to content'),
@@ -324,10 +325,8 @@ function App() {
           h(Nav, { entry, query: q.trim().toLowerCase() })),
         h('div', { className: 'scrim', onClick: () => _setMenu(false) }),
         h('main', { id: 'main' },
-          h('div', { className: 'topbar' }, h(Button, { variant: 'secondary', size: 'xsm', onClick: () => _setMenu(!menu) }, 'Menu'), h('a', { href: '#/', className: 'brand' }, 'baseui'), h('span', { className: 'topbar-end' }, themeButton)),
-          h('div', { className: 'pagebar' },
-            h(SegmentedControl, { size: 'sm', label: 'Preview width', value: viewport, onValueChange: setViewport, items: [{ value: 'desktop', label: 'Desktop' }, { value: 'mobile', label: 'Mobile' }] }),
-            themeButton),
+          h('div', { className: 'topbar' }, h(Button, { variant: 'secondary', size: 'xsm', onClick: () => _setMenu(!menu) }, 'Menu'), h('a', { href: '#/', className: 'brand' }, 'baseui'), h('span', { className: 'topbar-end' }, themeControl)),
+          h('div', { className: 'pagebar' }, h('div', { className: 'pagebar__in' }, viewControl, themeControl)),
           entry ? h(Page, { entry, key: entry.slug }) : h(Home))));
 }
 
