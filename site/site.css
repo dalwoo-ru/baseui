@@ -73,7 +73,6 @@ h3 { font: var(--baseui-Typography-Header-20); margin: 0 0 var(--baseui-spacing-
 .control { display: flex; flex-direction: column; gap: var(--baseui-spacing-8); }
 .control-name { align-self: flex-start; font: var(--baseui-Typography-Text-14-Semi-Bold); font-family: inherit; background: none; padding: 0; color: var(--baseui-Text-and-Icon-Primary); }
 .control .bui-segmented { align-self: flex-start; flex-wrap: wrap; max-width: 100%; }
-.canvas--mobile { width: 360px; max-width: 100%; margin: 0 auto; }
 .color-row { display: flex; gap: var(--baseui-spacing-8); align-items: center; }
 .color-row > :first-child { flex: 1; }
 .swatch { width: 40px; height: 40px; padding: 0; border: 0; border-radius: var(--baseui-radius-12); background: none; cursor: pointer; }
@@ -167,8 +166,8 @@ code.val { background: none; padding: 0; color: var(--baseui-Text-and-Icon-Secon
 .side-head { display: flex; align-items: center; }
 .side-head .brand { padding: 0 var(--baseui-spacing-8); }
 .search { padding-top: 0; }
-.pagebar { position: sticky; top: 0; z-index: var(--baseui-z-index-100); background: color-mix(in srgb, var(--baseui-Background-Primary) 90%, transparent); backdrop-filter: blur(8px); }
-.pagebar__in { max-width: 1040px; margin: 0 auto; box-sizing: border-box; display: flex; align-items: center; justify-content: flex-end; gap: var(--baseui-spacing-12); padding: var(--baseui-spacing-12) var(--baseui-spacing-32); }
+/* the bar is as far from the right edge as the logo from the left one */
+.pagebar { position: sticky; top: 0; z-index: var(--baseui-z-index-100); display: flex; align-items: center; justify-content: flex-end; gap: var(--baseui-spacing-12); padding: var(--baseui-spacing-12) var(--baseui-spacing-24); background: color-mix(in srgb, var(--baseui-Background-Primary) 90%, transparent); backdrop-filter: blur(8px); }
 .page { padding-top: var(--baseui-spacing-24); }
 .topbar-end { margin-left: auto; }
 @media (max-width: 860px) { .pagebar { display: none; } }
@@ -177,3 +176,8 @@ code.val { background: none; padding: 0; color: var(--baseui-Text-and-Icon-Secon
 .focus-demo { display: flex; flex-wrap: wrap; gap: var(--baseui-spacing-24); align-items: center; padding: var(--baseui-spacing-24); border: 1px solid var(--baseui-Border-Primary); border-radius: var(--baseui-radius-20); margin-bottom: var(--baseui-spacing-24); }
 .focus-demo__field { width: 260px; }
 .focus-demo__list { max-width: 320px; }
+
+/* Mobile preview: the whole content block becomes a 360px column */
+main[data-viewport="mobile"] { background: var(--baseui-Background-Secondary); }
+main[data-viewport="mobile"] .page { max-width: 360px; min-height: calc(100vh - 64px); background: var(--baseui-Background-Primary); padding: var(--baseui-spacing-24) var(--baseui-spacing-16) var(--baseui-spacing-48); }
+main[data-viewport="mobile"] .page h1 { font: var(--baseui-Typography-Header-32); }

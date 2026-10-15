@@ -184,9 +184,9 @@
 .bui-segmented--full { display: flex; width: 100%; }
 .bui-segmented--full .bui-segmented__item { flex: 1 1 0; min-width: 0; }
 .bui-segmented__thumb {
-  position: absolute; top: 4px; bottom: 4px; left: 0; border-radius: var(--baseui-radius-12); background: var(--baseui-Extensions-Background-Surface); pointer-events: none;
+  position: absolute; top: 0; left: 0; border-radius: var(--baseui-radius-12); background: var(--baseui-Extensions-Background-Surface); pointer-events: none;
 }
-.bui-segmented--ready .bui-segmented__thumb { transition: transform var(--baseui-duration-medium) var(--baseui-ease-standard), width var(--baseui-duration-medium) var(--baseui-ease-standard); }
+.bui-segmented--ready .bui-segmented__thumb { transition: transform var(--baseui-duration-medium) var(--baseui-ease-standard), width var(--baseui-duration-medium) var(--baseui-ease-standard), height var(--baseui-duration-medium) var(--baseui-ease-standard); }
 .bui-segmented__item {
   all: unset; box-sizing: border-box; position: relative; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: var(--baseui-spacing-8); text-align: center; white-space: nowrap;
   border-radius: var(--baseui-radius-12); padding-inline: var(--baseui-spacing-16);

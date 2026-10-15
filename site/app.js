@@ -11,8 +11,7 @@ import { composeStory, StoryCanvas, Boundary } from './story.js';
 const icons = await import('../lib/line-HpXc8B8J.js');
 
 const React = requireReact();
-const { createElement: h, useState, useEffect, useMemo, useContext, createContext, Fragment } = React;
-const ViewportContext = createContext('desktop');
+const { createElement: h, useState, useEffect, useMemo, Fragment } = React;
 
 /* ------------------------------------------------------------- page index */
 
@@ -142,7 +141,6 @@ function Toc({ items }) {
 }
 
 function Example({ meta, story, name, id, controls, overlay }) {
-  const viewport = useContext(ViewportContext);
   const base = useMemo(() => composeStory(meta, story).args, [meta, story]);
   const [overrides, setOverrides] = useState({});
   const current = { ...base, ...overrides };
@@ -152,12 +150,11 @@ function Example({ meta, story, name, id, controls, overlay }) {
   const gated = overlay || /defaultOpen/.test((doc.source && doc.source.originalSource) || '');
   const [shown, setShown] = useState(!gated);
   const [nonce, setNonce] = useState(0);
-  const narrow = viewport === 'mobile';
   return h('section', { className: 'example', id, 'data-anchor': name },
     h('h3', null, name),
     h('div', { className: 'stage' },
       showControls && h(Controls, { meta, args: current, setOverride: (k, v) => setOverrides((o) => ({ ...o, [k]: v })), reset: () => setOverrides({}) }),
-      h('div', { className: 'canvas' + (narrow ? ' canvas--mobile' : '') },
+      h('div', { className: 'canvas' },
         shown
           ? h(Boundary, { key: nonce }, h(StoryCanvas, { meta, story, args: current }))
           : h('div', { className: 'gate' }, 'This example opens on top of the page.'),
@@ -312,7 +309,7 @@ function App() {
   const skip = (e) => { e.preventDefault(); const m = document.getElementById('main'); m.setAttribute('tabindex', '-1'); m.focus(); };
   const themeControl = h(SegmentedControl, { size: 'sm', iconOnly: true, label: 'Theme', value: theme, onValueChange: setTheme, items: [{ value: 'light', label: 'Light theme', icon: h(icons.Sun) }, { value: 'dark', label: 'Dark theme', icon: h(icons.Moon01) }] });
   const viewControl = h(SegmentedControl, { size: 'sm', iconOnly: true, label: 'Preview width', value: viewport, onValueChange: setViewport, items: [{ value: 'desktop', label: 'Desktop', icon: h(icons.Monitor01) }, { value: 'mobile', label: 'Mobile', icon: h(icons.Phone01) }] });
-  return h(ViewportContext.Provider, { value: viewport },
+  return (
       h('div', { className: 'shell' + (menu ? ' menu-open' : '') },
         h('a', { className: 'skip', href: '#main', onClick: skip }, 'Skip to content'),
         h('aside', { className: 'side' },
@@ -324,9 +321,9 @@ function App() {
           })),
           h(Nav, { entry, query: q.trim().toLowerCase() })),
         h('div', { className: 'scrim', onClick: () => _setMenu(false) }),
-        h('main', { id: 'main' },
+        h('main', { id: 'main', 'data-viewport': viewport },
           h('div', { className: 'topbar' }, h(Button, { variant: 'secondary', size: 'xsm', onClick: () => _setMenu(!menu) }, 'Menu'), h('a', { href: '#/', className: 'brand' }, 'baseui'), h('span', { className: 'topbar-end' }, themeControl)),
-          h('div', { className: 'pagebar' }, h('div', { className: 'pagebar__in' }, viewControl, themeControl)),
+          h('div', { className: 'pagebar' }, viewControl, themeControl),
           entry ? h(Page, { entry, key: entry.slug }) : h(Home))));
 }
 

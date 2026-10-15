@@ -14,7 +14,7 @@ export function SegmentedControl({ items, value, defaultValue, onValueChange, si
     const root = ref.current;
     const measure = () => {
       const el = root.querySelector('[aria-checked="true"]');
-      setThumb(el ? { x: el.offsetLeft, w: el.offsetWidth } : null);
+      setThumb(el ? { x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight } : null);
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -33,7 +33,7 @@ export function SegmentedControl({ items, value, defaultValue, onValueChange, si
     ref.current.querySelector(`[data-value="${CSS.escape(String(next.value))}"]`)?.focus();
   };
   return h('div', { role: 'radiogroup', 'aria-label': label, ref, onKeyDown, className: cx('bui-segmented', `bui-segmented--${size}`, fullWidth && 'bui-segmented--full', iconOnly && 'bui-segmented--icons', ready && 'bui-segmented--ready', className), ...rest },
-    thumb && h('span', { className: 'bui-segmented__thumb', 'aria-hidden': 'true', style: { width: thumb.w, transform: `translateX(${thumb.x}px)` } }),
+    thumb && h('span', { className: 'bui-segmented__thumb', 'aria-hidden': 'true', style: { width: thumb.w, height: thumb.h, transform: `translate(${thumb.x}px, ${thumb.y}px)` } }),
     items.map((it) => h('button', {
       key: it.value, type: 'button', role: 'radio', 'data-value': it.value, 'aria-checked': it.value === current, tabIndex: it.value === current ? 0 : -1,
       disabled: it.disabled, title: iconOnly ? it.label : undefined, 'aria-label': iconOnly ? it.label : undefined, className: 'bui-segmented__item', onClick: () => setCurrent(it.value),
