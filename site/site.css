@@ -18,6 +18,10 @@ code {
 :root { --bar-h: 64px; }
 .shell { min-height: 100vh; }
 .body { display: grid; grid-template-columns: 272px minmax(0, 1fr); min-height: calc(100vh - var(--bar-h)); }
+.body--settings { grid-template-columns: 272px minmax(0, 1fr) 320px; }
+.settings { position: sticky; top: var(--bar-h); height: calc(100vh - var(--bar-h)); overflow-y: auto; box-sizing: border-box; padding: var(--baseui-spacing-24) var(--baseui-spacing-16); border-left: 1px solid var(--baseui-Border-Primary); background: var(--baseui-Background-Primary); }
+.settings .controls, .settings-sheet .controls { border: 0; border-radius: 0; padding: 0; background: none; }
+.settings-fab { display: none; }
 
 /* top bar: logo on the left, width and theme on the right, across the whole window */
 .appbar { position: sticky; top: 0; z-index: var(--baseui-z-index-100); box-sizing: border-box; height: var(--bar-h); display: flex; align-items: center; gap: var(--baseui-spacing-12); padding: 0 var(--baseui-spacing-24); background: var(--baseui-Background-Primary); border-bottom: 1px solid var(--baseui-Border-Primary); }
@@ -120,6 +124,9 @@ code.type { white-space: pre-wrap; word-break: break-word; color: var(--baseui-T
   .appbar { padding: 0 var(--baseui-spacing-16); }
   .menu-btn { display: inline-flex; }
   .view-control { display: none; }
+  .body--settings { display: block; }
+  .settings { display: none; }
+  .settings-fab { display: inline-flex; position: fixed; right: var(--baseui-spacing-16); bottom: var(--baseui-spacing-16); z-index: 15; box-shadow: var(--baseui-shadow-high); }
   .page { padding: var(--baseui-spacing-24) var(--baseui-spacing-16) var(--baseui-spacing-48); }
   h1 { font: var(--baseui-Typography-Header-32); }
 }

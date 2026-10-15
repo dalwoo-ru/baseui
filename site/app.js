@@ -1,7 +1,7 @@
 import { t as requireReact } from '../lib/react-BZJXY1be.js';
 import { t as initDom, r as renderInto } from '../lib/react-18-D4o7zN8K.js';
 import manifest from './manifest.js';
-import { TextField, Switch, Chip, List, ListItem } from '../src/base.js';
+import { TextField, Switch, Chip, List, ListItem, Modal } from '../src/base.js';
 import { Button } from '../src/components/Button.js';
 import { SegmentedControl } from '../src/components/SegmentedControl.js';
 import { Slider } from '../src/components/Slider.js';
@@ -11,7 +11,8 @@ import { composeStory, StoryCanvas, Boundary } from './story.js';
 const icons = await import('../lib/line-HpXc8B8J.js');
 
 const React = requireReact();
-const { createElement: h, useState, useEffect, useMemo, Fragment } = React;
+const { createElement: h, useState, useEffect, useMemo, useContext, createContext, Fragment } = React;
+const SettingsContext = createContext(() => {});
 
 /* ------------------------------------------------------------- page index */
 
@@ -96,7 +97,7 @@ function Control({ name, spec, value, onChange, args }) {
     input);
 }
 
-function Controls({ meta, args, setOverride, reset }) {
+function Controls({ meta, args, setOverride, reset, title = 'Settings' }) {
   const items = Object.entries(meta.argTypes || {}).filter(([, s]) => s.control);
   if (!items.length) return null;
   // Controls with the same `row` sit side by side.
@@ -106,7 +107,7 @@ function Controls({ meta, args, setOverride, reset }) {
     if (last && it[1].row && last[0][1].row === it[1].row) last.push(it); else groups.push([it]);
   }
   return h('div', { className: 'controls' },
-    h('div', { className: 'controls-title' }, 'Controls'),
+    title && h('div', { className: 'controls-title' }, title),
     groups.map((g) => g.length === 1 && !g[0][1].row
       ? h(Control, { key: g[0][0], name: g[0][0], spec: g[0][1], args, value: args[g[0][0]], onChange: (v) => setOverride(g[0][0], v) })
       : h('div', { key: g[0][0], className: 'controls-row' }, g.map(([name, spec]) =>
@@ -150,10 +151,15 @@ function Example({ meta, story, name, id, controls, overlay }) {
   const gated = overlay || /defaultOpen/.test((doc.source && doc.source.originalSource) || '');
   const [shown, setShown] = useState(!gated);
   const [nonce, setNonce] = useState(0);
+  // The settings of the playground live in the right column (or the sheet on small screens).
+  const setSettings = useContext(SettingsContext);
+  React.useLayoutEffect(() => {
+    if (showControls) setSettings({ meta, args: { ...base, ...overrides }, setOverride: (k, v) => setOverrides((o) => ({ ...o, [k]: v })), reset: () => setOverrides({}) });
+  }, [showControls, meta, base, overrides]);
+  useEffect(() => () => { if (showControls) setSettings(null); }, [showControls]);
   return h('section', { className: 'example', id, 'data-anchor': name },
     h('h3', null, name),
     h('div', { className: 'stage' },
-      showControls && h(Controls, { meta, args: current, setOverride: (k, v) => setOverrides((o) => ({ ...o, [k]: v })), reset: () => setOverrides({}) }),
       h('div', { className: 'canvas' },
         shown
           ? h(Boundary, { key: nonce }, h(StoryCanvas, { meta, story, args: current }))
@@ -299,6 +305,8 @@ function App() {
   const [viewport, setViewport] = useState(() => (store.get('baseui-viewport', 'desktop') === 'mobile' ? 'mobile' : 'desktop'));
   const [q, setQ] = useState('');
   const [menu, _setMenu] = useState(false);
+  const [settings, setSettings] = useState(null);
+  const [sheet, setSheet] = useState(false);
   setMenu = _setMenu;
   useEffect(() => { document.documentElement.setAttribute('data-theme', theme); store.set('baseui-theme', theme); }, [theme]);
   useEffect(() => { store.set('baseui-viewport', viewport); }, [viewport]);
@@ -309,14 +317,14 @@ function App() {
   const skip = (e) => { e.preventDefault(); const m = document.getElementById('main'); m.setAttribute('tabindex', '-1'); m.focus(); };
   const themeControl = h(SegmentedControl, { size: 'sm', iconOnly: true, label: 'Theme', value: theme, onValueChange: setTheme, items: [{ value: 'light', label: 'Light theme', icon: h(icons.Sun) }, { value: 'dark', label: 'Dark theme', icon: h(icons.Moon01) }] });
   const viewControl = h(SegmentedControl, { size: 'sm', iconOnly: true, label: 'Preview width', value: viewport, onValueChange: setViewport, items: [{ value: 'desktop', label: 'Desktop', icon: h(icons.Monitor01) }, { value: 'mobile', label: 'Mobile', icon: h(icons.Phone01) }] });
-  return (
+  return h(SettingsContext.Provider, { value: setSettings },
       h('div', { className: 'shell' + (menu ? ' menu-open' : '') },
         h('a', { className: 'skip', href: '#main', onClick: skip }, 'Skip to content'),
         h('header', { className: 'appbar' },
           h(Button, { variant: 'secondary', size: 'xsm', className: 'menu-btn', onClick: () => _setMenu(!menu) }, 'Menu'),
           h('a', { className: 'brand', href: '#/' }, 'baseui'),
           h('div', { className: 'appbar-end' }, h('div', { className: 'view-control' }, viewControl), themeControl)),
-        h('div', { className: 'body' },
+        h('div', { className: 'body' + (settings ? ' body--settings' : '') },
           h('aside', { className: 'side' },
             h('div', { className: 'search' }, h(TextField, {
               label: 'Search', floatingLabel: false, size: 'sm', value: q, clearable: true, actionLabel: 'Clear search', startIcon: h(icons.SearchSm, { size: 24 }),
@@ -325,7 +333,10 @@ function App() {
             h(Nav, { entry, query: q.trim().toLowerCase() })),
           h('div', { className: 'scrim', onClick: () => _setMenu(false) }),
           h('main', { id: 'main', 'data-viewport': viewport },
-            entry ? h(Page, { entry, key: entry.slug }) : h(Home)))));
+            entry ? h(Page, { entry, key: entry.slug }) : h(Home)),
+          settings && h('aside', { className: 'settings', 'aria-label': 'Settings' }, h(Controls, settings))),
+        settings && h(Button, { variant: 'primary', size: 'md', className: 'settings-fab', icon: h(icons.Sliders01), onClick: () => setSheet(true) }, 'Settings'),
+        h(Modal, { open: sheet && !!settings, onOpenChange: setSheet, title: 'Settings', primaryAction: h(Button, { onClick: () => setSheet(false) }, 'Done') }, settings && h('div', { className: 'settings-sheet' }, h(Controls, { ...settings, title: null })))));
 }
 
 await initDom();
