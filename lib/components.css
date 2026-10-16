@@ -72,3 +72,4 @@
 ._small_2ah00_25[data-float=floating][data-control=text] ._inner_2ah00_78 { padding-top: 16px; }
 ._small_2ah00_25 ._icon_2ah00_102 svg, ._small_2ah00_25 ._action_2ah00_198 svg, ._small_2ah00_25 ._iconButton_1xjg3_93 svg { width: 20px; height: 20px; }
 ._small_2ah00_25 ._icon_2ah00_102 { margin-right: var(--baseui-spacing-8); }
+._small_2ah00_25[data-float=floating][data-filled] ._label_2ah00_144:not([data-x]), ._small_2ah00_25[data-float=floating]:not([data-control=select]) ._cell_2ah00_30:focus-within ._label_2ah00_144, ._small_2ah00_25[data-float=floating][data-control=select] ._label_2ah00_144 { top: calc(var(--fs-float-top) + 2px); }
