@@ -109,3 +109,5 @@
 ._iconButton_1nnzw_92{border-radius:var(--baseui-radius-16);transition:background-color var(--baseui-duration-fast) var(--baseui-ease-standard)}
 @media (hover:hover){._iconButton_1nnzw_92:hover:not(:disabled),._closeButton_1nnzw_188:hover:not(:disabled){background-color:var(--baseui-Background-Transparent-Hover)}}
 ._iconButton_1nnzw_92:active:not(:disabled){background-color:var(--baseui-Background-Transparent-Hover)}
+/* 40px box (icon stays 24px); margins keep the icon exactly where it was, so the hover does not touch the sheet edge */
+._iconButton_1nnzw_92{width:40px;height:40px;margin:var(--baseui-spacing-8);border-radius:var(--baseui-radius-12)}
