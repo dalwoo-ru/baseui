@@ -5,7 +5,7 @@ import { Button } from './Button.js';
 
 const ToastContext = createContext(null);
 
-/** Hook: const { toast, dismiss, update } = useToast(); toast({ message, status, icon, action, duration }) */
+/** Hook: const { toast, dismiss, update } = useToast(); toast({ message, variant, status, icon, action, duration }) */
 export function useToast() {
   const ctx = useContext(ToastContext);
   if (!ctx) throw new Error('useToast: wrap your app in <ToastProvider>');
@@ -40,7 +40,7 @@ function ToastItem({ item, onDismiss, onGone }) {
     className: 'bui-toast-item', 'data-leaving': item.leaving || undefined,
     onTransitionEnd: (e) => { if (item.leaving && e.target === e.currentTarget && e.propertyName === 'grid-template-rows') onGone(item.id); },
   }, h('div', { className: 'bui-toast-item__clip' }, h('div', {
-    role: status === 'error' ? 'alert' : 'status', className: 'bui-toast',
+    role: status === 'error' ? 'alert' : 'status', className: cx('bui-toast', `bui-toast--${item.variant}`),
     onMouseEnter: pause, onMouseLeave: run, onFocus: pause, onBlur: run,
   },
     (icon || status !== 'neutral') && h('span', { className: 'bui-toast__icon' }, icon || h(Icon, { name: status, size: 24 })),
@@ -57,7 +57,7 @@ export function ToastProvider({ children, placement = 'bottom-right', limit = 4 
   const dismiss = useCallback((id) => setItems((list) => list.map((t) => (t.id === id ? { ...t, leaving: true } : t))), []);
   const toast = useCallback((options) => {
     const id = ++counter.current;
-    setItems((list) => [...list, { status: 'neutral', duration: 5000, ...options, id }]);
+    setItems((list) => [...list, { variant: 'base', status: 'neutral', duration: 5000, ...options, id }]);
     return id;
   }, [limit]);
   const update = useCallback((id, options) => setItems((list) => list.map((t) => (t.id === id ? { ...t, ...options } : t))), []);
@@ -71,6 +71,7 @@ describe(ToastProvider, 'Shows brief notifications: a message, an optional actio
   placement: ["'bottom-right' | 'bottom-center' | 'top-right' | 'top-center'", "'bottom-right'", 'Where the stack appears'],
   limit: ['number', '4', 'Maximum simultaneous toasts'],
   message: ['ReactNode', null, 'toast() option: the text'],
+  variant: ["'base' | 'inverse'", "'base'", 'toast() option: base is a light surface, inverse is dark (light in a dark theme)'],
   status: ["'neutral' | 'success' | 'error' | 'info'", "'neutral'", 'toast() option: the icon; neutral has none'],
   icon: ['ReactNode', null, 'toast() option: a custom icon instead of the status one'],
   action: ['{ label: string; onClick?: () => void }', null, 'toast() option: an optional button; it closes the toast'],

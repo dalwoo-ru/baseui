@@ -3,8 +3,9 @@ import { ToastProvider, useToast } from '../components/Toast.js';
 import { Button, Heart } from './_ui.js';
 import { meta, playground, Row } from './_helpers.js';
 
-const toastOptions = ({ message, status, action, actionLabel, autoClose }) => ({
+const toastOptions = ({ message, variant, status, action, actionLabel, autoClose }) => ({
   message,
+  variant,
   status: status === 'custom' || status === 'none' ? 'neutral' : status,
   icon: status === 'custom' ? h(Heart, { size: 24 }) : undefined,
   action: action ? { label: actionLabel } : undefined,
@@ -16,15 +17,16 @@ function Demo(args) {
   const { toast, update } = useToast();
   const ids = useRef([]);
   const opts = toastOptions(args);
-  useEffect(() => { ids.current.forEach((id) => update(id, opts)); }, [args.message, args.status, args.action, args.actionLabel, args.autoClose]);
+  useEffect(() => { ids.current.forEach((id) => update(id, opts)); }, [args.message, args.variant, args.status, args.action, args.actionLabel, args.autoClose]);
   return h(Row, null,
     h(Button, { variant: 'secondary', onClick: () => { ids.current.push(toast(opts)); } }, 'Open toast'));
 }
 export default meta({
   title: 'Components/Toast', component: ToastProvider,
-  args: { message: 'Changes saved', status: 'success', action: false, actionLabel: 'Undo', autoClose: false, placement: 'bottom-right', limit: 4 },
+  args: { message: 'Changes saved', variant: 'base', status: 'success', action: false, actionLabel: 'Undo', autoClose: false, placement: 'bottom-right', limit: 4 },
   argTypes: {
     message: { control: 'text' },
+    variant: { control: 'inline-radio', options: ['base', 'inverse'] },
     status: { control: 'inline-radio', options: ['none', 'success', 'error', 'info', 'custom'], description: 'Icon: none, a status or a custom one' },
     action: { control: 'boolean', description: 'Optional action button' },
     actionLabel: { control: 'text', if: { arg: 'action', eq: true } },
