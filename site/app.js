@@ -1,7 +1,7 @@
 import { t as requireReact } from '../lib/react-BZJXY1be.js';
 import { t as initDom, r as renderInto } from '../lib/react-18-D4o7zN8K.js';
 import manifest from './manifest.js';
-import { TextField, Switch, Chip, List, ListItem, Modal } from '../src/base.js';
+import { TextField, Switch, Chip, ChipGroup, List, ListItem, Modal } from '../src/base.js';
 import { Button } from '../src/components/Button.js';
 import { SegmentedControl } from '../src/components/SegmentedControl.js';
 import { Slider } from '../src/components/Slider.js';
@@ -71,9 +71,10 @@ function Control({ name, spec, value, onChange, args }) {
     input = h(Switch, { label: name, checked: !!value, onCheckedChange: onChange });
   } else if (type === 'inline-radio' || type === 'radio' || type === 'select') {
     const options = spec.options || [];
-    input = h(SegmentedControl, {
-      size: 'sm', label: name, value: String(value), onValueChange: (v) => onChange(options.find((o) => String(o) === v) ?? v),
-      items: options.map((o) => ({ value: String(o), label: String(o) })),
+    input = h(ChipGroup, {
+      size: 'sm', title: name, value: [String(value)],
+      onValueChange: (v) => { const next = v[v.length - 1]; if (next !== undefined) onChange(options.find((o) => String(o) === next) ?? next); },
+      options: options.map((o) => ({ value: String(o), label: String(o) })),
     });
   } else if (type === 'range') {
     const { min = 0, max = 100, step = 1 } = spec.control;
@@ -91,9 +92,7 @@ function Control({ name, spec, value, onChange, args }) {
     input = h(TextField, { label: name, size: 'sm', value: value ?? '', onChange: (e) => onChange(e.target.value) });
   }
   if (!input) return null;
-  const inlineLabel = type === 'inline-radio' || type === 'radio' || type === 'select';
   return h('div', { className: 'control' },
-    inlineLabel && h('code', { className: 'control-name' }, name),
     input);
 }
 
