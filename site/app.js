@@ -329,8 +329,8 @@ function App() {
   const dark = theme === 'dark';
 
   const skip = (e) => { e.preventDefault(); const m = document.getElementById('main'); m.setAttribute('tabindex', '-1'); m.focus(); };
-  const themeControl = h(SegmentedControl, { size: 'sm', iconOnly: true, label: 'Theme', value: theme, onValueChange: setTheme, items: [{ value: 'light', label: 'Light theme', icon: h(icons.Sun) }, { value: 'dark', label: 'Dark theme', icon: h(icons.Moon01) }] });
-  const viewControl = h(SegmentedControl, { size: 'sm', iconOnly: true, label: 'Preview width', value: viewport, onValueChange: setViewport, items: [{ value: 'desktop', label: 'Desktop', icon: h(icons.Monitor01) }, { value: 'mobile', label: 'Mobile', icon: h(icons.Phone01) }] });
+  const themeControl = h(SegmentedControl, { size: 'sm', showLabel: false, label: 'Theme', value: theme, onValueChange: setTheme, items: [{ value: 'light', label: 'Light theme', icon: h(icons.Sun) }, { value: 'dark', label: 'Dark theme', icon: h(icons.Moon01) }] });
+  const viewControl = h(SegmentedControl, { size: 'sm', showLabel: false, label: 'Preview width', value: viewport, onValueChange: setViewport, items: [{ value: 'desktop', label: 'Desktop', icon: h(icons.Monitor01) }, { value: 'mobile', label: 'Mobile', icon: h(icons.Phone01) }] });
   const catalog = [
     h('div', { className: 'search', key: 'search' }, h(TextField, {
       label: 'Search', floatingLabel: false, size: 'sm', value: q, clearable: true, actionLabel: 'Clear search', startIcon: h(icons.SearchSm, { size: 24 }),
