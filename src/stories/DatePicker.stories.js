@@ -6,7 +6,7 @@ import { meta, playground, example } from './_helpers.js';
 // The field is a Text Input: its settings and their docs come from Text Input.
 const T = TextFieldStory.argTypes;
 const shared = ['variant', 'size', 'floatingLabel', 'caption', 'status', 'disabled', 'loading'];
-const inDays = (n) => { const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() + n); return d; };
+const inDays = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
 const tp = TextFieldStory.component.__docgenInfo.props;
 const hp = DatePicker.__docgenInfo.props;
 for (const k of shared) if (tp[k]) hp[k] = { ...hp[k], ...tp[k] };
