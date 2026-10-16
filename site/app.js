@@ -323,7 +323,7 @@ function App() {
         h('header', { className: 'appbar' },
           h(Button, { variant: 'secondary', size: 'xsm', className: 'menu-btn', onClick: () => _setMenu(!menu) }, 'Menu'),
           h('a', { className: 'brand', href: '#/', 'aria-label': 'baseui' },
-            h('svg', { className: 'brand-logo', viewBox: '0 0 64 14', width: 64, height: 14, fill: 'currentColor', 'aria-hidden': 'true', focusable: 'false' }, LOGO_PATHS.map((d) => h('path', { key: d.slice(0, 24), d })))),
+            h('svg', { className: 'brand-logo', viewBox: '0 0 64 14', width: 128, height: 28, fill: 'currentColor', 'aria-hidden': 'true', focusable: 'false' }, LOGO_PATHS.map((d) => h('path', { key: d.slice(0, 24), d })))),
           h('div', { className: 'appbar-end' }, h('div', { className: 'view-control' }, viewControl), themeControl)),
         h('div', { className: 'body' + (settings ? ' body--settings' : '') },
           h('aside', { className: 'side' },
