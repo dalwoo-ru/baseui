@@ -68,7 +68,7 @@ function Control({ name, spec, value, onChange, args }) {
   const type = typeof spec.control === 'string' ? spec.control : spec.control?.type;
   let input = null;
   if (type === 'boolean') {
-    input = h(Switch, { label: name, checked: !!value, onCheckedChange: onChange });
+    input = h(Switch, { size: 'sm', label: name, checked: !!value, onCheckedChange: onChange });
   } else if (type === 'inline-radio' || type === 'radio' || type === 'select') {
     const options = spec.options || [];
     input = h(ChipGroup, {

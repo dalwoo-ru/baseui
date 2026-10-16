@@ -80,3 +80,9 @@
 ._multiline_2ah00_64[data-float=floating][data-control=text] ._inner_2ah00_78 { padding-top: var(--tf-pt); padding-bottom: var(--tf-pb); }
 ._multiline_2ah00_64 ._label_2ah00_144 { top: calc((var(--fs-height) - var(--tf-line)) / 2 - 2px); }
 ._multiline_2ah00_64 textarea._input_1xjg3_7 { line-height: var(--tf-line); min-height: calc(var(--tf-min-rows, 1) * var(--tf-line)); max-height: calc(var(--tf-max-rows, 9999) * var(--tf-line)); }
+
+/* Switch sm: 14px label, proportionally smaller track (32x20, thumb 14) */
+._small_1epgh_45 ._root_1epgh_9{gap:var(--baseui-spacing-8);font:var(--baseui-Typography-Text-14-Regular)}
+._small_1epgh_45 ._track_1epgh_17{width:32px;height:20px;padding:3px}
+._small_1epgh_45 ._thumb_1epgh_43{width:14px;height:14px}
+._small_1epgh_45 ._track_1epgh_17[data-checked] ._thumb_1epgh_43{transform:translate(12px)}
