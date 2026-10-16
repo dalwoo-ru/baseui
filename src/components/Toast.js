@@ -49,7 +49,7 @@ export function ToastProvider({ children, placement = 'bottom-right', limit = 4 
   const api = useMemo(() => ({ toast, dismiss, update }), [toast, dismiss, update]);
   return h(ToastContext.Provider, { value: api }, children,
     h('div', { className: cx('bui-toast-region', `bui-toast-region--${placement}`), role: 'region', 'aria-label': 'Notifications' },
-      items.map((item) => h(ToastItem, { key: item.id, item, onDismiss: dismiss }))));
+      items.slice(-limit).map((item) => h(ToastItem, { key: item.id, item, onDismiss: dismiss }))));
 }
 
 describe(ToastProvider, 'Shows brief notifications: a message, an optional action and a close button. Call `useToast()` to add one.', {

@@ -11,18 +11,18 @@ const toastOptions = ({ message, status, action, actionLabel, autoClose }) => ({
   duration: autoClose ? 5000 : 0,
 });
 
-/** One button opens a toast; the open toast follows the settings live. */
+/** Each click opens one more toast; the open toasts follow the settings live. */
 function Demo(args) {
-  const { toast, dismiss, update } = useToast();
-  const id = useRef(null);
+  const { toast, update } = useToast();
+  const ids = useRef([]);
   const opts = toastOptions(args);
-  useEffect(() => { if (id.current) update(id.current, opts); }, [args.message, args.status, args.action, args.actionLabel, args.autoClose]);
+  useEffect(() => { ids.current.forEach((id) => update(id, opts)); }, [args.message, args.status, args.action, args.actionLabel, args.autoClose]);
   return h(Row, null,
-    h(Button, { variant: 'secondary', onClick: () => { if (id.current) dismiss(id.current); id.current = toast(opts); } }, 'Open toast'));
+    h(Button, { variant: 'secondary', onClick: () => { ids.current.push(toast(opts)); } }, 'Open toast'));
 }
 export default meta({
   title: 'Components/Toast', component: ToastProvider,
-  args: { message: 'Changes saved', status: 'success', action: false, actionLabel: 'Undo', autoClose: false, placement: 'bottom-right' },
+  args: { message: 'Changes saved', status: 'success', action: false, actionLabel: 'Undo', autoClose: false, placement: 'bottom-right', limit: 4 },
   argTypes: {
     message: { control: 'text' },
     status: { control: 'inline-radio', options: ['none', 'success', 'error', 'info', 'custom'], description: 'Icon: none, a status or a custom one' },
@@ -30,6 +30,7 @@ export default meta({
     actionLabel: { control: 'text', if: { arg: 'action', eq: true } },
     autoClose: { control: 'boolean', description: 'Closes itself after 5 seconds' },
     placement: { control: 'inline-radio', options: ['bottom-right', 'bottom-center', 'top-right', 'top-center'] },
+    limit: { control: 'number', description: 'Maximum simultaneous toasts' },
   },
 });
 export const Playground = {
@@ -41,6 +42,6 @@ export const Playground = {
 const { toast } = useToast();
 toast({ message: 'Message deleted', status: 'success', action: { label: 'Undo', onClick: restore } });`,
   }),
-  render: (args) => h(ToastProvider, { placement: args.placement }, h(Demo, args)),
+  render: (args) => h(ToastProvider, { placement: args.placement, limit: args.limit || 1 }, h(Demo, args)),
 };
 export const __namedExportsOrder = ['Playground'];
