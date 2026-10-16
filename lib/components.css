@@ -69,13 +69,13 @@
 ._small_2ah00_25 ._label_2ah00_144 { font: var(--baseui-Typography-Text-14-Regular); }
 ._small_2ah00_25[data-float=floating][data-filled] ._label_2ah00_144, ._small_2ah00_25[data-float=floating]:not([data-control=select]) ._cell_2ah00_30:focus-within ._label_2ah00_144, ._small_2ah00_25[data-control=select] ._label_2ah00_144 { font: var(--baseui-Typography-Text-12-Regular); }
 /* Small fields: tighter label-to-value gap and a 20px icon */
-._small_2ah00_25[data-float=floating][data-control=text] ._inner_2ah00_78 { padding-top: 16px; }
+._small_2ah00_25[data-float=floating][data-control=text] ._inner_2ah00_78 { padding-top: 14px; }
 ._small_2ah00_25 ._icon_2ah00_102 svg, ._small_2ah00_25 ._action_2ah00_198 svg, ._small_2ah00_25 ._iconButton_1xjg3_93 svg { width: 20px; height: 20px; }
 ._small_2ah00_25 ._icon_2ah00_102 { margin-right: var(--baseui-spacing-8); }
 ._small_2ah00_25[data-float=floating][data-filled] ._label_2ah00_144:not([data-x]), ._small_2ah00_25[data-float=floating]:not([data-control=select]) ._cell_2ah00_30:focus-within ._label_2ah00_144, ._small_2ah00_25[data-float=floating][data-control=select] ._label_2ah00_144 { top: calc(var(--fs-float-top) + 2px); }
 /* Multiline: one row matches the single-line field exactly (same height, same line position) */
 ._field_2ah00_13 { --tf-line: 22px; --tf-pt: 25px; --tf-pb: 5px; }
-._small_2ah00_25 { --tf-line: 20px; --tf-pt: 20px; --tf-pb: 4px; }
+._small_2ah00_25 { --tf-line: 20px; --tf-pt: 19px; --tf-pb: 5px; }
 ._multiline_2ah00_64 ._inner_2ah00_78 { padding-block: calc((var(--fs-height) - var(--tf-line)) / 2 - 2px); }
 ._multiline_2ah00_64[data-float=floating][data-control=text] ._inner_2ah00_78 { padding-top: var(--tf-pt); padding-bottom: var(--tf-pb); }
 ._multiline_2ah00_64 ._label_2ah00_144 { top: calc((var(--fs-height) - var(--tf-line)) / 2 - 2px); }
