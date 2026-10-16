@@ -18,6 +18,8 @@ export function SegmentedControl({ items, value, defaultValue, onValueChange, si
     const measure = () => {
       const el = root.querySelector('[aria-checked="true"]');
       setThumb(el ? { x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight } : null);
+      // A control wider than its container scrolls sideways: keep the selected item in view.
+      if (el && root.scrollWidth > root.clientWidth) root.scrollLeft = Math.min(Math.max(root.scrollLeft, el.offsetLeft + el.offsetWidth - root.clientWidth + 4), el.offsetLeft - 4);
     };
     measure();
     const ro = new ResizeObserver(measure);

@@ -196,7 +196,9 @@
 .bui-link:focus-visible { outline: var(--baseui-focus-outline-width) var(--baseui-focus-outline-style) var(--baseui-focus-outline-color); outline-offset: var(--baseui-focus-outline-offset); }
 
 /* ---------- Segmented Control ---------- */
-.bui-segmented { position: relative; display: inline-flex; gap: 2px; padding: 4px; border-radius: var(--baseui-radius-16); background: var(--baseui-Background-Secondary); box-sizing: border-box; max-width: 100%; }
+.bui-segmented { position: relative; display: inline-flex; gap: 2px; padding: 4px; border-radius: var(--baseui-radius-16); background: var(--baseui-Background-Secondary); box-sizing: border-box; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+.bui-segmented::-webkit-scrollbar { display: none; }
+.bui-segmented__item { flex: none; }
 .bui-segmented--full { display: flex; width: 100%; }
 .bui-segmented--full .bui-segmented__item { flex: 1 1 0; min-width: 0; }
 .bui-segmented__thumb {
@@ -215,12 +217,12 @@
 .bui-segmented--md .bui-segmented__item { height: 40px; font: var(--baseui-Typography-Text-16-Semi-Bold); }
 .bui-segmented__icon { display: inline-flex; flex: none; width: 20px; height: 20px; }
 .bui-segmented__icon > * { width: 100%; height: 100%; }
-.bui-segmented__counter { font: var(--baseui-Typography-Text-12-Regular); color: var(--baseui-Text-and-Icon-Secondary); }
+.bui-segmented__counter { font: inherit; font-weight: 400; color: var(--baseui-Text-and-Icon-Secondary); }
 .bui-segmented--icons .bui-segmented__item { padding-inline: 0; aspect-ratio: 1; }
 .bui-segmented--icons.bui-segmented--full .bui-segmented__item { aspect-ratio: auto; }
 .bui-segmented__item:disabled { cursor: not-allowed; color: var(--baseui-Text-and-Icon-Disabled); }
 @media (hover: hover) { .bui-segmented__item:hover:not(:disabled):not([aria-checked="true"]) { background: var(--baseui-Background-Secondary-Hover); } }
-.bui-segmented__item:focus-visible { outline: var(--baseui-focus-outline-width) var(--baseui-focus-outline-style) var(--baseui-focus-outline-color); outline-offset: var(--baseui-focus-outline-offset); }
+.bui-segmented__item:focus-visible { outline: var(--baseui-focus-outline-width) var(--baseui-focus-outline-style) var(--baseui-focus-outline-color); outline-offset: calc(var(--baseui-focus-outline-width) * -1); }
 
 /* ---------- Slider ---------- */
 .bui-slider { display: flex; flex-direction: column; gap: var(--baseui-spacing-8); font: var(--baseui-Typography-Text-14-Regular); }
