@@ -1,3 +1,7 @@
+/* No blue tap flash on touch screens (the pressed state is drawn by the components themselves); no double-tap zoom delay on controls */
+:root { -webkit-tap-highlight-color: transparent; }
+:where(a, button, input, select, textarea, label, summary, [role=button], [role=radio], [role=option], [role=tab], [role=combobox], [role=switch], [role=checkbox]) { touch-action: manipulation; }
+
 /* baseui components (zero-build). Only --baseui-* tokens. Components have no outlines: fills, spacing and shadows separate them. */
 
 /* ---------- Common ---------- */
