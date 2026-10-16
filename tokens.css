@@ -80,7 +80,7 @@
   --baseui-Background-Tertiary-Hover: #c8cfd9;
   --baseui-Background-Accent-Hover: #4b51ec;
   --baseui-Background-Brand-Hover: #3b3b3b;
-  --baseui-Background-Transparent-Hover: rgba(23, 23, 23, 0.06);
+  --baseui-Background-Transparent-Hover: rgba(88, 122, 172, 0.06);
   --baseui-Extensions-Background-Surface-Hover: #f5f7fa;
   --baseui-Extensions-Background-Error-Hover: #d9523b;
   --baseui-Extensions-Background-Warning-Hover: #e7a92c;
@@ -194,7 +194,7 @@
   --baseui-Background-Tertiary-Hover: #444444;
   --baseui-Background-Accent-Hover: #6a6ff8;
   --baseui-Background-Brand-Hover: #e0e0e0;
-  --baseui-Background-Transparent-Hover: rgba(255, 255, 255, 0.08);
+  --baseui-Background-Transparent-Hover: rgba(255, 255, 255, 0.05);
   --baseui-Extensions-Background-Surface-Hover: #2b2b2b;
   --baseui-Extensions-Background-Error-Hover: #ee7561;
   --baseui-Extensions-Background-Warning-Hover: #f8c866;
