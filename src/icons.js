@@ -9,6 +9,8 @@ const PATHS = {
   close: ['M18 6 6 18', 'm6 6 12 12'],
   chevronDown: ['m6 9 6 6 6-6'],
   chevronRight: ['m9 18 6-6-6-6'],
+  chevronLeft: ['m15 18-6-6 6-6'],
+  calendar: ['M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z', 'M8 2v4', 'M16 2v4', 'M3 10h18'],
 };
 
 export function Icon({ name, size = 20, ...rest }) {

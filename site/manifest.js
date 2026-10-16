@@ -32,6 +32,7 @@ export default [
       { title: 'Banner', file: N('Banner') },
       { title: 'Breadcrumbs', file: N('Breadcrumbs') },
       { title: 'Button', file: N('Button'), children: [{ title: 'Button Group', file: N('ButtonGroup') }, { title: 'Icon Button', file: N('IconButton') }, { title: 'Toggle Button', file: N('ToggleButton'), examples: [{ title: 'Toggle Button Group', file: N('ToggleButtonGroup') }] }] },
+      { title: 'Calendar', file: N('Calendar'), lead: 'A month grid for picking a date or a date range.', children: [{ title: 'Date Picker', file: N('DatePicker'), lead: 'A date field that opens the calendar in a popover, or in a Dialog sheet on small screens.' }] },
       { title: 'Card', file: N('Card'), children: [{ title: 'Clickable Card', file: N('ClickableCard') }, { title: 'Selectable Card', file: N('SelectableCard') }] },
       { title: 'Checkbox', file: B('Checkbox.stories-CjVZ5VOE'), lead: 'A box that turns one option on or off.', children: [{ title: 'Checkbox List', file: B('CheckboxGroup.stories-DyCBCBrP'), lead: 'A group of checkboxes for choosing several options.' }] },
       { title: 'Collapsible', file: N('Collapsible'), examples: [{ title: 'Collapsible Group', file: N('CollapsibleGroup') }] },

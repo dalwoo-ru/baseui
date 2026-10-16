@@ -6,6 +6,7 @@ export { Banner } from './components/Banner.js';
 export { Breadcrumbs } from './components/Breadcrumbs.js';
 export { Button, ButtonGroup, IconButton, ToggleButton, ToggleButtonGroup } from './components/Button.js';
 export { Card, ClickableCard, SelectableCard } from './components/Card.js';
+export { Calendar, DatePicker } from './components/Calendar.js';
 export { Collapsible, CollapsibleGroup } from './components/Collapsible.js';
 export { Divider } from './components/Divider.js';
 export { EmptyState } from './components/EmptyState.js';
