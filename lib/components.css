@@ -97,3 +97,4 @@
 .bui-field-action svg{display:block}
 .bui-field-action:focus-visible{outline:var(--baseui-focus-outline-width) var(--baseui-focus-outline-style) var(--baseui-focus-outline-color);outline-offset:var(--baseui-focus-outline-offset)}
 @media (hover){._iconButton_1xjg3_93:hover,.bui-field-action:hover{background-color:var(--baseui-Background-Transparent-Hover)}}
+.bui-field-action--text{padding:4px 8px;margin:-4px -8px -4px 0;font:var(--baseui-Typography-Text-14-Semi-Bold)}
