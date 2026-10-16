@@ -73,6 +73,19 @@
   --baseui-Extensions-Border-Error: #e8634c;
   --baseui-Extensions-Border-Warning: #f5ba44;
   --baseui-Extensions-Border-Success: #44cf5e;
+
+  /* Hover */
+  --baseui-Background-Primary-Hover: #f5f7fa;
+  --baseui-Background-Secondary-Hover: #e5e9ef;
+  --baseui-Background-Tertiary-Hover: #c8cfd9;
+  --baseui-Background-Accent-Hover: #4b51ec;
+  --baseui-Background-Brand-Hover: #3b3b3b;
+  --baseui-Background-Transparent-Hover: rgba(23, 23, 23, 0.06);
+  --baseui-Extensions-Background-Surface-Hover: #f5f7fa;
+  --baseui-Extensions-Background-Error-Hover: #d9523b;
+  --baseui-Extensions-Background-Warning-Hover: #e7a92c;
+  --baseui-Extensions-Background-Success-Hover: #37bd51;
+  --baseui-Extensions-Background-LightAccent-Hover: #dcdefd;
 }
 
 [data-theme="dark"] {
@@ -137,6 +150,19 @@
   --baseui-Extensions-Border-Error: #e8634c;
   --baseui-Extensions-Border-Warning: #f5ba44;
   --baseui-Extensions-Border-Success: #44cf5e;
+
+  /* Hover */
+  --baseui-Background-Primary-Hover: #232323;
+  --baseui-Background-Secondary-Hover: #3a3a3a;
+  --baseui-Background-Tertiary-Hover: #444444;
+  --baseui-Background-Accent-Hover: #6a6ff8;
+  --baseui-Background-Brand-Hover: #e0e0e0;
+  --baseui-Background-Transparent-Hover: rgba(255, 255, 255, 0.08);
+  --baseui-Extensions-Background-Surface-Hover: #2b2b2b;
+  --baseui-Extensions-Background-Error-Hover: #ee7561;
+  --baseui-Extensions-Background-Warning-Hover: #f8c866;
+  --baseui-Extensions-Background-Success-Hover: #5bda73;
+  --baseui-Extensions-Background-LightAccent-Hover: #2d3180;
 }
 
 /* ---------- Spacing ---------- */

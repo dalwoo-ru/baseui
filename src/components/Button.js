@@ -14,7 +14,7 @@ export function Button({
   const [pending, setPending] = useState(false);
   const sz = size || (group && group.size) || 'md';
   const disabled = isDisabled ?? (group && group.isDisabled) ?? false;
-  const common = { size: sz, loading: isLoading || pending, disabled, className: cx(isIconOnly && `bui-btn-icon bui-btn-icon--${sz}`, className), style: { width, ...style } };
+  const common = { size: sz, loading: isLoading || pending, disabled, className: cx(isIconOnly && `bui-btn-icon bui-btn-icon--${sz}`, className), style: { width, ...(variant === 'destructive' && { '--baseui-button-custom-hover': 'var(--baseui-Extensions-Background-Error-Hover)' }), ...style } };
   const variantProps = variant === 'ghost' ? { variant: 'text' }
     : variant === 'destructive' ? { variant: 'custom', customBackground: 'var(--baseui-Extensions-Background-Error)', customColor: 'var(--baseui-Extensions-Text-and-Icon-AlwaysDark)' }
       : { variant };
