@@ -77,7 +77,8 @@ h3 { font: var(--baseui-Typography-Header-20); margin: 0 0 var(--baseui-spacing-
   border: 1px solid var(--baseui-Border-Primary); background: var(--baseui-Background-Primary);
 }
 .controls > button { align-self: flex-start; }
-.controls-title { font: var(--baseui-Typography-Text-14-Semi-Bold); color: var(--baseui-Text-and-Icon-Secondary); }
+.controls-title { font: var(--baseui-Typography-Header-20); color: var(--baseui-Text-and-Icon-Primary); margin: 0; padding: 16px 0 8px; }
+.settings { padding-top: 8px; }
 .controls-row { display: flex; gap: var(--baseui-spacing-16); }
 .controls-row > .control { flex: 1; min-width: 0; }
 .control { display: flex; flex-direction: column; gap: var(--baseui-spacing-8); }

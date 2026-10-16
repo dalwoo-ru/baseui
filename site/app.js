@@ -68,7 +68,7 @@ function Control({ name, spec, value, onChange, args }) {
   const type = typeof spec.control === 'string' ? spec.control : spec.control?.type;
   let input = null;
   if (type === 'boolean') {
-    input = h(Switch, { checked: !!value, onCheckedChange: onChange, 'aria-label': name });
+    input = h(Switch, { label: name, checked: !!value, onCheckedChange: onChange });
   } else if (type === 'inline-radio' || type === 'radio' || type === 'select') {
     const options = spec.options || [];
     input = h(SegmentedControl, {
@@ -91,7 +91,7 @@ function Control({ name, spec, value, onChange, args }) {
     input = h(TextField, { label: name, size: 'sm', value: value ?? '', onChange: (e) => onChange(e.target.value) });
   }
   if (!input) return null;
-  const inlineLabel = type === 'boolean' || type === 'inline-radio' || type === 'radio' || type === 'select';
+  const inlineLabel = type === 'inline-radio' || type === 'radio' || type === 'select';
   return h('div', { className: 'control' },
     inlineLabel && h('code', { className: 'control-name' }, name),
     input);
