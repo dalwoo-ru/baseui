@@ -144,7 +144,8 @@
 }
 .bui-toast__icon { display: inline-flex; flex: none; color: var(--baseui-Text-and-Icon-Primary); }
 .bui-toast__text { flex: 1; min-width: 0; }
-.bui-toast .bui-button, .bui-toast > button:not(.bui-toast__close) { flex: none; }
+.bui-toast .bui-toast__action { flex: none; font: var(--baseui-Typography-Text-16-Semi-Bold); }
+.bui-toast__close { padding: 4px; margin: 0; border-radius: var(--baseui-radius-10); flex: none; }
 @keyframes bui-toast-in { from { opacity: 0; transform: translateY(8px); } }
 
 /* ---------- Breadcrumbs ---------- */

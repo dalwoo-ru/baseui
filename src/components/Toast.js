@@ -31,7 +31,7 @@ function ToastItem({ item, onDismiss }) {
   },
     (icon || status !== 'neutral') && h('span', { className: 'bui-toast__icon' }, icon || h(Icon, { name: status, size: 24 })),
     h('div', { className: 'bui-toast__text' }, item.message),
-    action && h(Button, { variant: 'ghost', size: 'xsm', onClick: () => { action.onClick?.(); onDismiss(item.id); } }, action.label),
+    action && h(Button, { variant: 'ghost', size: 'xsm', className: 'bui-toast__action', onClick: () => { action.onClick?.(); onDismiss(item.id); } }, action.label),
     h('button', { type: 'button', className: 'bui-toast__close', 'aria-label': 'Dismiss notification', onClick: () => onDismiss(item.id) },
       h(Icon, { name: 'close', size: 24 })));
 }
@@ -55,4 +55,9 @@ export function ToastProvider({ children, placement = 'bottom-right', limit = 4 
 describe(ToastProvider, 'Shows brief notifications: a message, an optional action and a close button. Call `useToast()` to add one.', {
   placement: ["'bottom-right' | 'bottom-center' | 'top-right' | 'top-center'", "'bottom-right'", 'Where the stack appears'],
   limit: ['number', '4', 'Maximum simultaneous toasts'],
+  message: ['ReactNode', null, 'toast() option: the text'],
+  status: ["'neutral' | 'success' | 'error' | 'info'", "'neutral'", 'toast() option: the icon; neutral has none'],
+  icon: ['ReactNode', null, 'toast() option: a custom icon instead of the status one'],
+  action: ['{ label: string; onClick?: () => void }', null, 'toast() option: an optional button; it closes the toast'],
+  duration: ['number', '5000', 'toast() option: milliseconds before it closes; 0 keeps it open'],
 });
