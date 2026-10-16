@@ -196,8 +196,7 @@
 .bui-link:focus-visible { outline: var(--baseui-focus-outline-width) var(--baseui-focus-outline-style) var(--baseui-focus-outline-color); outline-offset: var(--baseui-focus-outline-offset); }
 
 /* ---------- Segmented Control ---------- */
-.bui-segmented { position: relative; display: inline-flex; gap: 2px; padding: 4px; border-radius: var(--baseui-radius-16); background: var(--baseui-Background-Secondary); box-sizing: border-box; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
-.bui-segmented::-webkit-scrollbar { display: none; }
+.bui-segmented { position: relative; display: inline-flex; gap: 2px; padding: 4px; border-radius: var(--baseui-radius-16); background: var(--baseui-Background-Secondary); box-sizing: border-box; width: max-content; }
 .bui-segmented__item { flex: none; }
 .bui-segmented--full { display: flex; width: 100%; }
 .bui-segmented--full .bui-segmented__item { flex: 1 1 0; min-width: 0; }

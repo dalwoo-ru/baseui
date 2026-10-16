@@ -18,8 +18,6 @@ export function SegmentedControl({ items, value, defaultValue, onValueChange, si
     const measure = () => {
       const el = root.querySelector('[aria-checked="true"]');
       setThumb(el ? { x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight } : null);
-      // A control wider than its container scrolls sideways: keep the selected item in view.
-      if (el && root.scrollWidth > root.clientWidth) root.scrollLeft = Math.min(Math.max(root.scrollLeft, el.offsetLeft + el.offsetWidth - root.clientWidth + 4), el.offsetLeft - 4);
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -46,7 +44,7 @@ export function SegmentedControl({ items, value, defaultValue, onValueChange, si
     showIcon && it.icon && h('span', { className: 'bui-segmented__icon', 'aria-hidden': 'true' }, it.icon),
     labelShown(it) && h('span', { className: 'bui-segmented__label' }, it.label),
     showCounter && it.counter != null && h('span', { className: 'bui-segmented__counter' }, it.counter),
-    showBadge && it.badge != null && (typeof it.badge === 'object' ? it.badge : h(Badge, { label: it.badge })))));
+    showBadge && it.badge != null && (typeof it.badge === 'object' ? it.badge : h(Badge, { label: it.badge, variant: 'red' })))));
 }
 describe(SegmentedControl, 'A control for switching between a few exclusive options.', {
   items: ['Array<{ value: string; label: string; icon?: ReactNode; counter?: number | string; badge?: ReactNode | string; disabled?: boolean }>', null, 'Segments'],
