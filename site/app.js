@@ -6,6 +6,7 @@ import { Button } from '../src/components/Button.js';
 import { LOGO_PATHS } from './logo.js';
 import { SegmentedControl } from '../src/components/SegmentedControl.js';
 import { Slider } from '../src/components/Slider.js';
+import { Skeleton } from '../src/components/Skeleton.js';
 import { Table, pixel, proportional } from '../src/components/Table.js';
 import { composeStory, StoryCanvas, Boundary } from './story.js';
 
@@ -197,6 +198,19 @@ const storiesOf = (state, stem) => (state.__namedExportsOrder || Object.keys(sta
   .filter((k) => k !== 'default' && k !== '__namedExportsOrder' && k !== 'page' && state[k])
   .map((k) => ({ key: kebab(humanize(k)), id: `${stem}--${kebab(humanize(k))}`, name: state[k].name || humanize(k), story: state[k] }));
 
+/** The page frame while its module loads: the known title is real, everything else is a skeleton of the same layout. */
+function PageSkeleton({ entry }) {
+  return h('article', { className: 'page page--loading', 'aria-busy': 'true', 'aria-label': `Loading ${entry.title}` },
+    h('div', { className: 'eyebrow' }, entry.parent ? `${entry.section} · ${entry.parent.title}` : entry.section),
+    h('h1', null, entry.title),
+    h(Skeleton, { variant: 'text', lines: 2, width: '70%', className: 'skel-lead' }),
+    h('div', { className: 'skel-chips' }, [88, 64, 96, 80].map((w, i) => h(Skeleton, { key: i, variant: 'rect', width: w, height: 32, style: { borderRadius: 'var(--baseui-radius-full)' } }))),
+    h(Skeleton, { variant: 'text', width: 160, height: 28, className: 'skel-title' }),
+    h(Skeleton, { variant: 'rect', height: 96, style: { borderRadius: 'var(--baseui-radius-16)' } }),
+    h(Skeleton, { variant: 'text', width: 120, height: 28, className: 'skel-title' }),
+    h(Skeleton, { variant: 'rect', height: 220, style: { borderRadius: 'var(--baseui-radius-16)' } }));
+}
+
 /** Every page has the same structure: title, lead, anchors, Playground, Props, Examples. */
 function Page({ entry }) {
   const files = [entry.file, ...entry.examples.map((e) => e.file)];
@@ -214,7 +228,7 @@ function Page({ entry }) {
     const t = setTimeout(() => setAnchors([...document.querySelectorAll('.page [data-anchor]')].map((el) => ({ id: el.id, name: el.dataset.anchor }))), 120);
     return () => clearTimeout(t);
   }, [states]);
-  if (!states) return h('div', { className: 'loading' }, 'Loading…');
+  if (!states) return h(PageSkeleton, { entry });
   if (states.error) return h('div', { className: 'error' }, String(states.error));
 
   const state = states[0];

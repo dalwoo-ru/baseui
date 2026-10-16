@@ -192,3 +192,8 @@ main[data-viewport="mobile"] .page h1 { font: var(--baseui-Typography-Header-32)
 .layout-frame { box-sizing: border-box; border-radius: var(--baseui-radius-16); background: var(--baseui-Background-Secondary); max-width: 100%; }
 .layout-frame__inner { box-sizing: border-box; }
 .layout-frame__content { display: flex; align-items: center; justify-content: center; height: 96px; border-radius: var(--baseui-radius-12); background: var(--baseui-Background-Primary); font: var(--baseui-Typography-Text-14-Semi-Bold); }
+
+/* Page skeleton */
+.page--loading .skel-lead { margin-bottom: var(--baseui-spacing-16); font: var(--baseui-Typography-Text-20-Regular); }
+.page--loading .skel-chips { display: flex; flex-wrap: wrap; gap: var(--baseui-spacing-8); margin-bottom: var(--baseui-spacing-32); }
+.page--loading .skel-title { margin: var(--baseui-spacing-32) 0 var(--baseui-spacing-16); }

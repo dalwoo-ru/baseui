@@ -1,6 +1,7 @@
 // Shared helpers for Foundations pages: reads tokens.css (single source of truth) and renders common blocks.
 import { h, useState, useEffect, Fragment } from '../react.js';
 import { Table, pixel, proportional } from '../components/Table.js';
+import { Skeleton } from '../components/Skeleton.js';
 
 let cache;
 /** Parses tokens.css into sections → groups → tokens. */
@@ -79,4 +80,7 @@ export function TokenTable({ tokens, themed, preview, previewWidth = 72 }) {
   return h(Table, { data: tokens, columns, rowKey: 'name', caption: 'Tokens' });
 }
 
-export const Loading = () => h('div', { className: 'loading' }, 'Loading tokens…');
+export const Loading = () => h('div', { className: 'doc-block', 'aria-busy': 'true', 'aria-label': 'Loading tokens' },
+  h(Skeleton, { variant: 'text', width: 160, height: 28 }),
+  h('div', { style: { height: 16 } }),
+  h(Skeleton, { variant: 'rect', height: 220, style: { borderRadius: 'var(--baseui-radius-16)' } }));
