@@ -10,7 +10,8 @@ export function SegmentedControl({ items, value, defaultValue, onValueChange, si
   const enabled = items.filter((i) => !i.disabled);
   // Icon-only is just the label switched off; an item with nothing else to show keeps its label.
   const labelShown = (it) => showLabel || !(showIcon && it.icon);
-  const iconOnly = !showLabel && showIcon && items.every((it) => it.icon) && !showCounter && !showBadge;
+  // An item that shows only its icon is a square of the control's item height, whatever the other items show.
+  const iconOnlyItem = (it) => showIcon && !!it.icon && !labelShown(it) && !(showCounter && it.counter != null) && !(showBadge && it.badge != null);
 
   // The thumb slides to the selected item; it is measured again when the control is resized.
   React.useLayoutEffect(() => {
@@ -35,11 +36,11 @@ export function SegmentedControl({ items, value, defaultValue, onValueChange, si
     setCurrent(next.value);
     ref.current.querySelector(`[data-value="${CSS.escape(String(next.value))}"]`)?.focus();
   };
-  return h('div', { role: 'radiogroup', 'aria-label': label, ref, onKeyDown, className: cx('bui-segmented', `bui-segmented--${size}`, fullWidth && 'bui-segmented--full', iconOnly && 'bui-segmented--icons', ready && 'bui-segmented--ready', className), ...rest },
+  return h('div', { role: 'radiogroup', 'aria-label': label, ref, onKeyDown, className: cx('bui-segmented', `bui-segmented--${size}`, fullWidth && 'bui-segmented--full', ready && 'bui-segmented--ready', className), ...rest },
     thumb && h('span', { className: 'bui-segmented__thumb', 'aria-hidden': 'true', style: { width: thumb.w, height: thumb.h, transform: `translate(${thumb.x}px, ${thumb.y}px)` } }),
     items.map((it) => h('button', {
       key: it.value, type: 'button', role: 'radio', 'data-value': it.value, 'aria-checked': it.value === current, tabIndex: it.value === current ? 0 : -1,
-      disabled: it.disabled, title: labelShown(it) ? undefined : it.label, 'aria-label': labelShown(it) ? undefined : it.label, className: 'bui-segmented__item', onClick: () => setCurrent(it.value),
+      disabled: it.disabled, title: labelShown(it) ? undefined : it.label, 'aria-label': labelShown(it) ? undefined : it.label, className: cx('bui-segmented__item', iconOnlyItem(it) && 'bui-segmented__item--icon'), onClick: () => setCurrent(it.value),
     },
     showIcon && it.icon && h('span', { className: 'bui-segmented__icon', 'aria-hidden': 'true' }, it.icon),
     labelShown(it) && h('span', { className: 'bui-segmented__label' }, it.label),

@@ -200,7 +200,7 @@
 .bui-link:focus-visible { outline: var(--baseui-focus-outline-width) var(--baseui-focus-outline-style) var(--baseui-focus-outline-color); outline-offset: var(--baseui-focus-outline-offset); }
 
 /* ---------- Segmented Control ---------- */
-.bui-segmented { position: relative; display: inline-flex; gap: 2px; padding: 4px; border-radius: var(--baseui-radius-16); background: var(--baseui-Background-Secondary); box-sizing: border-box; width: max-content; }
+.bui-segmented { --seg-item: 40px; position: relative; display: inline-flex; gap: 2px; padding: var(--baseui-spacing-4); border-radius: var(--baseui-radius-16); background: var(--baseui-Background-Secondary); box-sizing: border-box; width: max-content; }
 .bui-segmented__item { flex: none; }
 .bui-segmented--full { display: flex; width: 100%; }
 .bui-segmented--full .bui-segmented__item { flex: 1 1 0; min-width: 0; }
@@ -214,17 +214,17 @@
   font: var(--baseui-Typography-Text-14-Semi-Bold); color: var(--baseui-Text-and-Icon-Primary);
   transition: background-color var(--baseui-duration-fast) var(--baseui-ease-standard);
 }
-.bui-segmented--sm { border-radius: var(--baseui-radius-14); }
-.bui-segmented--sm .bui-segmented__item { height: 32px; border-radius: var(--baseui-radius-12); }
+.bui-segmented--sm { --seg-item: 32px; border-radius: var(--baseui-radius-14); }
+.bui-segmented--sm .bui-segmented__item { height: var(--seg-item); border-radius: var(--baseui-radius-12); }
 .bui-segmented--sm .bui-segmented__thumb { border-radius: var(--baseui-radius-12); }
-.bui-segmented--md .bui-segmented__item { height: 40px; font: var(--baseui-Typography-Text-16-Semi-Bold); }
+.bui-segmented--md .bui-segmented__item { height: var(--seg-item); font: var(--baseui-Typography-Text-16-Semi-Bold); }
 .bui-segmented__icon { display: inline-flex; flex: none; width: 20px; height: 20px; }
 .bui-segmented__icon > * { width: 100%; height: 100%; }
 .bui-segmented__counter { font: inherit; font-weight: 400; color: var(--baseui-Text-and-Icon-Secondary); }
-.bui-segmented--icons .bui-segmented__item { padding-inline: 0; aspect-ratio: 1; }
-.bui-segmented--icons.bui-segmented--full .bui-segmented__item { aspect-ratio: auto; }
+.bui-segmented__item--icon { padding-inline: 0; width: var(--seg-item); }
+.bui-segmented--full .bui-segmented__item--icon { width: auto; }
 .bui-segmented__item:disabled { cursor: not-allowed; color: var(--baseui-Text-and-Icon-Disabled); }
-@media (hover: hover) { .bui-segmented__item:hover:not(:disabled):not([aria-checked="true"]) { background: var(--baseui-Background-Secondary-Hover); } }
+@media (hover: hover) { .bui-segmented__item:hover:not(:disabled):not([aria-checked="true"]) { background: var(--baseui-Background-Transparent-Hover); } }
 .bui-segmented__item:focus-visible { outline: var(--baseui-focus-outline-width) var(--baseui-focus-outline-style) var(--baseui-focus-outline-color); outline-offset: calc(var(--baseui-focus-outline-width) * -1); }
 
 /* ---------- Slider ---------- */
