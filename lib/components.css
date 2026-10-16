@@ -99,3 +99,5 @@
 .bui-field-action:focus-visible{outline:var(--baseui-focus-outline-width) var(--baseui-focus-outline-style) var(--baseui-focus-outline-color);outline-offset:var(--baseui-focus-outline-offset)}
 @media (hover){._iconButton_1xjg3_93:hover,.bui-field-action:hover{background-color:var(--baseui-Background-Transparent-Hover)}}
 .bui-field-action--text{padding:4px 8px;margin:-4px -8px -4px 0;font:var(--baseui-Typography-Text-14-Semi-Bold)}
+/* Icons: the search bar is full width and sticks under the app bar while scrolling */
+._toolbar_a6xxx_10{position:sticky;top:var(--bar-h,0px);z-index:var(--baseui-z-index-100);padding:var(--baseui-spacing-12) var(--baseui-spacing-24);margin-inline:calc(var(--baseui-spacing-24) * -1);background:var(--baseui-Background-Primary)}

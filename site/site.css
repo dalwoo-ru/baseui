@@ -190,3 +190,4 @@ main[data-viewport="mobile"] .page { max-width: 360px; min-height: calc(100vh - 
 main[data-viewport="mobile"] .page h1 { font: var(--baseui-Typography-Header-32); }
 
 .tok-pair { display: inline-flex; align-items: center; gap: 4px; }
+.canvas:has([class*=_gallery_a6xxx]){overflow:visible}
