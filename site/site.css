@@ -113,16 +113,10 @@ code.type { white-space: pre-wrap; word-break: break-word; color: var(--baseui-T
 
 .loading, .error { padding: var(--baseui-spacing-48); color: var(--baseui-Text-and-Icon-Secondary); }
 .error { color: var(--baseui-Extensions-Text-and-Icon-Error); }
-.scrim { display: none; }
 
 @media (max-width: 860px) {
   .body { display: block; }
-  .side {
-    position: fixed; inset: var(--bar-h) auto 0 0; width: 280px; max-width: 85vw; z-index: 20; height: auto;
-    transform: translateX(-100%); transition: transform .2s; box-shadow: var(--baseui-shadow-high);
-  }
-  .menu-open .side { transform: none; }
-  .menu-open .scrim { display: block; position: fixed; inset: var(--bar-h) 0 0 0; z-index: 10; background: var(--baseui-Extensions-Background-OverlayDark); }
+  .side { display: none; }
   .appbar { padding: 0 var(--baseui-spacing-16); }
   .menu-btn { display: inline-flex; }
   .view-control { display: none; }

@@ -317,26 +317,28 @@ function App() {
   const skip = (e) => { e.preventDefault(); const m = document.getElementById('main'); m.setAttribute('tabindex', '-1'); m.focus(); };
   const themeControl = h(SegmentedControl, { size: 'sm', iconOnly: true, label: 'Theme', value: theme, onValueChange: setTheme, items: [{ value: 'light', label: 'Light theme', icon: h(icons.Sun) }, { value: 'dark', label: 'Dark theme', icon: h(icons.Moon01) }] });
   const viewControl = h(SegmentedControl, { size: 'sm', iconOnly: true, label: 'Preview width', value: viewport, onValueChange: setViewport, items: [{ value: 'desktop', label: 'Desktop', icon: h(icons.Monitor01) }, { value: 'mobile', label: 'Mobile', icon: h(icons.Phone01) }] });
+  const catalog = [
+    h('div', { className: 'search', key: 'search' }, h(TextField, {
+      label: 'Search', floatingLabel: false, size: 'sm', value: q, clearable: true, actionLabel: 'Clear search', startIcon: h(icons.SearchSm, { size: 24 }),
+      onChange: (e) => setQ(e.target.value),
+    })),
+    h(Nav, { key: 'nav', entry, query: q.trim().toLowerCase() }),
+  ];
   return h(SettingsContext.Provider, { value: setSettings },
-      h('div', { className: 'shell' + (menu ? ' menu-open' : '') },
+      h('div', { className: 'shell' },
         h('a', { className: 'skip', href: '#main', onClick: skip }, 'Skip to content'),
         h('header', { className: 'appbar' },
-          h(Button, { variant: 'secondary', size: 'xsm', className: 'menu-btn', onClick: () => _setMenu(!menu) }, 'Menu'),
+          h(Button, { variant: 'ghost', size: 'sm', isIconOnly: true, label: 'Open catalog', icon: h(icons.Menu01), className: 'menu-btn', onClick: () => _setMenu(true) }),
           h('a', { className: 'brand', href: '#/', 'aria-label': 'baseui' },
             h('svg', { className: 'brand-logo', viewBox: '0 0 64 14', width: 128, height: 28, fill: 'currentColor', 'aria-hidden': 'true', focusable: 'false' }, LOGO_PATHS.map((d) => h('path', { key: d.slice(0, 24), d })))),
           h('div', { className: 'appbar-end' }, h('div', { className: 'view-control' }, viewControl), themeControl)),
         h('div', { className: 'body' + (settings ? ' body--settings' : '') },
-          h('aside', { className: 'side' },
-            h('div', { className: 'search' }, h(TextField, {
-              label: 'Search', floatingLabel: false, size: 'sm', value: q, clearable: true, actionLabel: 'Clear search', startIcon: h(icons.SearchSm, { size: 24 }),
-              onChange: (e) => setQ(e.target.value),
-            })),
-            h(Nav, { entry, query: q.trim().toLowerCase() })),
-          h('div', { className: 'scrim', onClick: () => _setMenu(false) }),
+          h('aside', { className: 'side' }, catalog),
           h('main', { id: 'main', 'data-viewport': viewport },
             entry ? h(Page, { entry, key: entry.slug }) : h(Home)),
           settings && h('aside', { className: 'settings', 'aria-label': 'Settings' }, h(Controls, settings))),
         settings && h(Button, { variant: 'primary', size: 'md', className: 'settings-fab', icon: h(icons.Sliders01), onClick: () => setSheet(true) }, 'Settings'),
+        h(Modal, { open: menu, onOpenChange: _setMenu, title: 'Catalog', height: 'viewport' }, h('div', { className: 'catalog-sheet' }, catalog)),
         h(Modal, { open: sheet && !!settings, onOpenChange: setSheet, title: 'Settings', primaryAction: h(Button, { onClick: () => setSheet(false) }, 'Done') }, settings && h('div', { className: 'settings-sheet' }, h(Controls, { ...settings, title: null })))));
 }
 
