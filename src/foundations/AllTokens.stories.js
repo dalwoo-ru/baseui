@@ -18,6 +18,6 @@ export function page() {
   return h(Fragment, null, data.map((s) => h(Block, { key: s.title, title: s.title, id: s.title.toLowerCase() },
     s.groups.map((g) => h(Fragment, { key: g.title },
       g.title && h('h3', null, g.title),
-      h(TokenTable, { tokens: g.tokens, themed: s.themed, preview: s.themed ? colorPreview(s, 28) : PREVIEW[s.title] }))))));
+      h(TokenTable, { tokens: g.tokens, themed: s.themed, preview: s.themed ? colorPreview(s, 28) : PREVIEW[s.title], previewWidth: 96 }))))));
 }
 export const __namedExportsOrder = [];

@@ -61,16 +61,16 @@ export const Block = ({ title, id, children }) =>
 /** A color swatch with a smaller one beside it for the hover color, when the color has one. */
 export const colorPreview = (color, size = 40) => (t) => h('span', { className: 'tok-pair' },
   h(Swatch, { name: t.name, size }),
-  color.hovers.has(t.name) && h(Swatch, { name: `${t.name}-Hover`, size: Math.round(size * 0.6) }));
+  color.hovers.has(t.name) && h(Swatch, { name: `${t.name}-Hover`, size }));
 
 export function Swatch({ name, size = 40 }) {
   return h('span', { className: 'tok-swatch', style: { width: size, height: size, background: `var(--baseui-${name})` }, 'aria-hidden': 'true' });
 }
 
-export function TokenTable({ tokens, themed, preview }) {
+export function TokenTable({ tokens, themed, preview, previewWidth = 72 }) {
   const val = (key) => (t) => h('code', { className: 'val' }, t[key]);
   const columns = [
-    ...(preview ? [{ key: 'preview', header: '', width: pixel(72), renderCell: preview }] : []),
+    ...(preview ? [{ key: 'preview', header: '', width: pixel(previewWidth), renderCell: preview }] : []),
     { key: 'name', header: 'Token', width: proportional(3, { minWidth: 220 }), renderCell: (t) => h('code', null, `--baseui-${t.name}`) },
     ...(themed
       ? [{ key: 'light', header: 'Light', width: proportional(2, { minWidth: 120 }), renderCell: val('light') }, { key: 'dark', header: 'Dark', width: proportional(2, { minWidth: 120 }), renderCell: val('dark') }]

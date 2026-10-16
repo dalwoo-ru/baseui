@@ -11,6 +11,6 @@ export function page() {
   if (!color) return h(Loading);
   return h(Fragment, null,
     color.groups.map((g) => h(Block, { key: g.title, title: g.title },
-      h(TokenTable, { tokens: g.tokens, themed: true, preview: colorPreview(color) }))));
+      h(TokenTable, { tokens: g.tokens, themed: true, preview: colorPreview(color), previewWidth: 120 }))));
 }
 export const __namedExportsOrder = [];
