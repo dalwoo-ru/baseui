@@ -1,5 +1,5 @@
 import { h, Fragment } from '../react.js';
-import { useTokens, Block, TokenTable, Swatch, Loading } from './_kit.js';
+import { useTokens, Block, TokenTable, colorPreview, Loading } from './_kit.js';
 
 export default {
   title: 'Foundations/All Tokens',
@@ -18,6 +18,6 @@ export function page() {
   return h(Fragment, null, data.map((s) => h(Block, { key: s.title, title: s.title, id: s.title.toLowerCase() },
     s.groups.map((g) => h(Fragment, { key: g.title },
       g.title && h('h3', null, g.title),
-      h(TokenTable, { tokens: g.tokens, themed: s.themed, preview: s.themed ? (t) => h(Swatch, { name: t.name, size: 28 }) : PREVIEW[s.title] }))))));
+      h(TokenTable, { tokens: g.tokens, themed: s.themed, preview: s.themed ? colorPreview(s, 28) : PREVIEW[s.title] }))))));
 }
 export const __namedExportsOrder = [];

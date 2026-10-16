@@ -36,7 +36,9 @@ function parse(css) {
       const light = groupsOf(blocks.find((b) => b.selector.includes('light')).body);
       const dark = groupsOf(blocks.find((b) => b.selector.includes('dark')).body);
       const darkBy = Object.fromEntries(dark.flatMap((g) => g.tokens).map((t) => [t.name, t.value]));
-      return { title, themed: true, groups: light.map((g) => ({ ...g, tokens: g.tokens.map((t) => ({ name: t.name, light: t.value, dark: darkBy[t.name] })) })) };
+      // `X-Hover` tokens are not listed: each color row shows its hover next to the base swatch.
+      const hovers = new Set(light.filter((g) => g.title === 'Hover').flatMap((g) => g.tokens.map((t) => t.name.replace(/-Hover$/, ''))));
+      return { title, themed: true, hovers, groups: light.filter((g) => g.title !== 'Hover').map((g) => ({ ...g, tokens: g.tokens.map((t) => ({ name: t.name, light: t.value, dark: darkBy[t.name] })) })) };
     }
     const tokens = blocks.flatMap((b) => groupsOf(b.body).flatMap((g) => g.tokens));
     return { title, themed: false, groups: [{ title: '', tokens }] };
@@ -55,6 +57,11 @@ export const section = (title, data) => data && data.find((s) => s.title === tit
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 export const Block = ({ title, id, children }) =>
   h('section', { className: 'doc-block', id: id || (title ? `block-${slug(title)}` : undefined), 'data-anchor': title || undefined }, title && h('h2', null, title), children);
+
+/** A color swatch with a smaller one beside it for the hover color, when the color has one. */
+export const colorPreview = (color, size = 40) => (t) => h('span', { className: 'tok-pair' },
+  h(Swatch, { name: t.name, size }),
+  color.hovers.has(t.name) && h(Swatch, { name: `${t.name}-Hover`, size: Math.round(size * 0.6) }));
 
 export function Swatch({ name, size = 40 }) {
   return h('span', { className: 'tok-swatch', style: { width: size, height: size, background: `var(--baseui-${name})` }, 'aria-hidden': 'true' });

@@ -188,4 +188,4 @@ main[data-viewport="mobile"] { background: var(--baseui-Background-Secondary); p
 main[data-viewport="mobile"] .page { max-width: 360px; min-height: calc(100vh - var(--bar-h) - var(--baseui-spacing-16)); border-radius: var(--baseui-radius-24) var(--baseui-radius-24) 0 0; background: var(--baseui-Background-Primary); padding: var(--baseui-spacing-24) var(--baseui-spacing-16) var(--baseui-spacing-48); }
 main[data-viewport="mobile"] .page h1 { font: var(--baseui-Typography-Header-32); }
 
-.tok-pair { display: inline-flex; gap: 4px; }
+.tok-pair { display: inline-flex; align-items: center; gap: 4px; }

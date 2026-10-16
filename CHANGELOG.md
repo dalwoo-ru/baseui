@@ -17,4 +17,4 @@
 - Dialogs: every dialog in a stack has its own dimming layer; the mobile Selector sheet takes the field label as its header (none for icon triggers).
 - List and List Item: new size `xsm` (40px); the docs menu uses it.
 - Text Input, Selector and Typeahead in size `sm`: 14px value and label text (12px when the label floats).
-- Color: hover tokens (`*-Hover`) for backgrounds, shown on the Color page. Components use them instead of a computed overlay.
+- Color: hover colors (`*-Hover` tokens) sit next to each base swatch on the Color page. Components use them instead of a computed overlay.
