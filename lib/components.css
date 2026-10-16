@@ -93,7 +93,8 @@
 ._field_2ah00_13._loading_2ah00_245 ._cell_2ah00_30::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,var(--baseui-Background-Tertiary),transparent);opacity:.6;transform:translateX(-100%);animation:bui-shimmer 1.4s var(--baseui-ease-standard) infinite}
 @media (prefers-reduced-motion:reduce){._field_2ah00_13._loading_2ah00_245 ._cell_2ah00_30::after{animation:none}}
 /* Actions (clear, reveal, custom): a small transparent-button hover */
-._iconButton_1xjg3_93,.bui-field-action{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:inherit;padding:4px;margin:-4px;border-radius:var(--baseui-radius-10);transition:background-color var(--baseui-duration-fast) var(--baseui-ease-standard)}
+.bui-field-action{all:unset}
+._iconButton_1xjg3_93,.bui-field-action{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:inherit;padding:4px;margin:-4px;border-radius:var(--baseui-radius-10);transition:background-color var(--baseui-duration-fast) var(--baseui-ease-standard)}
 .bui-field-action svg{display:block}
 .bui-field-action:focus-visible{outline:var(--baseui-focus-outline-width) var(--baseui-focus-outline-style) var(--baseui-focus-outline-color);outline-offset:var(--baseui-focus-outline-offset)}
 @media (hover){._iconButton_1xjg3_93:hover,.bui-field-action:hover{background-color:var(--baseui-Background-Transparent-Hover)}}
