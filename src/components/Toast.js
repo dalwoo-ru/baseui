@@ -5,7 +5,7 @@ import { Button } from './Button.js';
 
 const ToastContext = createContext(null);
 
-/** Hook: const { toast, dismiss } = useToast(); toast({ message, status, icon, action, duration }) */
+/** Hook: const { toast, dismiss, update } = useToast(); toast({ message, status, icon, action, duration }) */
 export function useToast() {
   const ctx = useContext(ToastContext);
   if (!ctx) throw new Error('useToast: wrap your app in <ToastProvider>');
@@ -45,7 +45,8 @@ export function ToastProvider({ children, placement = 'bottom-right', limit = 4 
     setItems((list) => [...list, { status: 'neutral', duration: 5000, ...options, id }].slice(-limit));
     return id;
   }, [limit]);
-  const api = useMemo(() => ({ toast, dismiss }), [toast, dismiss]);
+  const update = useCallback((id, options) => setItems((list) => list.map((t) => (t.id === id ? { ...t, ...options } : t))), []);
+  const api = useMemo(() => ({ toast, dismiss, update }), [toast, dismiss, update]);
   return h(ToastContext.Provider, { value: api }, children,
     h('div', { className: cx('bui-toast-region', `bui-toast-region--${placement}`), role: 'region', 'aria-label': 'Notifications' },
       items.map((item) => h(ToastItem, { key: item.id, item, onDismiss: dismiss }))));
