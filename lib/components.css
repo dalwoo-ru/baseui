@@ -101,3 +101,7 @@
 .bui-field-action--text{padding:4px 8px;margin:-4px -8px -4px 0;font:var(--baseui-Typography-Text-14-Semi-Bold)}
 /* Icons: the search bar is full width and sticks under the app bar while scrolling */
 ._toolbar_a6xxx_10{position:sticky;top:var(--bar-h,0px);z-index:var(--baseui-z-index-100);padding:var(--baseui-spacing-12) var(--baseui-spacing-24);margin-inline:calc(var(--baseui-spacing-24) * -1);background:var(--baseui-Background-Primary)}
+/* Focus rings are never clipped by a scrolling container: the Modal content keeps a 4px gutter around its edge
+   (the extra padding is pulled back with a negative margin, so the layout does not change). */
+._content_1nnzw_124{padding-top:var(--baseui-spacing-4);margin-top:calc(var(--baseui-spacing-4) * -1);position:relative}
+._content_1nnzw_124[data-without-header]{margin-top:0}

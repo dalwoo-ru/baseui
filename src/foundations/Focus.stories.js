@@ -33,6 +33,7 @@ export function page() {
         h('div', { className: 'focus-demo__field' }, h(TextField, { label: 'Success', status: 'success', caption: 'All good', defaultValue: 'Value' })))),
     h(Block, { title: 'Inside Clipped Containers' },
       h('p', { className: 'doc-p' }, 'Where a container clips its content (list rows, dropdown options, the dialog close button), the ring is drawn inside the element, with the same width and color.'),
+      h('p', { className: 'doc-p' }, 'Scrolling containers (the dialog content) keep a 4px gutter at their edges, so the outer ring of an input is never cut off.'),
       h('div', { className: 'focus-demo__list' }, h(List, { size: 'sm' }, h(ListItem, { onClick: () => {} }, 'Item'), h(ListItem, { onClick: () => {} }, 'Item')))));
 }
 export const __namedExportsOrder = [];
