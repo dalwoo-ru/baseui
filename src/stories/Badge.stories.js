@@ -3,7 +3,7 @@ import { Badge } from '../components/Badge.js';
 import { Heart } from './_ui.js';
 import { meta, playground, example, Row } from './_helpers.js';
 
-const VARIANTS = ['neutral', 'info', 'success', 'warning', 'error', 'blue', 'green', 'orange', 'pink', 'red'];
+const VARIANTS = ['neutral', 'info', 'success', 'warning', 'error', 'blue', 'blue-light', 'green', 'green-light', 'orange', 'pink', 'red'];
 export default meta({
   title: 'Components/Badge', component: Badge, args: { variant: 'neutral', label: 'Badge' },
   argTypes: { variant: { control: 'select', options: VARIANTS }, label: { control: 'text' } },

@@ -7,7 +7,7 @@ export function Badge({ variant = 'neutral', label, icon, className, ...rest }) 
     h('span', { className: 'bui-badge__label' }, label));
 }
 describe(Badge, 'A compact label for a status, category or count.', {
-  variant: ["'neutral' | 'info' | 'success' | 'warning' | 'error' | 'blue' | 'green' | 'orange' | 'pink' | 'red'", "'neutral'", 'Semantic colors are solid; hues are tinted'],
+  variant: ["'neutral' | 'info' | 'success' | 'warning' | 'error' | 'blue' | 'blue-light' | 'green' | 'green-light' | 'orange' | 'pink' | 'red'", "'neutral'", 'Semantic and accent colors from the palette, all solid'],
   label: ['ReactNode', null, 'Badge text'],
   icon: ['ReactNode', null, 'Icon before the label'],
 });
