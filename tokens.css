@@ -255,6 +255,26 @@
   --baseui-spacing-80: 80px;
 }
 
+/* ---------- Layout ---------- */
+/* Page and container geometry. Media queries cannot read variables, so the breakpoints are mirrored in CSS. */
+:root {
+  /* Margins */
+  --baseui-layout-margin-mobile: 20px;
+  --baseui-layout-margin-desktop: 24px;
+
+  /* Sizes */
+  --baseui-layout-header-height: 64px;
+  --baseui-layout-sidebar-width: 272px;
+  --baseui-layout-settings-width: 320px;
+  --baseui-layout-content-max-width: 1040px;
+  --baseui-layout-dialog-width: 480px;
+  --baseui-layout-mobile-preview-width: 360px;
+
+  /* Breakpoints */
+  --baseui-layout-breakpoint-mobile: 860px;
+  --baseui-layout-breakpoint-sheet: 1200px;
+}
+
 /* ---------- Radius ---------- */
 :root {
   --baseui-radius-none: 0;
