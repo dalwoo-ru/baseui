@@ -145,8 +145,8 @@
 
   /* Border */
   --baseui-Border-Primary: #383838;
-  --baseui-Border-Accent: #6c7989;
-  --baseui-Border-Disabled: #495563;
+  --baseui-Border-Accent: #5a5a5a;
+  --baseui-Border-Disabled: #404040;
 
   /* Accent Colors */
   --baseui-Accent-Colors-Green-Light: #bbfb60;
@@ -207,8 +207,8 @@
   --baseui-Text-and-Icon-Accent-Hover: #7383fc;
   --baseui-Background-Disabled-Hover: #555555;
   --baseui-Border-Primary-Hover: #4a4a4a;
-  --baseui-Border-Accent-Hover: #808e9e;
-  --baseui-Border-Disabled-Hover: #5c6977;
+  --baseui-Border-Accent-Hover: #6a6a6a;
+  --baseui-Border-Disabled-Hover: #505050;
   --baseui-Accent-Colors-Green-Light-Hover: #aeed51;
   --baseui-Accent-Colors-Pink-Hover: #db8ce6;
   --baseui-Accent-Colors-Blue-Hover: #4949e1;
