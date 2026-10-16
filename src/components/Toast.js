@@ -1,10 +1,11 @@
 import { h, cx, createContext, useContext, useState, useRef, useCallback, useEffect, useMemo } from '../react.js';
 import { Icon } from '../icons.js';
 import { describe } from '../doc.js';
+import { Button } from './Button.js';
 
 const ToastContext = createContext(null);
 
-/** Hook: const { toast, dismiss } = useToast(); toast({ title, description, status, duration }) */
+/** Hook: const { toast, dismiss } = useToast(); toast({ message, status, icon, action, duration }) */
 export function useToast() {
   const ctx = useContext(ToastContext);
   if (!ctx) throw new Error('useToast: wrap your app in <ToastProvider>');
@@ -23,16 +24,16 @@ function ToastItem({ item, onDismiss }) {
   const pause = () => { clearTimeout(timer.current); left.current -= Date.now() - startedAt.current; };
   useEffect(() => { run(); return () => clearTimeout(timer.current); }, [run]);
 
+  const { status, icon, action } = item;
   return h('div', {
-    role: item.status === 'error' ? 'alert' : 'status', className: cx('bui-toast', `bui-toast--${item.status}`),
+    role: status === 'error' ? 'alert' : 'status', className: 'bui-toast',
     onMouseEnter: pause, onMouseLeave: run, onFocus: pause, onBlur: run,
   },
-    h(Icon, { name: item.status, size: 24, className: 'bui-toast__icon' }),
-    h('div', { className: 'bui-toast__body' },
-      item.title && h('div', { className: 'bui-toast__title' }, item.title),
-      item.description && h('div', { className: 'bui-toast__text' }, item.description)),
+    (icon || status !== 'neutral') && h('span', { className: 'bui-toast__icon' }, icon || h(Icon, { name: status, size: 24 })),
+    h('div', { className: 'bui-toast__text' }, item.message),
+    action && h(Button, { variant: 'ghost', size: 'xsm', onClick: () => { action.onClick?.(); onDismiss(item.id); } }, action.label),
     h('button', { type: 'button', className: 'bui-toast__close', 'aria-label': 'Dismiss notification', onClick: () => onDismiss(item.id) },
-      h(Icon, { name: 'close', size: 20 })));
+      h(Icon, { name: 'close', size: 24 })));
 }
 
 export function ToastProvider({ children, placement = 'bottom-right', limit = 4 }) {
@@ -41,7 +42,7 @@ export function ToastProvider({ children, placement = 'bottom-right', limit = 4 
   const dismiss = useCallback((id) => setItems((list) => list.filter((t) => t.id !== id)), []);
   const toast = useCallback((options) => {
     const id = ++counter.current;
-    setItems((list) => [...list, { status: 'info', duration: 5000, ...options, id }].slice(-limit));
+    setItems((list) => [...list, { status: 'neutral', duration: 5000, ...options, id }].slice(-limit));
     return id;
   }, [limit]);
   const api = useMemo(() => ({ toast, dismiss }), [toast, dismiss]);
@@ -50,7 +51,7 @@ export function ToastProvider({ children, placement = 'bottom-right', limit = 4 
       items.map((item) => h(ToastItem, { key: item.id, item, onDismiss: dismiss }))));
 }
 
-describe(ToastProvider, 'Shows brief notifications. Call `useToast()` to add one.', {
+describe(ToastProvider, 'Shows brief notifications: a message, an optional action and a close button. Call `useToast()` to add one.', {
   placement: ["'bottom-right' | 'bottom-center' | 'top-right' | 'top-center'", "'bottom-right'", 'Where the stack appears'],
   limit: ['number', '4', 'Maximum simultaneous toasts'],
 });
