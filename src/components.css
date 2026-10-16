@@ -130,7 +130,7 @@
 
 /* ---------- Toast ---------- */
 .bui-toast-region {
-  position: fixed; z-index: var(--baseui-z-index-400); display: flex; flex-direction: column; gap: var(--baseui-spacing-8);
+  position: fixed; z-index: var(--baseui-z-index-400); display: flex; flex-direction: column;
   width: min(380px, calc(100vw - 2 * var(--baseui-spacing-16))); pointer-events: none;
 }
 .bui-toast-region--bottom-right { right: var(--baseui-spacing-16); bottom: var(--baseui-spacing-16); }
@@ -146,6 +146,14 @@
 .bui-toast__text { flex: 1; min-width: 0; }
 .bui-toast .bui-toast__action { flex: none; font: var(--baseui-Typography-Text-16-Semi-Bold); }
 .bui-toast__close { padding: 4px; margin: 0; border-radius: var(--baseui-radius-10); flex: none; }
+/* Each toast sits in a wrapper that collapses smoothly when it leaves, so the stack closes up instead of jumping */
+.bui-toast-item {
+  display: grid; grid-template-rows: 1fr; margin-top: var(--baseui-spacing-8); opacity: 1;
+  transition: grid-template-rows var(--baseui-duration-medium) var(--baseui-ease-standard), margin-top var(--baseui-duration-medium) var(--baseui-ease-standard), opacity var(--baseui-duration-fast) var(--baseui-ease-standard);
+}
+.bui-toast-item__clip { min-height: 0; overflow: clip; overflow-clip-margin: 32px; }
+.bui-toast-item[data-leaving] { grid-template-rows: 0fr; margin-top: 0; opacity: 0; pointer-events: none; }
+.bui-toast-item[data-leaving] .bui-toast { transition: transform var(--baseui-duration-medium) var(--baseui-ease-standard); transform: translateY(8px); }
 @keyframes bui-toast-in { from { opacity: 0; transform: translateY(8px); } }
 
 /* ---------- Breadcrumbs ---------- */

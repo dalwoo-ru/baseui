@@ -12,20 +12,34 @@ export function useToast() {
   return ctx;
 }
 
-function ToastItem({ item, onDismiss }) {
+function ToastItem({ item, onDismiss, onGone }) {
   const timer = useRef();
-  const left = useRef(item.duration);
+  const left = useRef(0);
   const startedAt = useRef(0);
   const run = useCallback(() => {
-    if (!left.current) return;
+    clearTimeout(timer.current);
+    if (item.leaving || left.current <= 0) return;
     startedAt.current = Date.now();
     timer.current = setTimeout(() => onDismiss(item.id), left.current);
-  }, [item.id, onDismiss]);
-  const pause = () => { clearTimeout(timer.current); left.current -= Date.now() - startedAt.current; };
-  useEffect(() => { run(); return () => clearTimeout(timer.current); }, [run]);
+  }, [item.id, item.leaving, onDismiss]);
+  const pause = () => {
+    if (!timer.current) return;
+    clearTimeout(timer.current); timer.current = 0;
+    left.current = Math.max(0, left.current - (Date.now() - startedAt.current));
+  };
+  useEffect(() => { left.current = item.duration || 0; run(); return () => clearTimeout(timer.current); }, [item.duration, run]);
+  // Leaving: the wrapper fades and collapses (transition), then the toast is removed; the timeout is a safety net.
+  useEffect(() => {
+    if (!item.leaving) return;
+    const t = setTimeout(() => onGone(item.id), 700);
+    return () => clearTimeout(t);
+  }, [item.leaving, item.id, onGone]);
 
   const { status, icon, action } = item;
   return h('div', {
+    className: 'bui-toast-item', 'data-leaving': item.leaving || undefined,
+    onTransitionEnd: (e) => { if (item.leaving && e.target === e.currentTarget && e.propertyName === 'grid-template-rows') onGone(item.id); },
+  }, h('div', { className: 'bui-toast-item__clip' }, h('div', {
     role: status === 'error' ? 'alert' : 'status', className: 'bui-toast',
     onMouseEnter: pause, onMouseLeave: run, onFocus: pause, onBlur: run,
   },
@@ -33,23 +47,24 @@ function ToastItem({ item, onDismiss }) {
     h('div', { className: 'bui-toast__text' }, item.message),
     action && h(Button, { variant: 'ghost', size: 'xsm', className: 'bui-toast__action', onClick: () => { action.onClick?.(); onDismiss(item.id); } }, action.label),
     h('button', { type: 'button', className: 'bui-toast__close', 'aria-label': 'Dismiss notification', onClick: () => onDismiss(item.id) },
-      h(Icon, { name: 'close', size: 24 })));
+      h(Icon, { name: 'close', size: 24 })))));
 }
 
 export function ToastProvider({ children, placement = 'bottom-right', limit = 4 }) {
   const [items, setItems] = useState([]);
   const counter = useRef(0);
-  const dismiss = useCallback((id) => setItems((list) => list.filter((t) => t.id !== id)), []);
+  const gone = useCallback((id) => setItems((list) => list.filter((t) => t.id !== id)), []);
+  const dismiss = useCallback((id) => setItems((list) => list.map((t) => (t.id === id ? { ...t, leaving: true } : t))), []);
   const toast = useCallback((options) => {
     const id = ++counter.current;
-    setItems((list) => [...list, { status: 'neutral', duration: 5000, ...options, id }].slice(-limit));
+    setItems((list) => [...list, { status: 'neutral', duration: 5000, ...options, id }]);
     return id;
   }, [limit]);
   const update = useCallback((id, options) => setItems((list) => list.map((t) => (t.id === id ? { ...t, ...options } : t))), []);
   const api = useMemo(() => ({ toast, dismiss, update }), [toast, dismiss, update]);
   return h(ToastContext.Provider, { value: api }, children,
     h('div', { className: cx('bui-toast-region', `bui-toast-region--${placement}`), role: 'region', 'aria-label': 'Notifications' },
-      items.slice(-limit).map((item) => h(ToastItem, { key: item.id, item, onDismiss: dismiss }))));
+      items.filter((t) => !t.leaving).slice(-limit).concat(items.filter((t) => t.leaving)).sort((x, y) => x.id - y.id).map((item) => h(ToastItem, { key: item.id, item, onDismiss: dismiss, onGone: gone }))));
 }
 
 describe(ToastProvider, 'Shows brief notifications: a message, an optional action and a close button. Call `useToast()` to add one.', {
