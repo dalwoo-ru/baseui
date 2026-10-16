@@ -17,8 +17,9 @@ export function StoryCanvas({ meta, story, args }) {
   ref.current = args;
   const Inner = useMemo(() => {
     const { decorators, render, parameters } = composeStory(meta, story);
-    const ctx = () => ({ args: ref.current, parameters, globals: {}, argTypes: meta.argTypes, component: meta.component });
-    let Story = () => (render ? render(ref.current, ctx()) : h(meta.component, ref.current));
+    const mapped = () => Object.fromEntries(Object.entries(ref.current).map(([k, v]) => { const m = meta.argTypes?.[k]?.mapping; return [k, m && v in m ? m[v] : v]; }));
+    const ctx = () => ({ args: mapped(), parameters, globals: {}, argTypes: meta.argTypes, component: meta.component });
+    let Story = () => (render ? render(mapped(), ctx()) : h(meta.component, mapped()));
     for (const deco of decorators) {
       const Prev = Story;
       Story = () => deco(() => h(Prev), ctx());

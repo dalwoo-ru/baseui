@@ -86,3 +86,14 @@
 ._small_1epgh_45 ._track_1epgh_17{width:32px;height:20px;padding:3px}
 ._small_1epgh_45 ._thumb_1epgh_43{width:14px;height:14px}
 ._small_1epgh_45 ._track_1epgh_17[data-checked] ._thumb_1epgh_43{transform:translate(12px)}
+
+/* Loading: the whole field becomes a skeleton (content, icons and label hidden, same shimmer as Skeleton) */
+._field_2ah00_13._loading_2ah00_245 ._cell_2ah00_30{position:relative;overflow:hidden}
+._field_2ah00_13._loading_2ah00_245 ._cell_2ah00_30 *{visibility:hidden}
+._field_2ah00_13._loading_2ah00_245 ._cell_2ah00_30::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,var(--baseui-Background-Tertiary),transparent);opacity:.6;transform:translateX(-100%);animation:bui-shimmer 1.4s var(--baseui-ease-standard) infinite}
+@media (prefers-reduced-motion:reduce){._field_2ah00_13._loading_2ah00_245 ._cell_2ah00_30::after{animation:none}}
+/* Actions (clear, reveal, custom): a small transparent-button hover */
+._iconButton_1xjg3_93,.bui-field-action{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:inherit;padding:4px;margin:-4px;border-radius:var(--baseui-radius-10);transition:background-color var(--baseui-duration-fast) var(--baseui-ease-standard)}
+.bui-field-action svg{display:block}
+.bui-field-action:focus-visible{outline:var(--baseui-focus-outline-width) var(--baseui-focus-outline-style) var(--baseui-focus-outline-color);outline-offset:var(--baseui-focus-outline-offset)}
+@media (hover){._iconButton_1xjg3_93:hover,.bui-field-action:hover{background-color:var(--baseui-Background-Transparent-Hover)}}
