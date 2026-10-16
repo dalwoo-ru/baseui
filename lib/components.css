@@ -125,3 +125,24 @@
 ._small_2ah00_25 ._input_raho5_16{height:20px}
 ._small_2ah00_25[data-float=floating][data-control]:not([data-multiple]) ._control_raho5_7:focus-within ._input_raho5_16,._small_2ah00_25[data-float=floating][data-control]:not([data-multiple])[data-filled] ._input_raho5_16{transform:translateY(8px)}
 ._small_2ah00_25[data-float=floating][data-filled] ._value_csihx_23:not([data-placeholder]){transform:translateY(8px)}
+/* Dialog motion (design system durations and easing): the backdrop fades, the desktop dialog fades and scales in,
+   the mobile sheet slides up from the bottom. Entering uses keyframes, leaving uses transitions on Base UI's
+   data-ending-style, which keeps the dialog mounted until they end. */
+@keyframes baseui-dialog-fade{from{opacity:0}}
+@keyframes baseui-dialog-sheet{from{transform:translateY(100%)}}
+@keyframes baseui-dialog-pop{from{opacity:0;transform:scale(.96)}}
+._backdrop_1nnzw_1{transition:opacity var(--baseui-duration-medium) var(--baseui-ease-standard)}
+._backdrop_1nnzw_1[data-open]{animation:baseui-dialog-fade var(--baseui-duration-medium) var(--baseui-ease-standard)}
+._backdrop_1nnzw_1[data-ending-style]{opacity:0}
+._popup_1nnzw_24{transition:transform var(--baseui-duration-medium) var(--baseui-ease-standard),opacity var(--baseui-duration-medium) var(--baseui-ease-standard)}
+@media (width<=1200px){
+._popup_1nnzw_24[data-open]{animation:baseui-dialog-sheet var(--baseui-duration-medium) var(--baseui-ease-emphasized)}
+._popup_1nnzw_24[data-ending-style]{transform:translateY(100%)}
+._header_1nnzw_43[data-swipe]{touch-action:none;cursor:grab}
+._header_1nnzw_43[data-swipe]:active{cursor:grabbing}
+}
+@media (width>1200px){
+._popup_1nnzw_24[data-open]{animation:baseui-dialog-pop var(--baseui-duration-medium) var(--baseui-ease-emphasized)}
+._popup_1nnzw_24[data-ending-style]{opacity:0;transform:scale(.96)}
+}
+@media (prefers-reduced-motion:reduce){._backdrop_1nnzw_1[data-open],._popup_1nnzw_24[data-open]{animation:none}}
