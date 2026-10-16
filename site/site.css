@@ -36,7 +36,8 @@ code {
   background: var(--baseui-Background-Primary);
   border-right: 1px solid var(--baseui-Border-Primary);
 }
-.brand { font: var(--baseui-Typography-Header-24); text-decoration: none; color: inherit; }
+.brand { display: inline-flex; align-items: center; text-decoration: none; color: var(--baseui-Text-and-Icon-Primary); }
+.brand-logo { display: block; }
 .search { padding-top: var(--baseui-spacing-8); }
 .side nav { display: flex; flex-direction: column; gap: 2px; flex: 1; }
 .theme { padding: var(--baseui-spacing-12) var(--baseui-spacing-8) 0; border-top: 1px solid var(--baseui-Border-Primary); }

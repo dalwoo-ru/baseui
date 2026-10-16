@@ -3,6 +3,7 @@ import { t as initDom, r as renderInto } from '../lib/react-18-D4o7zN8K.js';
 import manifest from './manifest.js';
 import { TextField, Switch, Chip, ChipGroup, List, ListItem, Modal } from '../src/base.js';
 import { Button } from '../src/components/Button.js';
+import { LOGO_PATHS } from './logo.js';
 import { SegmentedControl } from '../src/components/SegmentedControl.js';
 import { Slider } from '../src/components/Slider.js';
 import { Table, pixel, proportional } from '../src/components/Table.js';
@@ -321,7 +322,8 @@ function App() {
         h('a', { className: 'skip', href: '#main', onClick: skip }, 'Skip to content'),
         h('header', { className: 'appbar' },
           h(Button, { variant: 'secondary', size: 'xsm', className: 'menu-btn', onClick: () => _setMenu(!menu) }, 'Menu'),
-          h('a', { className: 'brand', href: '#/' }, 'baseui'),
+          h('a', { className: 'brand', href: '#/', 'aria-label': 'baseui' },
+            h('svg', { className: 'brand-logo', viewBox: '0 0 64 14', width: 64, height: 14, fill: 'currentColor', 'aria-hidden': 'true', focusable: 'false' }, LOGO_PATHS.map((d) => h('path', { key: d.slice(0, 24), d })))),
           h('div', { className: 'appbar-end' }, h('div', { className: 'view-control' }, viewControl), themeControl)),
         h('div', { className: 'body' + (settings ? ' body--settings' : '') },
           h('aside', { className: 'side' },
