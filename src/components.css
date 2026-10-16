@@ -139,11 +139,11 @@
 .bui-toast-region--top-center { left: 50%; top: var(--baseui-spacing-16); translate: -50% 0; }
 .bui-toast {
   pointer-events: auto; display: flex; align-items: center; gap: var(--baseui-spacing-12); box-sizing: border-box; min-height: 56px; padding: var(--baseui-spacing-12) var(--baseui-spacing-16);
-  border-radius: var(--baseui-radius-16); background: var(--baseui-Background-Secondary); color: var(--baseui-Text-and-Icon-Primary);
-  font: var(--baseui-Typography-Text-16-Regular); animation: bui-toast-in var(--baseui-duration-medium) var(--baseui-ease-standard);
+  border-radius: var(--baseui-radius-16); background: var(--baseui-Extensions-Background-Surface); color: var(--baseui-Text-and-Icon-Primary);
+  font: var(--baseui-Typography-Text-16-Regular); box-shadow: var(--baseui-shadow-high); animation: bui-toast-in var(--baseui-duration-medium) var(--baseui-ease-standard);
 }
 .bui-toast__icon { display: inline-flex; flex: none; color: inherit; }
-.bui-toast--inverse { background: var(--baseui-Extensions-Background-InversePrimary); color: var(--baseui-Text-and-Icon-OnColor); }
+.bui-toast--inverse { box-shadow: none; background: var(--baseui-Extensions-Background-InversePrimary); color: var(--baseui-Text-and-Icon-OnColor); }
 .bui-toast--inverse .bui-toast__action { color: var(--baseui-Text-and-Icon-OnColor); }
 .bui-toast--inverse .bui-toast__close { color: var(--baseui-Text-and-Icon-OnColor); }
 @media (hover: hover) { .bui-toast--inverse .bui-toast__action:hover:not(:disabled), .bui-toast--inverse .bui-toast__close:hover { background: var(--baseui-Extensions-Background-InversePrimary-Hover); } }
